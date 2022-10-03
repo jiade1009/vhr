@@ -21,6 +21,8 @@ public class Menu implements Serializable {
     private Integer parentId;
 
     private Boolean enabled;
+    private Integer sortOrder;
+
     private List<Menu> children;
     private List<Role> roles;
 
@@ -110,5 +112,13 @@ public class Menu implements Serializable {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public Integer getSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(Integer sortOrder) {
+        this.sortOrder = sortOrder;
     }
 }
