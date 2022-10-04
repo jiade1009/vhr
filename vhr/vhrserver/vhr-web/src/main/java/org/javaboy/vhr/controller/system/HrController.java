@@ -1,11 +1,16 @@
 package org.javaboy.vhr.controller.system;
 
+import org.javaboy.vhr.VhrApplication;
+import org.javaboy.vhr.model.Employee;
 import org.javaboy.vhr.model.Hr;
 import org.javaboy.vhr.model.RespBean;
 import org.javaboy.vhr.model.Role;
 import org.javaboy.vhr.service.HrService;
 import org.javaboy.vhr.service.RoleService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,13 +27,35 @@ import java.util.List;
 @RestController
 @RequestMapping("/system/hr")
 public class HrController {
-    @Autowired
+    private static final Logger LOGGER = LoggerFactory.getLogger(HrController.class);
+    final
     HrService hrService;
-    @Autowired
+    final
     RoleService roleService;
+    final String initPassword = "ghk";
+
+    public HrController(HrService hrService, RoleService roleService) {
+        this.hrService = hrService;
+        this.roleService = roleService;
+    }
+
     @GetMapping("/")
     public List<Hr> getAllHrs(String keywords) {
         return hrService.getAllHrs(keywords);
+    }
+
+    @PostMapping("/")
+    public RespBean addHr(@RequestBody Hr hr) {
+//        SpringSecurity中的BCryptPasswordEncoder方法采用SHA-256 +随机盐+密钥对密码进行加密。
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String encodePass = encoder.encode(initPassword); //默认初始密码均为ghk
+        hr.setPassword(encodePass);
+        int result = hrService.addHr(hr);
+        System.out.println(hr.getPassword());
+        if (result == 1) {
+            return RespBean.ok("添加成功", hr);
+        }
+        return RespBean.error("添加失败");
     }
 
     @PutMapping("/")
@@ -57,5 +84,16 @@ public class HrController {
             return RespBean.ok("删除成功!");
         }
         return RespBean.error("删除失败!");
+    }
+
+    @PutMapping("/reset/{id}")
+    public RespBean resetPasswordById(@PathVariable Integer id) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String encodePassword = encoder.encode(initPassword); //默认初始密码均为ghk
+
+        if (hrService.resetPasswordById(id, encodePassword) == 1) {
+            return RespBean.ok("重置密码成功!");
+        }
+        return RespBean.error("重置密码失败!");
     }
 }

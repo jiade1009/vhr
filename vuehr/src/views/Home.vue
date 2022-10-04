@@ -2,12 +2,12 @@
     <div>
         <el-container>
             <el-header class="homeHeader">
-                <div class="title">微人事</div>
+                <div class="title">纯阳系统V2.0</div>
                 <div>
                     <el-button icon="el-icon-bell" type="text" style="margin-right: 8px;color: #000000;" size="normal" @click="goChat"></el-button>
                     <el-dropdown class="userInfo" @command="commandHandler">
   <span class="el-dropdown-link">
-    {{user.name}}<i><img :src="user.userface" alt=""></i>
+    {{user.name}}<i><img :src="user.userface?user.userface:userface" alt=""></i>
   </span>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item command="userinfo">个人中心</el-dropdown-item>
@@ -37,7 +37,7 @@
                         <el-breadcrumb-item>{{this.$router.currentRoute.name}}</el-breadcrumb-item>
                     </el-breadcrumb>
                     <div class="homeWelcome" v-if="this.$router.currentRoute.path=='/home'">
-                        欢迎来到微人事！
+                        欢迎来到成吉思汗基金GHK！
                     </div>
                     <router-view class="homeRouterView"/>
                 </el-main>
@@ -47,10 +47,12 @@
 </template>
 
 <script>
+
     export default {
         name: "Home",
         data() {
             return {
+              userface: this.$ELEMENT.userface,
                 // user: JSON.parse(window.sessionStorage.getItem("user"))
             }
         },
@@ -62,7 +64,9 @@
                 return this.$store.state.currentHr;
             }
         },
-        methods: {
+        beforeMount() {
+        },
+      methods: {
             goChat() {
                 this.$router.push("/chat");
             },

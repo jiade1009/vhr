@@ -2,6 +2,7 @@ package org.javaboy.vhr.service;
 
 import org.javaboy.vhr.mapper.HrMapper;
 import org.javaboy.vhr.mapper.HrRoleMapper;
+import org.javaboy.vhr.model.Department;
 import org.javaboy.vhr.model.Hr;
 import org.javaboy.vhr.utils.HrUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,10 @@ public class HrService implements UserDetailsService {
         return hrMapper.getAllHrs(HrUtils.getCurrentHr().getId(),keywords);
     }
 
+    public int addHr(Hr hr) {
+        return hrMapper.insertSelective(hr);
+    }
+
     public Integer updateHr(Hr hr) {
         return hrMapper.updateByPrimaryKeySelective(hr);
     }
@@ -81,5 +86,9 @@ public class HrService implements UserDetailsService {
 
     public Integer updateUserface(String url, Integer id) {
         return hrMapper.updateUserface(url, id);
+    }
+
+    public int resetPasswordById(Integer id, String encodePassword) {
+        return hrMapper.updatePasswd(id, encodePassword);
     }
 }

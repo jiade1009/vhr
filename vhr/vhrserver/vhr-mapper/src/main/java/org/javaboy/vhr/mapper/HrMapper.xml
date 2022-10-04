@@ -61,7 +61,10 @@
       #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{userface,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR})
   </insert>
-    <insert id="insertSelective" parameterType="org.javaboy.vhr.model.Hr">
+    <!--useGeneratedKeys （仅适用于 insert 和 update）:
+    令 MyBatis 使用 JDBC 的 getGeneratedKeys 方法来取出由数据库内部生成的主键-->
+    <insert id="insertSelective" parameterType="org.javaboy.vhr.model.Hr" useGeneratedKeys="true"
+            keyProperty="id">
         insert into hr
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

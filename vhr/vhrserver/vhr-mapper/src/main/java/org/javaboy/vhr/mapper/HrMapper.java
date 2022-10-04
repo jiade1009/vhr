@@ -1,6 +1,7 @@
 package org.javaboy.vhr.mapper;
 
 import org.apache.ibatis.annotations.Param;
+import org.javaboy.vhr.model.Department;
 import org.javaboy.vhr.model.Hr;
 import org.javaboy.vhr.model.Role;
 

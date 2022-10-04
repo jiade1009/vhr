@@ -9,7 +9,7 @@
                 element-loading-background="rgba(0, 0, 0, 0.8)"
                 :model="loginForm"
                 class="loginContainer">
-            <h3 class="loginTitle">系统登录</h3>
+            <h3 class="loginTitle">纯阳系统登录</h3>
             <el-form-item prop="username">
                 <el-input size="normal" type="text" v-model="loginForm.username" auto-complete="off"
                           placeholder="请输入用户名"></el-input>

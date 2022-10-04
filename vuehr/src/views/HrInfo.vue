@@ -11,12 +11,9 @@
                             :on-success="onSuccess"
                             :data="hr"
                             action="/hr/userface">
-                        <img title="点击修改用户图像" :src="hr.userface" style="width: 100px;height: 100px;border-radius: 50px"
+                        <img title="点击修改用户图像" :src="hr.userface?hr.userface:userface" style="width: 100px;height: 100px;border-radius: 50px"
                              alt="">
                     </el-upload>
-                </div>
-                <div>电话号码：
-                    <el-tag>{{hr.telephone}}</el-tag>
                 </div>
                 <div>手机号码：
                     <el-tag>{{hr.phone}}</el-tag>
@@ -130,6 +127,7 @@
                 }
             };
             return {
+                userface: this.$ELEMENT.userface,
                 ruleForm: {
                     oldpass: '',
                     pass: '',

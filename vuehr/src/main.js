@@ -52,7 +52,12 @@ import {
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
-Vue.prototype.$ELEMENT = {size: 'small', zIndex: 3000};
+Vue.prototype.$ELEMENT = {
+    size: 'small',
+    zIndex: 3000,
+    userface: require('@/assets/img/userface.jpg'),
+    pagesize: 10, //分页
+};
 Vue.use(Switch);
 Vue.use(CollapseItem);
 Vue.use(Radio);
@@ -97,6 +102,7 @@ Vue.use(Icon);
 Vue.use(Select);
 Vue.use(Form);
 Vue.use(Tag);
+Vue.use(Message);
 Vue.prototype.$alert = MessageBox.alert
 Vue.prototype.$confirm = MessageBox.confirm
 

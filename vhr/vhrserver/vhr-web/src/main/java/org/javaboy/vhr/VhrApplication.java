@@ -1,6 +1,8 @@
 package org.javaboy.vhr;
 
 import org.mybatis.spring.annotation.MapperScan;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -11,8 +13,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @MapperScan(basePackages = "org.javaboy.vhr.mapper")
 @EnableScheduling
 public class VhrApplication {
+    private static final Logger LOGGER = LoggerFactory.getLogger(VhrApplication.class);
 
     public static void main(String[] args) {
+        LOGGER.info("let's go to the new world!");
         SpringApplication.run(VhrApplication.class, args);
     }
 

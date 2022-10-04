@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.DatabaseTypeMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.DatabaseType">
+    <!--@mbg.generated-->
+    <!--@Table database_type-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="sort_order" jdbcType="INTEGER" property="sortOrder" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, code, `name`, `value`, description, sort_order, `type`
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from database_type
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getAllBeanlist" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from database_type
+    <if test="keywords!=null">
+      where name like concat('%',#{keywords},'%') or code like concat('%',#{keywords},'%')
+    </if>
+  </select>
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from database_type
+    <where>
+      <if test="keywords!=null">
+        and name like concat('%',#{keywords},'%') or code like concat('%',#{keywords},'%')
+      </if>
+    </where>
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from database_type
+    <where>
+      <if test="keywords!=null">
+        and name like concat('%',#{keywords},'%') or code like concat('%',#{keywords},'%')
+      </if>
+    </where>
+  </select>
+
+  <select id="checkUniqueName" resultType="java.lang.Long">
+    select count(*) from database_type where name = #{name,jdbcType=VARCHAR}
+    <if test="id != null">
+      and id != #{id,jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <select id="checkUniqueCode" resultType="java.lang.Long">
+    select count(*) from database_type where code = #{code,jdbcType=VARCHAR}
+    <if test="id != null">
+      and id != #{id,jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from database_type
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.DatabaseType" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into database_type (code, `name`, `value`, 
+      description, sort_order, `type`
+      )
+    values (#{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{sortOrder,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.DatabaseType" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into database_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="value != null">
+        `value`,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="sortOrder != null">
+        sort_order,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="value != null">
+        #{value,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="sortOrder != null">
+        #{sortOrder,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.javaboy.vhr.model.DatabaseType">
+    <!--@mbg.generated-->
+    update database_type
+    <set>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="value != null">
+        `value` = #{value,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="sortOrder != null">
+        sort_order = #{sortOrder,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.DatabaseType">
+    <!--@mbg.generated-->
+    update database_type
+    set code = #{code,jdbcType=VARCHAR},
+      `name` = #{name,jdbcType=VARCHAR},
+      `value` = #{value,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      sort_order = #{sortOrder,jdbcType=INTEGER},
+      `type` = #{type,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
