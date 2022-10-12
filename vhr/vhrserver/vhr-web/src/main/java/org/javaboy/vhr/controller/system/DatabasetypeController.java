@@ -39,6 +39,7 @@ public class DatabasetypeController {
 
     @PostMapping("/")
     public RespBean addBean(@RequestBody DatabaseType bean) {
+        bean.setCode(bean.getCode().toLowerCase());
         int result = beanService.insert(bean);
         if (result == 1) {
             return RespBean.ok("添加成功", bean);
@@ -48,6 +49,7 @@ public class DatabasetypeController {
 
     @PutMapping("/")
     public RespBean updateBean(@RequestBody DatabaseType bean) {
+        bean.setCode(bean.getCode().toLowerCase());
         if (beanService.updateByPrimaryKey(bean) == 1) {
             return RespBean.ok("更新成功!");
         }

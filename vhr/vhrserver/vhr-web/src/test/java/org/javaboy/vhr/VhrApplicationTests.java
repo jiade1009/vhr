@@ -5,6 +5,7 @@ package org.javaboy.vhr;
 
 import org.javaboy.vhr.model.DatabaseType;
 import org.javaboy.vhr.model.Menu;
+import org.javaboy.vhr.pythonutil.ExecPython;
 import org.javaboy.vhr.service.DatabaseTypeService;
 import org.javaboy.vhr.service.MenuService;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,8 @@ public class VhrApplicationTests {
     MenuService menuService;
     @Autowired
     DatabaseTypeService databaseTypeService;
+    @Autowired
+    ExecPython execPython;
 
     @Test
     public void contextLoads() {
@@ -36,6 +39,16 @@ public class VhrApplicationTests {
     public void getAllDatabasetypes() {
         List<DatabaseType> beanlist =  databaseTypeService.getAllBeanlist("");
         System.out.println(beanlist.size());
+    }
+
+    @Test
+    public void runPython() {
+        execPython.runPython(new String[]{"load_a_stock"});
+    }
+
+    @Test
+    public void down_weekly_line(){
+        execPython.runPython(new String[]{"load_a_weekly_line", "20220930", "20220915"});
     }
 
 }

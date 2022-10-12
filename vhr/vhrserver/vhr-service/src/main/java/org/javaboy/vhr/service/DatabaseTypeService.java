@@ -17,7 +17,6 @@ public class DatabaseTypeService{
 
     @Resource
     private DatabaseTypeMapper databaseTypeMapper;
-
     
     public int deleteByPrimaryKey(Integer id) {
         return databaseTypeMapper.deleteByPrimaryKey(id);

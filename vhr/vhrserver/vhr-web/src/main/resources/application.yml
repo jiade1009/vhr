@@ -59,4 +59,10 @@ logging:
       # 如果是压缩包，里面会多一个名log/ota.2021-11-05.0的日志文件
       # 如下面的例子，打包之后为: log/2021-11/ota.2020-11-5.0.log，这是一个日志文件
       file-name-pattern: log/%d{yyyy-MM}/ota.%d{yyyy-MM-dd}.%i.log
-
+#调用python脚本配置
+python:
+  command: /Library/Frameworks/Python.framework/Versions/3.9/bin/python3
+  basePath: /Users/sam/Documents/IdeaProjects/stock
+  apiFile: /web/main_api.py
+  parameters:
+    reloadBasicinfo: load_a_stock

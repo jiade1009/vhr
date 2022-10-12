@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.StockBasicInfoMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.StockBasicInfo">
+    <!--@mbg.generated-->
+    <!--@Table stock_basic_info-->
+    <id column="code" jdbcType="VARCHAR" property="code" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="date_publish" jdbcType="VARCHAR" property="datePublish" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    code, `name`, date_publish
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from stock_basic_info
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--@mbg.generated-->
+    delete from stock_basic_info
+    where code = #{code,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="org.javaboy.vhr.model.StockBasicInfo">
+    <!--@mbg.generated-->
+    insert into stock_basic_info (code, `name`, date_publish
+      )
+    values (#{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{datePublish,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="org.javaboy.vhr.model.StockBasicInfo">
+    <!--@mbg.generated-->
+    insert into stock_basic_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="datePublish != null">
+        date_publish,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="datePublish != null">
+        #{datePublish,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.javaboy.vhr.model.StockBasicInfo">
+    <!--@mbg.generated-->
+    update stock_basic_info
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="datePublish != null">
+        date_publish = #{datePublish,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockBasicInfo">
+    <!--@mbg.generated-->
+    update stock_basic_info
+    set `name` = #{name,jdbcType=VARCHAR},
+      date_publish = #{datePublish,jdbcType=VARCHAR}
+    where code = #{code,jdbcType=VARCHAR}
+  </update>
+
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_basic_info
+    <where>
+      <if test="keywords!=null">
+        and name like concat('%',#{keywords},'%') or code like concat('%',#{keywords},'%')
+      </if>
+    </where>
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from stock_basic_info
+    <where>
+      <if test="keywords!=null">
+        and name like concat('%',#{keywords},'%') or code like concat('%',#{keywords},'%')
+      </if>
+    </where>
+  </select>
+</mapper>
