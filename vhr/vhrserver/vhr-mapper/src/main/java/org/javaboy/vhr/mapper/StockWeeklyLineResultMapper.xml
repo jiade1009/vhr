@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.StockWeeklyLineResultMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.StockWeeklyLineResult">
+    <!--@mbg.generated-->
+    <!--@Table stock_weekly_line_result-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="rehabilitation_way" jdbcType="VARCHAR" property="rehabilitationWay" />
+    <result column="date_weekly_research" jdbcType="VARCHAR" property="dateWeeklyResearch" />
+    <result column="date_weekly_start" jdbcType="VARCHAR" property="dateWeeklyStart" />
+    <result column="result" jdbcType="INTEGER" property="result" />
+    <result column="ema_result" jdbcType="INTEGER" property="emaResult" />
+    <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
+    <result column="time_end" jdbcType="TIMESTAMP" property="timeEnd" />
+    <result column="generate_type" jdbcType="INTEGER" property="generateType" />
+    <result column="result_desc" jdbcType="LONGVARCHAR" property="resultDesc" />
+    <result column="ema_result_desc" jdbcType="LONGVARCHAR" property="emaResultDesc" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, rehabilitation_way, date_weekly_research, date_weekly_start, `result`, ema_result, 
+    time_create, time_end, generate_type, result_desc, ema_result_desc
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from stock_weekly_line_result
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from stock_weekly_line_result
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockWeeklyLineResult" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into stock_weekly_line_result (rehabilitation_way, date_weekly_research, 
+      date_weekly_start, `result`, ema_result, 
+      time_create, time_end, generate_type, 
+      result_desc, ema_result_desc)
+    values (#{rehabilitationWay,jdbcType=VARCHAR}, #{dateWeeklyResearch,jdbcType=VARCHAR}, 
+      #{dateWeeklyStart,jdbcType=VARCHAR}, #{result,jdbcType=INTEGER}, #{emaResult,jdbcType=INTEGER}, 
+      #{timeCreate,jdbcType=TIMESTAMP}, #{timeEnd,jdbcType=TIMESTAMP}, #{generateType,jdbcType=INTEGER}, 
+      #{resultDesc,jdbcType=LONGVARCHAR}, #{emaResultDesc,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockWeeklyLineResult" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into stock_weekly_line_result
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rehabilitationWay != null">
+        rehabilitation_way,
+      </if>
+      <if test="dateWeeklyResearch != null">
+        date_weekly_research,
+      </if>
+      <if test="dateWeeklyStart != null">
+        date_weekly_start,
+      </if>
+      <if test="result != null">
+        `result`,
+      </if>
+      <if test="emaResult != null">
+        ema_result,
+      </if>
+      <if test="timeCreate != null">
+        time_create,
+      </if>
+      <if test="timeEnd != null">
+        time_end,
+      </if>
+      <if test="generateType != null">
+        generate_type,
+      </if>
+      <if test="resultDesc != null">
+        result_desc,
+      </if>
+      <if test="emaResultDesc != null">
+        ema_result_desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rehabilitationWay != null">
+        #{rehabilitationWay,jdbcType=VARCHAR},
+      </if>
+      <if test="dateWeeklyResearch != null">
+        #{dateWeeklyResearch,jdbcType=VARCHAR},
+      </if>
+      <if test="dateWeeklyStart != null">
+        #{dateWeeklyStart,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null">
+        #{result,jdbcType=INTEGER},
+      </if>
+      <if test="emaResult != null">
+        #{emaResult,jdbcType=INTEGER},
+      </if>
+      <if test="timeCreate != null">
+        #{timeCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timeEnd != null">
+        #{timeEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="generateType != null">
+        #{generateType,jdbcType=INTEGER},
+      </if>
+      <if test="resultDesc != null">
+        #{resultDesc,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="emaResultDesc != null">
+        #{emaResultDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.javaboy.vhr.model.StockWeeklyLineResult">
+    <!--@mbg.generated-->
+    update stock_weekly_line_result
+    <set>
+      <if test="rehabilitationWay != null">
+        rehabilitation_way = #{rehabilitationWay,jdbcType=VARCHAR},
+      </if>
+      <if test="dateWeeklyResearch != null">
+        date_weekly_research = #{dateWeeklyResearch,jdbcType=VARCHAR},
+      </if>
+      <if test="dateWeeklyStart != null">
+        date_weekly_start = #{dateWeeklyStart,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null">
+        `result` = #{result,jdbcType=INTEGER},
+      </if>
+      <if test="emaResult != null">
+        ema_result = #{emaResult,jdbcType=INTEGER},
+      </if>
+      <if test="timeCreate != null">
+        time_create = #{timeCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timeEnd != null">
+        time_end = #{timeEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="generateType != null">
+        generate_type = #{generateType,jdbcType=INTEGER},
+      </if>
+      <if test="resultDesc != null">
+        result_desc = #{resultDesc,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="emaResultDesc != null">
+        ema_result_desc = #{emaResultDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockWeeklyLineResult">
+    <!--@mbg.generated-->
+    update stock_weekly_line_result
+    set rehabilitation_way = #{rehabilitationWay,jdbcType=VARCHAR},
+      date_weekly_research = #{dateWeeklyResearch,jdbcType=VARCHAR},
+      date_weekly_start = #{dateWeeklyStart,jdbcType=VARCHAR},
+      `result` = #{result,jdbcType=INTEGER},
+      ema_result = #{emaResult,jdbcType=INTEGER},
+      time_create = #{timeCreate,jdbcType=TIMESTAMP},
+      time_end = #{timeEnd,jdbcType=TIMESTAMP},
+      generate_type = #{generateType,jdbcType=INTEGER},
+      result_desc = #{resultDesc,jdbcType=LONGVARCHAR},
+      ema_result_desc = #{emaResultDesc,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_weekly_line_result
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from stock_weekly_line_result
+  </select>
+</mapper>
