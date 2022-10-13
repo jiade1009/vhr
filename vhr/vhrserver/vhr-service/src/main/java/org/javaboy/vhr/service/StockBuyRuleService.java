@@ -11,7 +11,6 @@ import java.util.List;
 /**
  * @author : sam
  * @ClassName : StockBuyRuleService
- * @description : TODO
  * @datetime : 2022年 10月 13日 22:02
  * @version: : 1.0
  */

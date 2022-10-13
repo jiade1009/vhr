@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
 /**
- * @description : TODO
+ * @description : 股票基本信息
  * @author      : sam
  * @datetime    : 2022-10-11 10:15:00
  * @version:    : 1.0

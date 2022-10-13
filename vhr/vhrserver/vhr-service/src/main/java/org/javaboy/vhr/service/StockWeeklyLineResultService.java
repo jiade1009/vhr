@@ -14,7 +14,6 @@ import java.util.List;
 /**
  * @author : sam
  * @ClassName : StockWeeklyLineResultService
- * @description : TODO
  * @datetime : 2022年 10月 12日 15:12
  * @version: : 1.0
  */

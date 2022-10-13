@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author : sam
  * @ClassName : StockBuyRuleMapper
- * @description : TODO
+ * @description :
  * @datetime : 2022年 10月 13日 22:02
  * @version: : 1.0
  */

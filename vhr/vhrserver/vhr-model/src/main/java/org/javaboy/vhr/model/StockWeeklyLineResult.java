@@ -4,7 +4,6 @@ import java.util.Date;
 
 /**
  * @ClassName   : StockWeeklyLineResult
- * @description : TODO
  * @author      : sam
  * @datetime    : 2022年 10月 12日 15:12
  * @version:    : 1.0

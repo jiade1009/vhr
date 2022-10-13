@@ -10,7 +10,7 @@ import java.io.*;
 /**
  * @author sam
  * @ClassName ExecPython
- * @description: TODO
+ * @description: 调用python脚本
  * @datetime 2022年 10月 07日 21:50
  * @version: 1.0
  */
