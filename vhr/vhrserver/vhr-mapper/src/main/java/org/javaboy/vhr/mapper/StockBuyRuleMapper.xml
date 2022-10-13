@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.StockBuyRuleMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.StockBuyRule">
+    <!--@mbg.generated-->
+    <!--@Table stock_buy_rule-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="time_market" jdbcType="INTEGER" property="timeMarket" />
+    <result column="time_market_option" jdbcType="INTEGER" property="timeMarketOption" />
+    <result column="rule_period" jdbcType="INTEGER" property="rulePeriod" />
+    <result column="turnover_limit" jdbcType="INTEGER" property="turnoverLimit" />
+    <result column="turnover_limit_option" jdbcType="INTEGER" property="turnoverLimitOption" />
+    <result column="conver_limit" jdbcType="FLOAT" property="converLimit" />
+    <result column="conver_limit_option" jdbcType="INTEGER" property="converLimitOption" />
+    <result column="shock_limit" jdbcType="FLOAT" property="shockLimit" />
+    <result column="shock_limit_option" jdbcType="INTEGER" property="shockLimitOption" />
+    <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
+    <result column="time_update" jdbcType="TIMESTAMP" property="timeUpdate" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, time_market, time_market_option, rule_period, turnover_limit, turnover_limit_option, 
+    conver_limit, conver_limit_option, shock_limit, shock_limit_option, time_create, 
+    time_update, `status`
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from stock_buy_rule
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from stock_buy_rule
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockBuyRule" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into stock_buy_rule (time_market, time_market_option, rule_period, 
+      turnover_limit, turnover_limit_option, conver_limit, 
+      conver_limit_option, shock_limit, shock_limit_option, 
+      time_create, time_update, `status`
+      )
+    values (#{timeMarket,jdbcType=INTEGER}, #{timeMarketOption,jdbcType=INTEGER}, #{rulePeriod,jdbcType=INTEGER}, 
+      #{turnoverLimit,jdbcType=INTEGER}, #{turnoverLimitOption,jdbcType=INTEGER}, #{converLimit,jdbcType=FLOAT}, 
+      #{converLimitOption,jdbcType=INTEGER}, #{shockLimit,jdbcType=FLOAT}, #{shockLimitOption,jdbcType=INTEGER}, 
+      #{timeCreate,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockBuyRule" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into stock_buy_rule
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="timeMarket != null">
+        time_market,
+      </if>
+      <if test="timeMarketOption != null">
+        time_market_option,
+      </if>
+      <if test="rulePeriod != null">
+        rule_period,
+      </if>
+      <if test="turnoverLimit != null">
+        turnover_limit,
+      </if>
+      <if test="turnoverLimitOption != null">
+        turnover_limit_option,
+      </if>
+      <if test="converLimit != null">
+        conver_limit,
+      </if>
+      <if test="converLimitOption != null">
+        conver_limit_option,
+      </if>
+      <if test="shockLimit != null">
+        shock_limit,
+      </if>
+      <if test="shockLimitOption != null">
+        shock_limit_option,
+      </if>
+      <if test="timeCreate != null">
+        time_create,
+      </if>
+      <if test="timeUpdate != null">
+        time_update,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="timeMarket != null">
+        #{timeMarket,jdbcType=INTEGER},
+      </if>
+      <if test="timeMarketOption != null">
+        #{timeMarketOption,jdbcType=INTEGER},
+      </if>
+      <if test="rulePeriod != null">
+        #{rulePeriod,jdbcType=INTEGER},
+      </if>
+      <if test="turnoverLimit != null">
+        #{turnoverLimit,jdbcType=INTEGER},
+      </if>
+      <if test="turnoverLimitOption != null">
+        #{turnoverLimitOption,jdbcType=INTEGER},
+      </if>
+      <if test="converLimit != null">
+        #{converLimit,jdbcType=FLOAT},
+      </if>
+      <if test="converLimitOption != null">
+        #{converLimitOption,jdbcType=INTEGER},
+      </if>
+      <if test="shockLimit != null">
+        #{shockLimit,jdbcType=FLOAT},
+      </if>
+      <if test="shockLimitOption != null">
+        #{shockLimitOption,jdbcType=INTEGER},
+      </if>
+      <if test="timeCreate != null">
+        #{timeCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timeUpdate != null">
+        #{timeUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.javaboy.vhr.model.StockBuyRule">
+    <!--@mbg.generated-->
+    update stock_buy_rule
+    <set>
+      <if test="timeMarket != null">
+        time_market = #{timeMarket,jdbcType=INTEGER},
+      </if>
+      <if test="timeMarketOption != null">
+        time_market_option = #{timeMarketOption,jdbcType=INTEGER},
+      </if>
+      <if test="rulePeriod != null">
+        rule_period = #{rulePeriod,jdbcType=INTEGER},
+      </if>
+      <if test="turnoverLimit != null">
+        turnover_limit = #{turnoverLimit,jdbcType=INTEGER},
+      </if>
+      <if test="turnoverLimitOption != null">
+        turnover_limit_option = #{turnoverLimitOption,jdbcType=INTEGER},
+      </if>
+      <if test="converLimit != null">
+        conver_limit = #{converLimit,jdbcType=FLOAT},
+      </if>
+      <if test="converLimitOption != null">
+        conver_limit_option = #{converLimitOption,jdbcType=INTEGER},
+      </if>
+      <if test="shockLimit != null">
+        shock_limit = #{shockLimit,jdbcType=FLOAT},
+      </if>
+      <if test="shockLimitOption != null">
+        shock_limit_option = #{shockLimitOption,jdbcType=INTEGER},
+      </if>
+      <if test="timeCreate != null">
+        time_create = #{timeCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timeUpdate != null">
+        time_update = #{timeUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockBuyRule">
+    <!--@mbg.generated-->
+    update stock_buy_rule
+    set time_market = #{timeMarket,jdbcType=INTEGER},
+      time_market_option = #{timeMarketOption,jdbcType=INTEGER},
+      rule_period = #{rulePeriod,jdbcType=INTEGER},
+      turnover_limit = #{turnoverLimit,jdbcType=INTEGER},
+      turnover_limit_option = #{turnoverLimitOption,jdbcType=INTEGER},
+      conver_limit = #{converLimit,jdbcType=FLOAT},
+      conver_limit_option = #{converLimitOption,jdbcType=INTEGER},
+      shock_limit = #{shockLimit,jdbcType=FLOAT},
+      shock_limit_option = #{shockLimitOption,jdbcType=INTEGER},
+      time_create = #{timeCreate,jdbcType=TIMESTAMP},
+      time_update = #{timeUpdate,jdbcType=TIMESTAMP},
+      `status` = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_buy_rule
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from stock_buy_rule
+  </select>
+</mapper>
