@@ -11,10 +11,11 @@
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="sort_order" jdbcType="INTEGER" property="sortOrder" />
     <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="sys" jdbcType="INTEGER" property="sys" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, code, `name`, `value`, description, sort_order, `type`
+    id, code, `name`, `value`, description, sort_order, `type`, sys
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -75,10 +76,10 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.DatabaseType" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into database_type (code, `name`, `value`, 
-      description, sort_order, `type`
+      description, sort_order, `type`, `sys`
       )
     values (#{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR}, 
-      #{description,jdbcType=VARCHAR}, #{sortOrder,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}
+      #{description,jdbcType=VARCHAR}, #{sortOrder,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{sys,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.DatabaseType" useGeneratedKeys="true">
@@ -103,6 +104,9 @@
       <if test="type != null">
         `type`,
       </if>
+      <if test="sys != null">
+        `sys`,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="code != null">
@@ -122,6 +126,9 @@
       </if>
       <if test="type != null">
         #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="sys != null">
+        #{sys,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -147,6 +154,9 @@
       <if test="type != null">
         `type` = #{type,jdbcType=VARCHAR},
       </if>
+      <if test="sys != null">
+        sys = #{sys,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -158,7 +168,8 @@
       `value` = #{value,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       sort_order = #{sortOrder,jdbcType=INTEGER},
-      `type` = #{type,jdbcType=VARCHAR}
+      `type` = #{type,jdbcType=VARCHAR},
+      sys = #{sys,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -24,9 +24,17 @@
             element-loading-spinner="el-icon-loading"
             element-loading-background="rgba(0, 0, 0, 0.8)"
             style="width: 100%">
+          <el-table-column type="expand">
+            <template slot-scope="props">
+              <el-form label-position="left" inline class="demo-table-expand">
+                <el-form-item label="运行结果">
+                  <span>{{ props.row.resultDesc}}</span>
+                </el-form-item>
+              </el-form>
+            </template>
+          </el-table-column>
           <el-table-column
               prop="dateWeeklyResearch"
-              fixed
               label="调研日期"
               align="left">
           </el-table-column>
@@ -60,11 +68,6 @@
               align="left">
           </el-table-column>
           <el-table-column
-              prop="resultDesc"
-              label="备注"
-              align="left">
-          </el-table-column>
-          <el-table-column
               prop="timeCreate"
               label="运行开始时间"
               :formatter="formatterTime"
@@ -81,7 +84,9 @@
               width="200"
               label="操作">
             <template slot-scope="scope">
-              <el-button :hidden="scope.row.emaResult!=0" @click="generateEma(scope.row)" style="padding: 3px" size="mini">生成EMA</el-button>
+              <el-button v-if="scope.row.emaResult==0" @click="generateEma(scope.row)" style="padding: 3px"
+                         size="mini">生成EMA
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -104,7 +109,7 @@
 <script>
 export default {
   name: "StockWeeklylineResult",
-  data () {
+  data() {
     return {
       //分页参数
       total: 0,
@@ -124,13 +129,13 @@ export default {
       let property = column.property;
       let data = row[property];
       if (property == "rehabilitationWay") {
-        return data=="qfq"?"前复权":data=="hfq"?"后复权":"未复权";
+        return data == "qfq" ? "前复权" : data == "hfq" ? "后复权" : "未复权";
       } else if (property == "result") {
-        return data=="0"?"成功":data=="1"?"失败":"";
+        return data == "0" ? "成功" : data == "1" ? "失败" : "";
       } else if (property == "emaResult") {
-        return data=="0"?"未生成":data=="1"?"已生成":"生成失败";
+        return data == "0" ? "未生成" : data == "1" ? "已生成" : "生成失败";
       } else if (property == "generateType") {
-        return data=="0"?"手动生成":"自动生成";
+        return data == "0" ? "手动生成" : "自动生成";
       }
     },
     formatterTime(row, column) {
@@ -186,5 +191,18 @@ export default {
 </script>
 
 <style scoped>
+.demo-table-expand {
+  font-size: 0;
+}
 
+.demo-table-expand label {
+  width: 90px;
+  color: #99a9bf;
+}
+
+.demo-table-expand .el-form-item {
+  margin-right: 0;
+  margin-bottom: 0;
+  width: 50%;
+}
 </style>

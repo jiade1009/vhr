@@ -26,6 +26,7 @@
             :data="beanlist"
             stripe
             border
+            tooltip-effect="light"
             v-loading="loading"
             element-loading-text="正在加载..."
             element-loading-spinner="el-icon-loading"
@@ -59,17 +60,31 @@
           </el-table-column>
           <el-table-column
               prop="type"
+              width="95"
               align="left"
               label="类别">
           </el-table-column>
-
+          <el-table-column
+              prop="description"
+              align="left"
+              :show-overflow-tooltip="true"
+              label="描述">
+          </el-table-column>
+          <el-table-column
+              prop="sys"
+              width="95"
+              align="left"
+              :formatter="formatterText"
+              label="系统参数">
+          </el-table-column>
           <el-table-column
               fixed="right"
               width="200"
               label="操作">
             <template slot-scope="scope">
               <el-button @click="showEditBeanView(scope.row)" style="padding: 3px" size="mini">编辑</el-button>
-              <el-button @click="deleteBean(scope.row)" style="padding: 3px" size="mini" type="danger">删除
+              <el-button @click="deleteBean(scope.row)" style="padding: 3px" size="mini" type="danger"
+                         v-if="scope.row.sys==1?false:true">删除
               </el-button>
             </template>
           </el-table-column>
@@ -141,6 +156,7 @@
                 </el-form-item>
               </el-col>
             </el-row>
+            <el-input type="hidden" id="sys"></el-input>
           </el-form>
         </div>
         <span slot="footer" class="dialog-footer">
@@ -191,6 +207,7 @@ export default {
         "description": "",
         "sortOrder": 0,
         "type": "",
+        "sys": 0,
       },
       title: '添加基础数据',
       dialogVisible: false,
@@ -216,6 +233,13 @@ export default {
           return callback(new Error(msg));
         }
       });
+    },
+    formatterText(row, column) {
+      let property = column.property;
+      let data = row[property];
+      if (property == "sys") {
+        return data == "0" ? "否" : "是";
+      }
     },
     showAddBeanView() {
       this.emptyBean();
@@ -256,9 +280,14 @@ export default {
         "description": "",
         "sortOrder": 0,
         "type": "",
+        "sys": 0
       };
     },
     deleteBean(data) {
+      if (data.sys==1) {
+        this.$alert('该数据为系统设置，不允许删除');
+        return;
+      }
       this.$confirm('此操作将永久删除【' + data.name + '】, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

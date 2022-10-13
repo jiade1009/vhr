@@ -1,8 +1,8 @@
 package org.javaboy.vhr.model;
 
 /**
-    * basic data information
-    */
+ * basic data information
+ */
 public class DatabaseType {
     private Integer id;
 
@@ -15,14 +15,15 @@ public class DatabaseType {
     private String description;
 
     /**
-    * 排序
-    */
+     * 排序
+     */
     private Integer sortOrder;
 
     /**
-    * 类型
-    */
+     * 类型
+     */
     private String type;
+    private Integer sys;
 
     public Integer getId() {
         return id;
@@ -78,5 +79,13 @@ public class DatabaseType {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Integer getSys() {
+        return sys;
+    }
+
+    public void setSys(Integer sys) {
+        this.sys = sys;
     }
 }
