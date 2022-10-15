@@ -3,10 +3,11 @@ package org.javaboy.vhr.model;
 import java.util.Date;
 
 /**
- * @ClassName   : StockWeeklyLineEmaResult
- * @author      : sam
- * @datetime    : 2022年 10月 12日 16:33
- * @version:    : 1.0
+ * @author : sam
+ * @ClassName : StockWeeklyLineEmaResult
+ * @description : TODO
+ * @datetime : 2022年 10月 15日 08:11
+ * @version: : 1.0
  */
 
 public class StockWeeklyLineEmaResult {
@@ -17,16 +18,21 @@ public class StockWeeklyLineEmaResult {
     private Date timeEnd;
 
     /**
-    * ema生成状态，0成功，1失败
-    */
+     * ema生成状态，0成功，1失败
+     */
     private Integer status;
 
     /**
-    * ema生成结果备注信息
-    */
+     * ema生成结果备注信息
+     */
     private String statusDesc;
 
     private Integer weeklyLineId;
+
+    /**
+     * ema数据线，例如18_25_75
+     */
+    private String emaIndex;
 
     public Integer getId() {
         return id;
@@ -74,5 +80,13 @@ public class StockWeeklyLineEmaResult {
 
     public void setWeeklyLineId(Integer weeklyLineId) {
         this.weeklyLineId = weeklyLineId;
+    }
+
+    public String getEmaIndex() {
+        return emaIndex;
+    }
+
+    public void setEmaIndex(String emaIndex) {
+        this.emaIndex = emaIndex;
     }
 }

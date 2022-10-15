@@ -2,14 +2,16 @@ package org.javaboy.vhr.controller.stock;
 
 import org.javaboy.vhr.model.StockWeeklyLineEmaResult;
 import org.javaboy.vhr.service.StockWeeklyLineEmaResultService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
 /**
  * (stock_weekly_line_ema_result)表控制层
  *
- * @author xxxxx
+ * @author sam
  */
 @RestController
 @RequestMapping("/stock_weekly_line_ema_result")

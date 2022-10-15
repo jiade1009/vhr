@@ -10,10 +10,11 @@
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="status_desc" jdbcType="LONGVARCHAR" property="statusDesc" />
     <result column="weekly_line_id" jdbcType="INTEGER" property="weeklyLineId" />
+    <result column="ema_index" jdbcType="VARCHAR" property="emaIndex" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, time_create, time_end, `status`, status_desc, weekly_line_id
+    id, time_create, time_end, `status`, status_desc, weekly_line_id, ema_index
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -30,9 +31,11 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockWeeklyLineEmaResult" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into stock_weekly_line_ema_result (time_create, time_end, `status`, 
-      status_desc, weekly_line_id)
+      status_desc, weekly_line_id, ema_index
+      )
     values (#{timeCreate,jdbcType=TIMESTAMP}, #{timeEnd,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
-      #{statusDesc,jdbcType=LONGVARCHAR}, #{weeklyLineId,jdbcType=INTEGER})
+      #{statusDesc,jdbcType=LONGVARCHAR}, #{weeklyLineId,jdbcType=INTEGER}, #{emaIndex,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockWeeklyLineEmaResult" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -53,6 +56,9 @@
       <if test="weeklyLineId != null">
         weekly_line_id,
       </if>
+      <if test="emaIndex != null">
+        ema_index,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="timeCreate != null">
@@ -69,6 +75,9 @@
       </if>
       <if test="weeklyLineId != null">
         #{weeklyLineId,jdbcType=INTEGER},
+      </if>
+      <if test="emaIndex != null">
+        #{emaIndex,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -91,6 +100,9 @@
       <if test="weeklyLineId != null">
         weekly_line_id = #{weeklyLineId,jdbcType=INTEGER},
       </if>
+      <if test="emaIndex != null">
+        ema_index = #{emaIndex,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -101,7 +113,8 @@
       time_end = #{timeEnd,jdbcType=TIMESTAMP},
       `status` = #{status,jdbcType=INTEGER},
       status_desc = #{statusDesc,jdbcType=LONGVARCHAR},
-      weekly_line_id = #{weeklyLineId,jdbcType=INTEGER}
+      weekly_line_id = #{weeklyLineId,jdbcType=INTEGER},
+      ema_index = #{emaIndex,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

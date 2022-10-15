@@ -4,10 +4,11 @@ import org.apache.ibatis.annotations.Mapper;
 import org.javaboy.vhr.model.StockWeeklyLineEmaResult;
 
 /**
- * @ClassName   : StockWeeklyLineEmaResultMapper
- * @author      : sam
- * @datetime    : 2022年 10月 12日 16:33
- * @version:    : 1.0
+ * @author : sam
+ * @ClassName : StockWeeklyLineEmaResultMapper
+ * @description : TODO
+ * @datetime : 2022年 10月 15日 08:11
+ * @version: : 1.0
  */
 
 @Mapper
