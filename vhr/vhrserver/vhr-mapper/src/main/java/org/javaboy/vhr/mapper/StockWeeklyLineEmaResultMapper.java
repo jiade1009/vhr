@@ -6,7 +6,7 @@ import org.javaboy.vhr.model.StockWeeklyLineEmaResult;
 /**
  * @author : sam
  * @ClassName : StockWeeklyLineEmaResultMapper
- * @description : TODO
+ * @description :
  * @datetime : 2022年 10月 15日 08:11
  * @version: : 1.0
  */

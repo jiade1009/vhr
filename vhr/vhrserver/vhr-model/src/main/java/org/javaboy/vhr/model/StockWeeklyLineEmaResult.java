@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * @author : sam
  * @ClassName : StockWeeklyLineEmaResult
- * @description : TODO
+ * @description :
  * @datetime : 2022年 10月 15日 08:11
  * @version: : 1.0
  */
