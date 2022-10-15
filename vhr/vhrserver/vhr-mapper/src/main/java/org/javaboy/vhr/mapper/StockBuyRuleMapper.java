@@ -3,7 +3,6 @@ package org.javaboy.vhr.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.javaboy.vhr.model.StockBuyRule;
-import org.javaboy.vhr.model.StockWeeklyLineResult;
 
 import java.util.List;
 
@@ -32,4 +31,17 @@ public interface StockBuyRuleMapper {
     List<StockBuyRule> getBeanlistByPage(@Param("page") Integer page, @Param("size") Integer size);
 
     Long getTotal();
+
+    // 关闭当前正在运行的策略
+    int closeRunRule();
+
+    /**
+     * 更新指定id的Bean，更改其状态为指定status
+     * @param id
+     * @param status
+     * @return
+     */
+    int updateStatusById(@Param("id") Integer id, @Param("status") Integer status);
+
+    List<StockBuyRule> getBeanlistByStatus(@Param("status") Integer status);
 }

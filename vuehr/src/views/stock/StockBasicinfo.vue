@@ -32,23 +32,10 @@
             element-loading-background="rgba(0, 0, 0, 0.8)"
             style="width: 100%">
           <el-table-column
-              type="selection"
-              width="55">
-          </el-table-column>
-          <el-table-column
-              prop="name"
-              fixed
-              align="left"
-              label="名称">
-          </el-table-column>
-          <el-table-column
-              prop="code"
-              label="编码"
-              align="left">
-          </el-table-column>
-          <el-table-column
-              prop="datePublish"
-              label="上市日期"
+              v-for="column in tableColumns"
+              :key="column.prop"
+              :prop="column.prop"
+              :label="column.label"
               align="left">
           </el-table-column>
         </el-table>
@@ -87,6 +74,11 @@ export default {
         "name": "",
         "datePublish": "",
       },
+      tableColumns: [
+        {prop: "name", label: "名称", show: true},
+        {prop: "code", label: "代码", show: true},
+        {prop: "datePublish", label: "上市日期", show: true},
+      ],
     }
   },
   mounted() {

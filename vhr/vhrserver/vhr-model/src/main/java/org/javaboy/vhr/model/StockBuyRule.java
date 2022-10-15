@@ -20,7 +20,7 @@ public class StockBuyRule {
     /**
      * 上市时长是否必要，0否，1是
      */
-    private Integer timeMarketOption;
+    private Boolean timeMarketOption;
 
     /**
      * 策略周期，单位为周
@@ -35,7 +35,7 @@ public class StockBuyRule {
     /**
      * 成交量额度是否必要，0否，1是
      */
-    private Integer turnoverLimitOption;
+    private Boolean turnoverLimitOption;
 
     /**
      * 收敛度，最大EMA75/当前ema18<conver_limit
@@ -45,7 +45,7 @@ public class StockBuyRule {
     /**
      * 收敛度是否必要，0否，1是
      */
-    private Integer converLimitOption;
+    private Boolean converLimitOption;
 
     /**
      * 下跌幅度,最低价/最高价<=shock_limit
@@ -55,7 +55,7 @@ public class StockBuyRule {
     /**
      * 下跌幅度是否必要，0否，1是
      */
-    private Integer shockLimitOption;
+    private Boolean shockLimitOption;
 
     private Date timeCreate;
 
@@ -82,11 +82,11 @@ public class StockBuyRule {
         this.timeMarket = timeMarket;
     }
 
-    public Integer getTimeMarketOption() {
+    public Boolean getTimeMarketOption() {
         return timeMarketOption;
     }
 
-    public void setTimeMarketOption(Integer timeMarketOption) {
+    public void setTimeMarketOption(Boolean timeMarketOption) {
         this.timeMarketOption = timeMarketOption;
     }
 
@@ -106,11 +106,11 @@ public class StockBuyRule {
         this.turnoverLimit = turnoverLimit;
     }
 
-    public Integer getTurnoverLimitOption() {
+    public Boolean getTurnoverLimitOption() {
         return turnoverLimitOption;
     }
 
-    public void setTurnoverLimitOption(Integer turnoverLimitOption) {
+    public void setTurnoverLimitOption(Boolean turnoverLimitOption) {
         this.turnoverLimitOption = turnoverLimitOption;
     }
 
@@ -122,11 +122,11 @@ public class StockBuyRule {
         this.converLimit = converLimit;
     }
 
-    public Integer getConverLimitOption() {
+    public Boolean getConverLimitOption() {
         return converLimitOption;
     }
 
-    public void setConverLimitOption(Integer converLimitOption) {
+    public void setConverLimitOption(Boolean converLimitOption) {
         this.converLimitOption = converLimitOption;
     }
 
@@ -138,11 +138,11 @@ public class StockBuyRule {
         this.shockLimit = shockLimit;
     }
 
-    public Integer getShockLimitOption() {
+    public Boolean getShockLimitOption() {
         return shockLimitOption;
     }
 
-    public void setShockLimitOption(Integer shockLimitOption) {
+    public void setShockLimitOption(Boolean shockLimitOption) {
         this.shockLimitOption = shockLimitOption;
     }
 

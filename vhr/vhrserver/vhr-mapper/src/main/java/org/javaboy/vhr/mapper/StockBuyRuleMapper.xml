@@ -6,14 +6,14 @@
     <!--@Table stock_buy_rule-->
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="time_market" jdbcType="INTEGER" property="timeMarket" />
-    <result column="time_market_option" jdbcType="INTEGER" property="timeMarketOption" />
+    <result column="time_market_option" jdbcType="BIT" property="timeMarketOption" />
     <result column="rule_period" jdbcType="INTEGER" property="rulePeriod" />
     <result column="turnover_limit" jdbcType="INTEGER" property="turnoverLimit" />
-    <result column="turnover_limit_option" jdbcType="INTEGER" property="turnoverLimitOption" />
+    <result column="turnover_limit_option" jdbcType="BIT" property="turnoverLimitOption" />
     <result column="conver_limit" jdbcType="FLOAT" property="converLimit" />
-    <result column="conver_limit_option" jdbcType="INTEGER" property="converLimitOption" />
+    <result column="conver_limit_option" jdbcType="BIT" property="converLimitOption" />
     <result column="shock_limit" jdbcType="FLOAT" property="shockLimit" />
-    <result column="shock_limit_option" jdbcType="INTEGER" property="shockLimitOption" />
+    <result column="shock_limit_option" jdbcType="BIT" property="shockLimitOption" />
     <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
     <result column="time_update" jdbcType="TIMESTAMP" property="timeUpdate" />
     <result column="status" jdbcType="INTEGER" property="status" />
@@ -43,9 +43,9 @@
       conver_limit_option, shock_limit, shock_limit_option, 
       time_create, time_update, `status`
       )
-    values (#{timeMarket,jdbcType=INTEGER}, #{timeMarketOption,jdbcType=INTEGER}, #{rulePeriod,jdbcType=INTEGER}, 
-      #{turnoverLimit,jdbcType=INTEGER}, #{turnoverLimitOption,jdbcType=INTEGER}, #{converLimit,jdbcType=FLOAT}, 
-      #{converLimitOption,jdbcType=INTEGER}, #{shockLimit,jdbcType=FLOAT}, #{shockLimitOption,jdbcType=INTEGER}, 
+    values (#{timeMarket,jdbcType=INTEGER}, #{timeMarketOption,jdbcType=BIT}, #{rulePeriod,jdbcType=INTEGER},
+      #{turnoverLimit,jdbcType=INTEGER}, #{turnoverLimitOption,jdbcType=BIT}, #{converLimit,jdbcType=FLOAT},
+      #{converLimitOption,jdbcType=BIT}, #{shockLimit,jdbcType=FLOAT}, #{shockLimitOption,jdbcType=BIT},
       #{timeCreate,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}
       )
   </insert>
@@ -95,7 +95,7 @@
         #{timeMarket,jdbcType=INTEGER},
       </if>
       <if test="timeMarketOption != null">
-        #{timeMarketOption,jdbcType=INTEGER},
+        #{timeMarketOption,jdbcType=BIT},
       </if>
       <if test="rulePeriod != null">
         #{rulePeriod,jdbcType=INTEGER},
@@ -104,19 +104,19 @@
         #{turnoverLimit,jdbcType=INTEGER},
       </if>
       <if test="turnoverLimitOption != null">
-        #{turnoverLimitOption,jdbcType=INTEGER},
+        #{turnoverLimitOption,jdbcType=BIT},
       </if>
       <if test="converLimit != null">
         #{converLimit,jdbcType=FLOAT},
       </if>
       <if test="converLimitOption != null">
-        #{converLimitOption,jdbcType=INTEGER},
+        #{converLimitOption,jdbcType=BIT},
       </if>
       <if test="shockLimit != null">
         #{shockLimit,jdbcType=FLOAT},
       </if>
       <if test="shockLimitOption != null">
-        #{shockLimitOption,jdbcType=INTEGER},
+        #{shockLimitOption,jdbcType=BIT},
       </if>
       <if test="timeCreate != null">
         #{timeCreate,jdbcType=TIMESTAMP},
@@ -137,7 +137,7 @@
         time_market = #{timeMarket,jdbcType=INTEGER},
       </if>
       <if test="timeMarketOption != null">
-        time_market_option = #{timeMarketOption,jdbcType=INTEGER},
+        time_market_option = #{timeMarketOption,jdbcType=BIT},
       </if>
       <if test="rulePeriod != null">
         rule_period = #{rulePeriod,jdbcType=INTEGER},
@@ -146,19 +146,19 @@
         turnover_limit = #{turnoverLimit,jdbcType=INTEGER},
       </if>
       <if test="turnoverLimitOption != null">
-        turnover_limit_option = #{turnoverLimitOption,jdbcType=INTEGER},
+        turnover_limit_option = #{turnoverLimitOption,jdbcType=BIT},
       </if>
       <if test="converLimit != null">
         conver_limit = #{converLimit,jdbcType=FLOAT},
       </if>
       <if test="converLimitOption != null">
-        conver_limit_option = #{converLimitOption,jdbcType=INTEGER},
+        conver_limit_option = #{converLimitOption,jdbcType=BIT},
       </if>
       <if test="shockLimit != null">
         shock_limit = #{shockLimit,jdbcType=FLOAT},
       </if>
       <if test="shockLimitOption != null">
-        shock_limit_option = #{shockLimitOption,jdbcType=INTEGER},
+        shock_limit_option = #{shockLimitOption,jdbcType=BIT},
       </if>
       <if test="timeCreate != null">
         time_create = #{timeCreate,jdbcType=TIMESTAMP},
@@ -176,14 +176,14 @@
     <!--@mbg.generated-->
     update stock_buy_rule
     set time_market = #{timeMarket,jdbcType=INTEGER},
-      time_market_option = #{timeMarketOption,jdbcType=INTEGER},
+      time_market_option = #{timeMarketOption,jdbcType=BIT},
       rule_period = #{rulePeriod,jdbcType=INTEGER},
       turnover_limit = #{turnoverLimit,jdbcType=INTEGER},
-      turnover_limit_option = #{turnoverLimitOption,jdbcType=INTEGER},
+      turnover_limit_option = #{turnoverLimitOption,jdbcType=BIT},
       conver_limit = #{converLimit,jdbcType=FLOAT},
-      conver_limit_option = #{converLimitOption,jdbcType=INTEGER},
+      conver_limit_option = #{converLimitOption,jdbcType=BIT},
       shock_limit = #{shockLimit,jdbcType=FLOAT},
-      shock_limit_option = #{shockLimitOption,jdbcType=INTEGER},
+      shock_limit_option = #{shockLimitOption,jdbcType=BIT},
       time_create = #{timeCreate,jdbcType=TIMESTAMP},
       time_update = #{timeUpdate,jdbcType=TIMESTAMP},
       `status` = #{status,jdbcType=INTEGER}
@@ -193,7 +193,7 @@
   <select id="getBeanlistByPage" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from stock_buy_rule
+    from stock_buy_rule order by status asc, id desc
     <if test="page !=null and size!=null">
       limit #{page},#{size}
     </if>
@@ -201,4 +201,21 @@
   <select id="getTotal" resultType="java.lang.Long">
     select count(*) from stock_buy_rule
   </select>
+
+  <update id="closeRunRule">
+    update stock_buy_rule set `status` = 2 , `time_update` = sysdate() where `status` = 1
+  </update>
+
+  <update id="updateStatusById">
+    update stock_buy_rule set `status` = #{status} , `time_update` = sysdate()
+    where id = #{id}
+  </update>
+
+  <select id="getBeanlistByStatus" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_buy_rule
+    where `status` = #{status,jdbcType=INTEGER}
+  </select>
+
 </mapper>

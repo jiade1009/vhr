@@ -4,6 +4,7 @@ import org.javaboy.vhr.mapper.StockBuyRuleMapper;
 import org.javaboy.vhr.model.RespPageBean;
 import org.javaboy.vhr.model.StockBuyRule;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -61,5 +62,17 @@ public class StockBuyRuleService {
         bean.setData(data);
         bean.setTotal(total);
         return bean;
+    }
+    @Transactional
+    public int runRuleById(Integer id) {
+        // 1.先将现在运行的策略状态更改为过期
+        int r_1 = stockBuyRuleMapper.closeRunRule();
+        // 2.将当前的草稿策略状态更改为运行
+        int r_2 = stockBuyRuleMapper.updateStatusById(id, 1);
+        return r_2;
+    }
+
+    public List<StockBuyRule> getBeanlistByStatus(Integer status) {
+        return stockBuyRuleMapper.getBeanlistByStatus(status);
     }
 }

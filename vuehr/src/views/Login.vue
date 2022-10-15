@@ -100,8 +100,8 @@
         text-align: left;
         margin: 0px 0px 15px 0px;
     }
-    .el-form-item__content{
-        display: flex;
-        align-items: center;
-    }
+    /*.el-form-item__content{*/
+    /*    display: flex;*/
+    /*    align-items: center;*/
+    /*}*/
 </style>
