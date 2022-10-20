@@ -168,7 +168,7 @@
   <select id="getBeanlistByPage" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from stock_weekly_line_result
+    from stock_weekly_line_result order by time_create desc
     <if test="page !=null and size!=null">
       limit #{page},#{size}
     </if>

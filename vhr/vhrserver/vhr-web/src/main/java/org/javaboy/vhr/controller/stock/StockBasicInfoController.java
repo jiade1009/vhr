@@ -1,11 +1,11 @@
 
 package org.javaboy.vhr.controller.stock;
 
+import org.javaboy.vhr.config.BaseConstants;
 import org.javaboy.vhr.model.RespBean;
 import org.javaboy.vhr.model.RespPageBean;
 import org.javaboy.vhr.pythonutil.ExecPython;
 import org.javaboy.vhr.service.StockBasicInfoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -38,7 +38,7 @@ public class StockBasicInfoController {
      */
     @DeleteMapping("/")
     public RespBean reloadBeanlist() {
-        execPython.runPython(new String[]{"load_a_stock"});
+        execPython.runPython(new String[]{BaseConstants.PY_API_LOAD_A_STOCK});
         return RespBean.ok("正在重新更新数据，请耐心等待!");
     }
 

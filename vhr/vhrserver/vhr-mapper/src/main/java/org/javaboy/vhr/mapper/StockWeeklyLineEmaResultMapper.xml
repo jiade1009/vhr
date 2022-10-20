@@ -11,10 +11,15 @@
     <result column="status_desc" jdbcType="LONGVARCHAR" property="statusDesc" />
     <result column="weekly_line_id" jdbcType="INTEGER" property="weeklyLineId" />
     <result column="ema_index" jdbcType="VARCHAR" property="emaIndex" />
+    <result column="time_run_begin" jdbcType="TIMESTAMP" property="timeRunBegin" />
+    <result column="time_run_end" jdbcType="TIMESTAMP" property="timeRunEnd" />
+    <result column="run_status" jdbcType="INTEGER" property="runStatus" />
+    <result column="run_status_desc" jdbcType="LONGVARCHAR" property="runStatusDesc" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, time_create, time_end, `status`, status_desc, weekly_line_id, ema_index
+    id, time_create, time_end, `status`, status_desc, weekly_line_id, ema_index, time_run_begin, 
+    time_run_end, run_status, run_status_desc
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -31,11 +36,12 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockWeeklyLineEmaResult" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into stock_weekly_line_ema_result (time_create, time_end, `status`, 
-      status_desc, weekly_line_id, ema_index
-      )
+      status_desc, weekly_line_id, ema_index, 
+      time_run_begin, time_run_end, run_status, run_status_desc)
     values (#{timeCreate,jdbcType=TIMESTAMP}, #{timeEnd,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
-      #{statusDesc,jdbcType=LONGVARCHAR}, #{weeklyLineId,jdbcType=INTEGER}, #{emaIndex,jdbcType=VARCHAR}
-      )
+      #{statusDesc,jdbcType=LONGVARCHAR}, #{weeklyLineId,jdbcType=INTEGER}, #{emaIndex,jdbcType=VARCHAR}, 
+      #{timeRunBegin,jdbcType=TIMESTAMP}, #{timeRunEnd,jdbcType=TIMESTAMP}), #{runStatus,jdbcType=INTEGER},
+    #{runStatusDesc,jdbcType=LONGVARCHAR}
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockWeeklyLineEmaResult" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -59,6 +65,18 @@
       <if test="emaIndex != null">
         ema_index,
       </if>
+      <if test="timeRunBegin != null">
+        time_run_begin,
+      </if>
+      <if test="timeRunEnd != null">
+        time_run_end,
+      </if>
+      <if test="runStatus != null">
+        run_status,
+      </if>
+      <if test="runStatusDesc != null">
+        run_status_desc,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="timeCreate != null">
@@ -78,6 +96,18 @@
       </if>
       <if test="emaIndex != null">
         #{emaIndex,jdbcType=VARCHAR},
+      </if>
+      <if test="timeRunBegin != null">
+        #{timeRunBegin,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timeRunEnd != null">
+        #{timeRunEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="runStatus != null">
+        #{runStatus,jdbcType=INTEGER},
+      </if>
+      <if test="runStatusDesc != null">
+        #{runStatusDesc,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -103,6 +133,18 @@
       <if test="emaIndex != null">
         ema_index = #{emaIndex,jdbcType=VARCHAR},
       </if>
+      <if test="timeRunBegin != null">
+        time_run_begin = #{timeRunBegin,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timeRunEnd != null">
+        time_run_end = #{timeRunEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="runStatus != null">
+        run_status,
+      </if>
+      <if test="runStatusDesc != null">
+        run_status_desc,
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -114,7 +156,31 @@
       `status` = #{status,jdbcType=INTEGER},
       status_desc = #{statusDesc,jdbcType=LONGVARCHAR},
       weekly_line_id = #{weeklyLineId,jdbcType=INTEGER},
-      ema_index = #{emaIndex,jdbcType=VARCHAR}
+      ema_index = #{emaIndex,jdbcType=VARCHAR},
+      time_run_begin = #{timeRunBegin,jdbcType=TIMESTAMP},
+      time_run_end = #{timeRunEnd,jdbcType=TIMESTAMP},
+      run_status = #{runStatus,jdbcType=INTEGER},
+      run_status_desc = #{runStatusDesc,jdbcType=LONGVARCHAR},
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="getBeanlistByWeeklyId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_weekly_line_ema_result
+    where weekly_line_id = #{weeklyId,jdbcType=INTEGER}
+    order by time_create desc
+  </select>
+
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_weekly_line_ema_result order by time_create desc
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from stock_weekly_line_ema_result
+  </select>
 </mapper>

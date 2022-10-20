@@ -1,10 +1,12 @@
 package org.javaboy.vhr.service;
 
+import org.javaboy.vhr.base.BaseService;
 import org.javaboy.vhr.mapper.StockWeeklyLineEmaResultMapper;
 import org.javaboy.vhr.model.StockWeeklyLineEmaResult;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author : sam
@@ -14,40 +16,14 @@ import javax.annotation.Resource;
  */
 
 @Service
-public class StockWeeklyLineEmaResultService {
+public class StockWeeklyLineEmaResultService extends BaseService<StockWeeklyLineEmaResult, Integer> {
 
     @Resource
     private StockWeeklyLineEmaResultMapper stockWeeklyLineEmaResultMapper;
 
-
-    public int deleteByPrimaryKey(Integer id) {
-        return stockWeeklyLineEmaResultMapper.deleteByPrimaryKey(id);
+    public List<StockWeeklyLineEmaResult> getBeanlistByWeeklyId(Integer weeklyId) {
+        return stockWeeklyLineEmaResultMapper.getBeanlistByWeeklyId(weeklyId);
     }
-
-
-    public int insert(StockWeeklyLineEmaResult record) {
-        return stockWeeklyLineEmaResultMapper.insert(record);
-    }
-
-
-    public int insertSelective(StockWeeklyLineEmaResult record) {
-        return stockWeeklyLineEmaResultMapper.insertSelective(record);
-    }
-
-
-    public StockWeeklyLineEmaResult selectByPrimaryKey(Integer id) {
-        return stockWeeklyLineEmaResultMapper.selectByPrimaryKey(id);
-    }
-
-
-    public int updateByPrimaryKeySelective(StockWeeklyLineEmaResult record) {
-        return stockWeeklyLineEmaResultMapper.updateByPrimaryKeySelective(record);
-    }
-
-
-    public int updateByPrimaryKey(StockWeeklyLineEmaResult record) {
-        return stockWeeklyLineEmaResultMapper.updateByPrimaryKey(record);
-    }
-
 }
+
 

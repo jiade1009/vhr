@@ -20,6 +20,12 @@ spring:
     password: jing2020
   cache:
     cache-names: menus_cache
+  jackson:
+    ## 格式为yyyy-MM-dd HH:mm:ss
+    date-format: yyyy-MM-dd HH:mm:ss
+    ## 定时区，解决8小时的时间差问题
+    time-zone: GMT+8
+
 server:
   port: 8081
   compression:

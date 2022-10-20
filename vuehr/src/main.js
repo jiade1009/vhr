@@ -105,6 +105,7 @@ Vue.use(Tag);
 Vue.use(Message);
 Vue.prototype.$alert = MessageBox.alert
 Vue.prototype.$confirm = MessageBox.confirm
+Vue.prototype.$message = Message
 
 import {postRequest} from "./utils/api";
 import {postKeyValueRequest} from "./utils/api";
@@ -112,6 +113,7 @@ import {putRequest} from "./utils/api";
 import {deleteRequest} from "./utils/api";
 import {getRequest} from "./utils/api";
 import {initMenu} from "./utils/menus";
+import utils from "./utils/utils";
 import 'font-awesome/css/font-awesome.min.css'
 
 Vue.prototype.postRequest = postRequest;
@@ -119,6 +121,7 @@ Vue.prototype.postKeyValueRequest = postKeyValueRequest;
 Vue.prototype.putRequest = putRequest;
 Vue.prototype.deleteRequest = deleteRequest;
 Vue.prototype.getRequest = getRequest;
+Vue.prototype.$utils = utils;
 
 Vue.config.productionTip = false
 

@@ -13,6 +13,7 @@ public class RespBean {
     private Integer status;
     private String msg;
     private Object obj;
+    private boolean showMsg = true;
 
     public static RespBean build() {
         return new RespBean();
@@ -22,8 +23,16 @@ public class RespBean {
         return new RespBean(200, msg, null);
     }
 
+    public static RespBean ok(String msg, boolean showMsg) {
+        return new RespBean(200, msg, null, showMsg);
+    }
+
     public static RespBean ok(String msg, Object obj) {
         return new RespBean(200, msg, obj);
+    }
+
+    public static RespBean ok(String msg, Object obj, boolean showMsg) {
+        return new RespBean(200, msg, obj, showMsg);
     }
 
     public static RespBean error(String msg) {
@@ -41,6 +50,14 @@ public class RespBean {
         this.status = status;
         this.msg = msg;
         this.obj = obj;
+        this.showMsg = true;
+    }
+
+    private RespBean(Integer status, String msg, Object obj, boolean showMsg) {
+        this.status = status;
+        this.msg = msg;
+        this.obj = obj;
+        this.showMsg = showMsg;
     }
 
     public Integer getStatus() {
@@ -68,5 +85,13 @@ public class RespBean {
     public RespBean setObj(Object obj) {
         this.obj = obj;
         return this;
+    }
+
+    public boolean isShowMsg() {
+        return showMsg;
+    }
+
+    public void setShowMsg(boolean showMsg) {
+        this.showMsg = showMsg;
     }
 }

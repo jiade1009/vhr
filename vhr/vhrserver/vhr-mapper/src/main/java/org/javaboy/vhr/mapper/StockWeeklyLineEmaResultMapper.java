@@ -1,27 +1,21 @@
 package org.javaboy.vhr.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.javaboy.vhr.base.BaseMapper;
 import org.javaboy.vhr.model.StockWeeklyLineEmaResult;
+
+import java.util.List;
 
 /**
  * @author : sam
  * @ClassName : StockWeeklyLineEmaResultMapper
- * @description :
- * @datetime : 2022年 10月 15日 08:11
+ * @description : TODO
+ * @datetime : 2022年 10月 19日 11:04
  * @version: : 1.0
  */
 
 @Mapper
-public interface StockWeeklyLineEmaResultMapper {
-    int deleteByPrimaryKey(Integer id);
+public interface StockWeeklyLineEmaResultMapper extends BaseMapper<StockWeeklyLineEmaResult, Integer> {
 
-    int insert(StockWeeklyLineEmaResult record);
-
-    int insertSelective(StockWeeklyLineEmaResult record);
-
-    StockWeeklyLineEmaResult selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(StockWeeklyLineEmaResult record);
-
-    int updateByPrimaryKey(StockWeeklyLineEmaResult record);
+    List<StockWeeklyLineEmaResult> getBeanlistByWeeklyId(Integer weeklyId);
 }

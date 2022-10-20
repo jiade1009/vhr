@@ -191,9 +191,6 @@ export default {
       } else if (property == "timeMarketOption" || property == "turnoverLimitOption"
           || property == "converLimitOption" || property == "shockLimitOption") {
         return data == "0" ? "否" : "是";
-      } else if (property == "timeCreate" || property == "timeUpdate") {
-        let dt = new Date(data)
-        return dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + dt.getDate() + ' ' + dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds();
       }
       return data;
     },
@@ -205,16 +202,6 @@ export default {
       } else if (property == "timeMarketOption" || property == "turnoverLimitOption"
           || property == "converLimitOption" || property == "shockLimitOption") {
         return data == "0" ? "否" : "是";
-      }
-    },
-    formatterTime(row, column) {
-      let property = column.property;
-      let data = row[property];
-      if (!!data) {
-        let dt = new Date(data)
-        return dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + dt.getDate() + ' ' + dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds();
-      } else {
-        return "";
       }
     },
     sizeChange(currentSize) {

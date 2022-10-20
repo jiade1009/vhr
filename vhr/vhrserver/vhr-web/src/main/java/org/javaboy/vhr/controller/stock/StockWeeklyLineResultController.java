@@ -1,7 +1,9 @@
 package org.javaboy.vhr.controller.stock;
 
+import org.javaboy.vhr.config.BaseConstants;
+import org.javaboy.vhr.model.RespBean;
 import org.javaboy.vhr.model.RespPageBean;
-import org.javaboy.vhr.model.StockWeeklyLineResult;
+import org.javaboy.vhr.pythonutil.ExecPython;
 import org.javaboy.vhr.service.StockWeeklyLineResultService;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,9 @@ public class StockWeeklyLineResultController {
     @Resource
     private StockWeeklyLineResultService stockWeeklyLineResultService;
 
+    @Resource
+    private ExecPython execPython;
+
     @GetMapping("/")
     public RespPageBean getBeanlistByPage(@RequestParam(defaultValue = "1") Integer page,
                                           @RequestParam(defaultValue = "10") Integer size) {
@@ -30,6 +35,10 @@ public class StockWeeklyLineResultController {
         return bean;
     }
 
-
+    @PostMapping("/")
+    public RespBean newWeekly() {
+        execPython.runPython(new String[]{BaseConstants.PY_API_CREATE_A_WEEKLY});
+        return RespBean.ok("正在生成Weekly数据线，请耐心等待!");
+    }
 
 }

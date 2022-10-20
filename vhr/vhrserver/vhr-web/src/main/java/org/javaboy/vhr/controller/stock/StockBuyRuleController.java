@@ -73,9 +73,9 @@ public class StockBuyRuleController {
         List<StockBuyRule> list = stockBuyRuleService.getBeanlistByStatus(0);
         System.out.println(list.size());
         if (list.isEmpty()){
-            return RespBean.ok("运行成功!");
+            return RespBean.ok("运行成功!", false);
         } else {
-            return RespBean.ok("运行成功!", list.get(0));
+            return RespBean.ok("运行成功!", list.get(0), false);
         }
     }
 
