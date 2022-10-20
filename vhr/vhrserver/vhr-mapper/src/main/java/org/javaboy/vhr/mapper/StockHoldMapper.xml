@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.StockHoldMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.StockHold">
+    <!--@mbg.generated-->
+    <!--@Table stock_hold-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
+    <result column="time_update" jdbcType="TIMESTAMP" property="timeUpdate" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="buy_amount" jdbcType="INTEGER" property="buyAmount" />
+    <result column="buy_price" jdbcType="FLOAT" property="buyPrice" />
+    <result column="hold_amount" jdbcType="INTEGER" property="holdAmount" />
+    <result column="sell_stage" jdbcType="INTEGER" property="sellStage" />
+    <result column="weekly_ema_result_id" jdbcType="INTEGER" property="weeklyEmaResultId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, code, time_create, time_update, `status`, buy_amount, buy_price, hold_amount, 
+    sell_stage, weekly_ema_result_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from stock_hold
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from stock_hold
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockHold" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into stock_hold (code, time_create, time_update, 
+      `status`, buy_amount, buy_price, 
+      hold_amount, sell_stage, weekly_ema_result_id
+      )
+    values (#{code,jdbcType=VARCHAR}, #{timeCreate,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=INTEGER}, #{buyAmount,jdbcType=INTEGER}, #{buyPrice,jdbcType=FLOAT}, 
+      #{holdAmount,jdbcType=INTEGER}, #{sellStage,jdbcType=INTEGER}, #{weeklyEmaResultId,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockHold">
+    <!--@mbg.generated-->
+    update stock_hold
+    set code = #{code,jdbcType=VARCHAR},
+      time_create = #{timeCreate,jdbcType=TIMESTAMP},
+      time_update = #{timeUpdate,jdbcType=TIMESTAMP},
+      `status` = #{status,jdbcType=INTEGER},
+      buy_amount = #{buyAmount,jdbcType=INTEGER},
+      buy_price = #{buyPrice,jdbcType=FLOAT},
+      hold_amount = #{holdAmount,jdbcType=INTEGER},
+      sell_stage = #{sellStage,jdbcType=INTEGER},
+      weekly_ema_result_id = #{weeklyEmaResultId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_hold
+    <where>
+      <if test="keywords!=null">
+        and code like concat('%',#{keywords},'%')
+      </if>
+    </where>
+    order by time_create desc
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from stock_hold
+    <where>
+      <if test="keywords!=null">
+        and code like concat('%',#{keywords},'%')
+      </if>
+    </where>
+  </select>
+</mapper>
