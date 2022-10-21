@@ -102,7 +102,9 @@ Vue.use(Icon);
 Vue.use(Select);
 Vue.use(Form);
 Vue.use(Tag);
-Vue.use(Message);
+//采用component 方式引入Message，如果采用use，则刷新会弹出一个空窗口
+// Vue.use(Message);
+Vue.component(Message.name, Message)
 Vue.prototype.$alert = MessageBox.alert
 Vue.prototype.$confirm = MessageBox.confirm
 Vue.prototype.$message = Message
