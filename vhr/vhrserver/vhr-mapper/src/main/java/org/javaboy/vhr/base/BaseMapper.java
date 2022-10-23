@@ -11,7 +11,7 @@ import java.util.List;
  * @datetime : 2022年 10月 20日 17:35
  * @version: : 1.0
  */
-public interface BaseMapper<T,ID> {
+public interface BaseMapper<T, ID> {
     int deleteByPrimaryKey(ID id);
 
     int insert(T record);

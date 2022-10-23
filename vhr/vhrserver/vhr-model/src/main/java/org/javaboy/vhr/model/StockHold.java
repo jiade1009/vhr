@@ -23,7 +23,7 @@ public class StockHold {
     private Date timeUpdate;
 
     /**
-    * 状态，0未购买、1暂停购买、2卖出中、3暂定卖出、4交易结束
+    * 状态，0未购买、1购买中、2暂停购买、3已购买、4卖出中、5暂定卖出、6交易结束
     */
     private Integer status;
 

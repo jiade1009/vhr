@@ -327,7 +327,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .row-expand-cover .el-table__expand-icon{
   visibility: hidden!important;
 }

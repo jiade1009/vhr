@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.StockHoldTradeMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.StockHoldTrade">
+    <!--@mbg.generated-->
+    <!--@Table stock_hold_trade-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="hold_id" jdbcType="INTEGER" property="holdId" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="amount" jdbcType="INTEGER" property="amount" />
+    <result column="trade_type" jdbcType="INTEGER" property="tradeType" />
+    <result column="trade_note" jdbcType="VARCHAR" property="tradeNote" />
+    <result column="orderid" jdbcType="VARCHAR" property="orderid" />
+    <result column="message" jdbcType="VARCHAR" property="message" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="taskid" jdbcType="VARCHAR" property="taskid" />
+    <result column="taskstatus" jdbcType="INTEGER" property="taskstatus" />
+    <result column="taskmsg" jdbcType="VARCHAR" property="taskmsg" />
+    <result column="taskpro" jdbcType="VARCHAR" property="taskpro" />
+    <result column="ordernum" jdbcType="VARCHAR" property="ordernum" />
+    <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
+    <result column="time_update" jdbcType="TIMESTAMP" property="timeUpdate" />
+    <result column="price" jdbcType="FLOAT" property="price" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, hold_id, code, amount, trade_type, trade_note, orderid, message, `status`, note, 
+    taskid, taskstatus, taskmsg, taskpro, ordernum, time_create, time_update, price
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from stock_hold_trade
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from stock_hold_trade
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockHoldTrade" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into stock_hold_trade (hold_id, code, amount, 
+      trade_type, trade_note, orderid, 
+      message, `status`, note, 
+      taskid, taskstatus, taskmsg, 
+      taskpro, ordernum, time_create, 
+      time_update, price)
+    values (#{holdId,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, 
+      #{tradeType,jdbcType=INTEGER}, #{tradeNote,jdbcType=VARCHAR}, #{orderid,jdbcType=VARCHAR}, 
+      #{message,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{note,jdbcType=VARCHAR}, 
+      #{taskid,jdbcType=VARCHAR}, #{taskstatus,jdbcType=INTEGER}, #{taskmsg,jdbcType=VARCHAR}, 
+      #{taskpro,jdbcType=VARCHAR}, #{ordernum,jdbcType=VARCHAR}, #{timeCreate,jdbcType=TIMESTAMP}, 
+      #{timeUpdate,jdbcType=TIMESTAMP}, #{price,jdbcType=FLOAT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockHoldTrade">
+    <!--@mbg.generated-->
+    update stock_hold_trade
+    set hold_id = #{holdId,jdbcType=INTEGER},
+      code = #{code,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=INTEGER},
+      trade_type = #{tradeType,jdbcType=INTEGER},
+      trade_note = #{tradeNote,jdbcType=VARCHAR},
+      orderid = #{orderid,jdbcType=VARCHAR},
+      message = #{message,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=INTEGER},
+      note = #{note,jdbcType=VARCHAR},
+      taskid = #{taskid,jdbcType=VARCHAR},
+      taskstatus = #{taskstatus,jdbcType=INTEGER},
+      taskmsg = #{taskmsg,jdbcType=VARCHAR},
+      taskpro = #{taskpro,jdbcType=VARCHAR},
+      ordernum = #{ordernum,jdbcType=VARCHAR},
+      time_create = #{timeCreate,jdbcType=TIMESTAMP},
+      time_update = #{timeUpdate,jdbcType=TIMESTAMP},
+      price = #{price,jdbcType=FLOAT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_hold_trade
+    <where>
+      <if test="keywords!=null">
+        and code like concat('%',#{keywords},'%')
+      </if>
+    </where>
+    order by time_create desc
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from stock_hold_trade
+    <where>
+      <if test="keywords!=null">
+        and code like concat('%',#{keywords},'%')
+      </if>
+    </where>
+  </select>
+
+  <select id="getBeanlistByHoldId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_hold_trade where hold_id = #{hid,jdbcType=INTEGER}
+    order by time_create desc
+  </select>
+</mapper>
