@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableCaching
 @MapperScan(basePackages = "org.javaboy.vhr.mapper")
-@EnableScheduling
+@EnableScheduling  //开启对定时任务的支持
 public class VhrApplication {
     private static final Logger LOGGER = LoggerFactory.getLogger(VhrApplication.class);
 

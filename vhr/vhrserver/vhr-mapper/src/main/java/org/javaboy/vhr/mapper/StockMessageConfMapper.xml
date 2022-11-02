@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.StockMessageConfMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.StockMessageConf">
+    <!--@mbg.generated-->
+    <!--@Table stock_message_conf-->
+    <result column="empid" jdbcType="INTEGER" property="empid" />
+    <result column="message_type" jdbcType="VARCHAR" property="messageType" />
+    <result column="send_type" jdbcType="VARCHAR" property="sendType" />
+    <result column="status" jdbcType="BOOLEAN" property="status" />
+  </resultMap>
+
+  <resultMap id="AllBeanInfo" type="org.javaboy.vhr.model.StockMessageConf" extends="BaseResultMap">
+    <association property="employee" javaType="org.javaboy.vhr.model.Employee">
+      <id column="eid" property="id"/>
+      <result column="ename" property="name"/>
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    empid, message_type, send_type, `status`
+  </sql>
+  <insert id="insert" parameterType="org.javaboy.vhr.model.StockMessageConf">
+    <!--@mbg.generated-->
+    insert into stock_message_conf (empid, message_type, send_type, 
+      `status`)
+    values (#{empid,jdbcType=INTEGER}, #{messageType,jdbcType=VARCHAR}, #{sendType,jdbcType=VARCHAR}, 
+      #{status,jdbcType=BOOLEAN})
+  </insert>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from stock_message_conf
+    where empid = #{id,jdbcType=INTEGER}
+  </delete>
+  <update id="updateByPrimaryKeySelective" parameterType="org.javaboy.vhr.model.StockMessageConf">
+    <!--@mbg.generated-->
+    update stock_message_conf
+    <set>
+      <if test="messageType != null">
+        `message_type` = #{messageType,jdbcType=VARCHAR},
+      </if>
+      <if test="sendType != null">
+        send_type = #{sendType,jdbcType=VARCHAR},
+      </if>
+      status = #{status,jdbcType=BOOLEAN},
+    </set>
+    where empid = #{empid,jdbcType=VARCHAR}
+  </update>
+
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_message_conf
+    <where>
+      <if test="keywords!=null">
+        and code like concat('%',#{keywords},'%')
+      </if>
+    </where>
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from stock_message_conf
+    <where>
+      <if test="keywords!=null">
+        and code like concat('%',#{keywords},'%')
+      </if>
+    </where>
+  </select>
+
+  <select id="getBeanlistByBeanAndPage" resultMap="AllBeanInfo">
+    select s.*,e.`id` as eid,e.`name` as ename from stock_message_conf s, employee e where s.`empid` = e.`id`
+    <if test="bean.employee.name !=null and bean.employee.name!=''">
+      and e.name like concat('%',#{bean.employee.name},'%')
+    </if>
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotalByBean" resultType="java.lang.Long">
+    select count(*) from stock_message_conf s, employee e where  s.`empid` = e.`id`
+    <if test="bean.employee.name !=null and bean.employee.name!=''">
+      and e.name like concat('%',#{bean.employee.name},'%')
+    </if>
+  </select>
+
+  <delete id="deleteByEmpid" parameterType="java.lang.Integer">
+    delete from stock_message_conf
+    where empid = #{empid,jdbcType=INTEGER}
+  </delete>
+
+</mapper>

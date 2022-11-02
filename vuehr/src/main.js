@@ -33,6 +33,8 @@ import {
     Collapse,
     FormItem,
     Checkbox,
+    CheckboxButton,
+    CheckboxGroup,
     Header,
     DropdownMenu,
     DropdownItem,
@@ -75,6 +77,8 @@ Vue.use(DropdownItem);
 Vue.use(Aside);
 Vue.use(Main);
 Vue.use(Checkbox);
+Vue.use(CheckboxButton);
+Vue.use(CheckboxGroup);
 Vue.use(FormItem);
 Vue.use(Collapse);
 Vue.use(Popover);

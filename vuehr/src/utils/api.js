@@ -4,7 +4,7 @@ import router from '../router'
 import {mymessage} from '@/utils/mymessage';
 
 axios.interceptors.response.use(success => {
-    if (success.data.showMsg !=null && !success.data.showMsg ) return;
+    if (success.data.showMsg !=null && !success.data.showMsg ) return success.data;
     if (success.status && success.status == 200 && success.data.status == 500) {
         Message.error({message: success.data.msg})
         return;

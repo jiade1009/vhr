@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.StockMessageLogMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.StockMessageLog">
+    <!--@mbg.generated-->
+    <!--@Table stock_message_log-->
+    <result column="msgId" jdbcType="VARCHAR" property="msgid" />
+    <result column="empId" jdbcType="INTEGER" property="empid" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="routeKey" jdbcType="VARCHAR" property="routekey" />
+    <result column="exchange" jdbcType="VARCHAR" property="exchange" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="time_try" jdbcType="TIMESTAMP" property="timeTry" />
+    <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
+    <result column="time_update" jdbcType="TIMESTAMP" property="timeUpdate" />
+    <result column="message_type" jdbcType="INTEGER" property="messageType" />
+    <result column="send_type" jdbcType="INTEGER" property="sendType" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    msgId, empId, `status`, routeKey, exchange, `count`, time_try, time_create, time_update, 
+    message_type, send_type
+  </sql>
+  <insert id="insert" parameterType="org.javaboy.vhr.model.StockMessageLog">
+    <!--@mbg.generated-->
+    insert into stock_message_log (msgId, empId, `status`, 
+      routeKey, exchange, `count`, 
+      time_try, time_create, time_update, 
+      message_type, send_type)
+    values (#{msgid,jdbcType=VARCHAR}, #{empid,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{routekey,jdbcType=VARCHAR}, #{exchange,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER}, 
+      #{timeTry,jdbcType=TIMESTAMP}, #{timeCreate,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP}, 
+      #{messageType,jdbcType=INTEGER}, #{sendType,jdbcType=INTEGER})
+  </insert>
+
+  <update id="updateStockMessageLogStatus">
+    update stock_message_log set status = #{status} where msgId=#{msgId};
+  </update>
+
+  <select id="getStockMessageLogByStatus" resultMap="BaseResultMap">
+    select * from stock_message_log where status=0 and time_try &lt; sysdate()
+  </select>
+
+  <update id="updateCount">
+    update stock_message_log set count=count+1,time_update=#{date} where msgId=#{msgId};
+  </update>
+</mapper>

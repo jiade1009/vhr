@@ -42,6 +42,11 @@ public class EmpBasicController {
         return employeeService.getEmployeeByPage(page, size, employee,beginDateScope);
     }
 
+    @GetMapping("/list")
+    public RespPageBean getEmployeeByName(Employee employee) {
+        return employeeService.getEmployeeByPage(null, null, employee, null);
+    }
+
     @PostMapping("/")
     public RespBean addEmp(@RequestBody Employee employee) {
         if (employeeService.addEmp(employee) == 1) {

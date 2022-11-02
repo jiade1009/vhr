@@ -1,8 +1,8 @@
 package org.javaboy.vhr.base;
 
-import org.apache.ibatis.annotations.Param;
 import org.javaboy.vhr.model.RespPageBean;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.List;
 
 /**
@@ -42,7 +42,7 @@ public abstract class BaseService<T,ID> {
         return baseMapper.updateByPrimaryKey(record);
     }
 
-    public RespPageBean getBeanlistByPage(@Param("page") Integer page, @Param("size") Integer size, @Param("keywords") String keywords) {
+    public RespPageBean getBeanlistByPage(Integer page, Integer size, String keywords) {
         if (page != null && size != null) {
             page = (page - 1) * size;
         }
@@ -52,5 +52,17 @@ public abstract class BaseService<T,ID> {
         bean.setData(data);
         bean.setTotal(total);
         return bean;
+    }
+
+    public RespPageBean getBeanlistByBeanAndPage(Integer page, Integer size,T bean) {
+        if (page != null && size != null) {
+            page = (page - 1) * size;
+        }
+        List<T> data = baseMapper.getBeanlistByBeanAndPage(page, size, bean);
+        Long total = baseMapper.getTotalByBean(bean);
+        RespPageBean resp = new RespPageBean();
+        resp.setData(data);
+        resp.setTotal(total);
+        return resp;
     }
 }

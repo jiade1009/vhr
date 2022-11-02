@@ -105,8 +105,14 @@
           </el-table-column>
           <el-table-column
               prop="result"
-              label="周线导入结果"
+              label="导入结果"
               :formatter="formatterText"
+              align="left">
+          </el-table-column>
+          <el-table-column
+              prop="resultDesc"
+              label="备注"
+              width="200"
               align="left">
           </el-table-column>
           <el-table-column

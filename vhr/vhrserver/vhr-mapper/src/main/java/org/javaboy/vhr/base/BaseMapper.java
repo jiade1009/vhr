@@ -26,6 +26,10 @@ public interface BaseMapper<T, ID> {
 
     List<T> getBeanlistByPage(@Param("page") Integer page, @Param("size") Integer size, @Param("keywords") String keywords);
 
+    List<T> getBeanlistByBeanAndPage(@Param("page") Integer page, @Param("size") Integer size, @Param("bean") T record);
+
     Long getTotal(@Param("keywords") String keywords);
+
+    Long getTotalByBean(@Param("bean") T record);
 
 }
