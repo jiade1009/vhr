@@ -39,6 +39,7 @@ public class VhrApplicationTests {
     public void getAllDatabasetypes() {
         List<DatabaseType> beanlist =  databaseTypeService.getAllBeanlist("");
         System.out.println(beanlist.size());
+        List<DatabaseType> beanlist2 =  databaseTypeService.getAllBeanlist("");
     }
 
     @Test

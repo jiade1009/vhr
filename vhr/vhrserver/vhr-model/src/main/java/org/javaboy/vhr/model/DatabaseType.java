@@ -1,9 +1,14 @@
 package org.javaboy.vhr.model;
 
+import java.io.Serializable;
+
 /**
  * basic data information
  */
-public class DatabaseType {
+public class DatabaseType implements Serializable {
+
+    private static final long serialVersionUID = -1233635359115056864L;
+
     private Integer id;
 
     private String code;

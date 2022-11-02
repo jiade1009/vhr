@@ -1,33 +1,35 @@
 package org.javaboy.vhr.service;
 
-import org.javaboy.vhr.model.Employee;
-import org.javaboy.vhr.model.Hr;
-import org.javaboy.vhr.model.RespPageBean;
-import org.javaboy.vhr.utils.HrUtils;
-import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
-import org.javaboy.vhr.model.DatabaseType;
 import org.javaboy.vhr.mapper.DatabaseTypeMapper;
+import org.javaboy.vhr.model.DatabaseType;
+import org.javaboy.vhr.model.RespPageBean;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service
+@CacheConfig(cacheNames = "database_cache")
 public class DatabaseTypeService{
 
     @Resource
     private DatabaseTypeMapper databaseTypeMapper;
-    
+
+    @CacheEvict
     public int deleteByPrimaryKey(Integer id) {
         return databaseTypeMapper.deleteByPrimaryKey(id);
     }
 
-    
+    @CachePut
     public int insert(DatabaseType record) {
         return databaseTypeMapper.insert(record);
     }
 
-    
+    @CachePut
     public int insertSelective(DatabaseType record) {
         return databaseTypeMapper.insertSelective(record);
     }
@@ -37,6 +39,7 @@ public class DatabaseTypeService{
         return databaseTypeMapper.selectByPrimaryKey(id);
     }
 
+    @Cacheable
     public List<DatabaseType> getAllBeanlist(String keywords) {
         return databaseTypeMapper.getAllBeanlist(keywords);
     }
@@ -53,10 +56,12 @@ public class DatabaseTypeService{
         return bean;
     }
 
+    @CachePut
     public int updateByPrimaryKeySelective(DatabaseType record) {
         return databaseTypeMapper.updateByPrimaryKeySelective(record);
     }
 
+    @CachePut
     public int updateByPrimaryKey(DatabaseType record) {
         return databaseTypeMapper.updateByPrimaryKey(record);
     }

@@ -42,7 +42,9 @@ logging:
     org.springframework.security: error
     # mybatis日志
     org.mybatis: info
-    org.javaboy.vhr.service: info
+    org.javaboy.vhr: info
+    org.javaboy.vhr.service: debug
+    org.javaboy.vhr.task: debug
     org.javaboy.vhr.controller: debug
   charset:
     # 输出控制台编码
@@ -72,3 +74,11 @@ python:
   apiFile: /web/main_api.py
   parameters:
     reloadBasicinfo: load_a_stock
+
+# 定时任务配置
+task:
+  cron:
+    StockMessageSend:
+      resend: 0/10 * * * * ?
+    MailSend:
+      resend: 0/10 * * * * ?
