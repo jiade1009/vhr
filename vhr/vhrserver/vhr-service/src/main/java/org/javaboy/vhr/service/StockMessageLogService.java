@@ -31,8 +31,12 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
         return stockMessageLogMapper.updateStockMessageLogStatus(msgId, status);
     }
 
-    public List<StockMessageLog> getStockMessageLogByStatus() {
-        return stockMessageLogMapper.getStockMessageLogByStatus();
+    /**
+     * 获取指定状态的消息日志
+     * @return
+     */
+    public List<StockMessageLog> getStockMessageLogByStatus(Integer status) {
+        return stockMessageLogMapper.getStockMessageLogByStatus(status);
     }
 
     public Integer updateCount(String msgId, Date date) {

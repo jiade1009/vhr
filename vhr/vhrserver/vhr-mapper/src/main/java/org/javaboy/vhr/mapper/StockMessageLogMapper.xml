@@ -38,7 +38,13 @@
   </update>
 
   <select id="getStockMessageLogByStatus" resultMap="BaseResultMap">
-    select * from stock_message_log where status=0 and time_try &lt; sysdate()
+    select * from stock_message_log
+    <where>
+      <if test="status!=null">
+        and status=#{status, jdbcType=INTEGER})
+      </if>
+      and time_try &lt; sysdate()
+    </where>
   </select>
 
   <update id="updateCount">

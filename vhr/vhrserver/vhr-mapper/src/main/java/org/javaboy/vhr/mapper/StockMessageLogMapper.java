@@ -22,7 +22,7 @@ public interface StockMessageLogMapper extends BaseMapper<StockMessageLog, Integ
 
     Integer updateStockMessageLogStatus(@Param("msgId") String msgId, @Param("status") Integer status);
 
-    List<StockMessageLog> getStockMessageLogByStatus();
+    List<StockMessageLog> getStockMessageLogByStatus(@Param("status") Integer status);
 
     Integer updateCount(@Param("msgId") String msgId, @Param("date") Date date);
 }
