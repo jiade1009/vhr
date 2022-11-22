@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.StockATradeDateMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.StockATradeDate">
+    <!--@mbg.generated-->
+    <!--@Table stock_a_trade_date-->
+    <id column="trade_date" jdbcType="VARCHAR" property="tradeDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    trade_date
+  </sql>
+
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_a_trade_date
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from stock_a_trade_date
+  </select>
+  <select id="getByDate" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_a_trade_date
+    where trade_date = #{tradeDate,jdbcType=VARCHAR}
+  </select>
+</mapper>
