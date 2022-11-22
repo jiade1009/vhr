@@ -4,7 +4,7 @@
             <li v-for="item in hrs" :class="{ active: currentSession?item.username === currentSession.username:false}"
                 v-on:click="changeCurrentSession(item)">
                 <!--   :class="[item.id === currentSession ? 'active':'']" -->
-                <img class="avatar" :src="item.userface" :alt="item.name">
+                <img class="avatar" :src="item.userface?item.userface:userface" :alt="item.name">
                 <el-badge :is-dot="isDot[user.username+'#'+item.username]"><p class="name">{{item.name}}</p></el-badge>
             </li>
         </ul>
@@ -18,7 +18,8 @@
         name: 'list',
         data() {
             return {
-                user:JSON.parse(window.sessionStorage.getItem("user"))
+              userface: this.$ELEMENT.userface,
+              user:JSON.parse(window.sessionStorage.getItem("user"))
             }
         },
         computed: mapState([

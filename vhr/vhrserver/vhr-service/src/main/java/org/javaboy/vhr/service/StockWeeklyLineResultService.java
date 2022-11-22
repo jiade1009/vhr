@@ -1,14 +1,11 @@
 package org.javaboy.vhr.service;
 
+import org.javaboy.vhr.mapper.StockWeeklyLineResultMapper;
 import org.javaboy.vhr.model.RespPageBean;
-import org.javaboy.vhr.model.StockBasicInfo;
+import org.javaboy.vhr.model.StockWeeklyLineResult;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-
-import org.javaboy.vhr.model.StockWeeklyLineResult;
-import org.javaboy.vhr.mapper.StockWeeklyLineResultMapper;
-
 import java.util.List;
 
 /**
@@ -64,5 +61,16 @@ public class StockWeeklyLineResultService {
         bean.setData(data);
         bean.setTotal(total);
         return bean;
+    }
+
+    /**
+     * @description : 获取自动生成，且ema生成状态为生成成功的周线数据
+     * @param dateWeeklyResearch: 周线生成日 yyyy
+     * @param generateType: 0手动，1自动生成
+     * @param emaStatus : 0未生成，1生成成功，2生成失败
+     */
+
+    public List<StockWeeklyLineResult> getBeanListByPro(String dateWeeklyResearch, Integer generateType, Integer emaStatus) {
+        return stockWeeklyLineResultMapper.getBeanListByPro(dateWeeklyResearch, generateType, emaStatus);
     }
 }

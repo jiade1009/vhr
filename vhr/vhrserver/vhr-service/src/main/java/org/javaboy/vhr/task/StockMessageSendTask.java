@@ -1,7 +1,6 @@
 package org.javaboy.vhr.task;
 
 import org.javaboy.vhr.model.Employee;
-import org.javaboy.vhr.model.MailConstants;
 import org.javaboy.vhr.model.RabbitBean;
 import org.javaboy.vhr.model.StockMessageLog;
 import org.javaboy.vhr.service.EmployeeService;
@@ -26,14 +25,14 @@ public class StockMessageSendTask {
     @Autowired
     StockMessageLogService stockMessageLogService;
     @Autowired
-    RabbitTemplate rabbitTemplate;
+    RabbitTemplate stockRabbitTemplate;
     @Autowired
     EmployeeService employeeService;
 
-    @Async("myAsync")
+    @Async("stockMessageAsync")
     @Scheduled(cron = "${task.cron.StockMessageSend.resend}")
     public void resend() {
-        LOGGER.debug("-----------begin resend task------------");
+        LOGGER.debug("-----------begin StockMessageSend task------------");
         List<StockMessageLog> logs = stockMessageLogService.getStockMessageLogByStatus(0);
         if (logs == null || logs.size() == 0) {
             return;
@@ -42,11 +41,10 @@ public class StockMessageSendTask {
             if (log.getCount() >= 3) {
                 stockMessageLogService.updateStockMessageLogStatus(log.getMsgid(), 2);//直接设置该条消息发送失败
             } else {
-                stockMessageLogService.updateCount(log.getMsgid(), new Date());
                 Employee emp = employeeService.getEmployeeById(log.getEmpid());
-                RabbitBean bean = new RabbitBean(emp, log.getMessageType(), log.getSendType());
-                rabbitTemplate.convertAndSend(MailConstants.STOCK_EXCHANGE_NAME, MailConstants.STOCK_ROUTING_KEY_NAME,
-                        bean, new CorrelationData(log.getMsgid()));
+                RabbitBean bean = new RabbitBean(emp, log.getContent(), log.getMessageType(), log.getSendType());
+                stockRabbitTemplate.convertAndSend(log.getExchange(), log.getRoutekey(), bean, new CorrelationData(log.getMsgid()));
+                stockMessageLogService.updateCount(log.getMsgid(), new Date());
             }
         });
     }

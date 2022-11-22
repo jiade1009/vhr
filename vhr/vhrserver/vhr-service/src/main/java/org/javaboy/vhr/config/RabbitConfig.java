@@ -2,6 +2,7 @@ package org.javaboy.vhr.config;
 
 import org.javaboy.vhr.model.MailConstants;
 import org.javaboy.vhr.service.MailSendLogService;
+import org.javaboy.vhr.service.StockMessageLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Binding;
@@ -10,19 +11,21 @@ import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 
 @Configuration
 public class RabbitConfig {
     public final static Logger logger = LoggerFactory.getLogger(RabbitConfig.class);
-    @Autowired
+    @Resource
     CachingConnectionFactory cachingConnectionFactory;
-    @Autowired
+    @Resource
     MailSendLogService mailSendLogService;
+    @Resource
+    StockMessageLogService stockMessageLogService;
 
     @Bean
     RabbitTemplate rabbitTemplate() {
@@ -55,6 +58,33 @@ public class RabbitConfig {
             logger.info("消息从Exchange路由到Queue失败: exchange: {}, route: {}, replyCode: {}, replyText: {}, message: {}",
                     exchange, routingKey, replyCode, replyText, message);
         });*/
+        return rabbitTemplate;
+    }
+
+    @Bean
+    RabbitTemplate stockRabbitTemplate() {
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(cachingConnectionFactory);
+        rabbitTemplate.setConfirmCallback((data, ack, cause) -> {
+            String msgId = data.getId();
+            if (ack) {
+                logger.info(msgId + ":消息发送成功到Exchange");
+                stockMessageLogService.updateStockMessageLogStatus(msgId, 1);//修改数据库中的记录，消息投递成功
+            } else {
+                logger.info(msgId + ":消息发送失败");
+            }
+        });
+        rabbitTemplate.setMandatory(true);
+        /**
+         * 消息路由失败，回调，消息是否从Exchange路由到Queue, 注意: 这是一个失败回调, 只有消息从Exchange路由到Queue失败才会回调这个方法
+         * 消息(带有路由键routingKey)到达交换机，与交换机的所有绑定键进行匹配，匹配不到触发回调
+         */
+        rabbitTemplate.setReturnsCallback(returnedMessage -> {
+            String exchange = returnedMessage.getExchange();
+            String routingKey = returnedMessage.getRoutingKey();
+            //String queue = returnedMessage.getMessage().getMessageProperties().getConsumerQueue();
+            logger.info("消息路由失败（Exchange->Queue)：消息从" + exchange + "到路由key为" + routingKey);
+            System.out.println("消息为：" + new String(returnedMessage.getMessage().getBody(), StandardCharsets.UTF_8));
+        });
         return rabbitTemplate;
     }
 

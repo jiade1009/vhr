@@ -1,5 +1,7 @@
 package org.javaboy.vhr.model;
 
+import java.io.Serializable;
+
 /**
  * @author : sam
  * @ClassName : StockMessageConf
@@ -8,7 +10,10 @@ package org.javaboy.vhr.model;
  * @version: : 1.0
  */
 
-public class StockMessageConf {
+public class StockMessageConf implements Serializable {
+
+    private static final long serialVersionUID = 6789204026313043198L;
+
     /**
      * 员工id
      */
@@ -27,7 +32,7 @@ public class StockMessageConf {
     /**
      * 是否生效
      */
-    private Boolean status;
+    private Boolean status = true;
 
     private Integer[] empids; //用于在新增消息配置时，传递多个empid数组
 

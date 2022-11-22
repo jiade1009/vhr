@@ -44,6 +44,8 @@ public class StockHoldTrade {
     */
     private Integer status;
 
+    private String statusNote;
+
     /**
     * 投资备注
     */
@@ -58,6 +60,8 @@ public class StockHoldTrade {
     * 任务/指令状态，0 未知,1 等待,2 提交中,3 执行中,4 暂停,5 撤销中,6 异常撤销中,7 完成,8 已撤,9 打回,10  异常终止,11  放弃，目前用于组合交易中，放弃补单,12  强制终止
     */
     private Integer taskstatus;
+
+    private String taskstatusNote;
 
     /**
     * 任务/指令状态信息
@@ -228,5 +232,50 @@ public class StockHoldTrade {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public String getTaskstatusNote() {
+        if (taskstatus==null) return "";
+        switch (taskstatus) {
+            case 1:
+                return "等待";
+            case 2:
+                return "提交中";
+            case 3:
+                return "执行中";
+            case 4:
+                return "暂停";
+            case 5:
+                return "撤销中";
+            case 6:
+                return "异常撤销中";
+            case 7:
+                return "完成";
+            case 8:
+                return "已撤";
+            case 9:
+                return "打回";
+            case 10:
+                return "等异常终止待";
+            case 11:
+                return "放弃，目前用于组合交易中，放弃补单";
+            case 12:
+                return "强制终止";
+            default:
+                return "未知";
+        }
+    }
+    public String getStatusNote() {
+        if (status==null) return "";
+        switch (status) {
+            case 0:
+                return "0执行中";
+            case 1:
+                return "结束";
+            case -1:
+                return "失败";
+            default:
+                return "未知";
+        }
     }
 }

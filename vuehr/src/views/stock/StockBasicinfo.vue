@@ -17,6 +17,9 @@
           <el-button type="primary" icon="el-icon-plus" @click="updateBean">
             重新更新股票信息
           </el-button>
+          <el-button type="primary" icon="el-icon-refresh" @click="updateCalendar">
+            刷新股票交易日历
+          </el-button>
         </div>
       </div>
       <!--search section end-->
@@ -120,6 +123,21 @@ export default {
         this.$message({
           type: 'info',
           message: '已取消删除'
+        });
+      });
+    },
+    updateCalendar() {
+      this.$confirm('此操作将重新下载最新的股票交易日历, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.postRequest("/stock/basicinfo/calendar/").then(resp => {
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消更新'
         });
       });
     },

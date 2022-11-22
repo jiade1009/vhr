@@ -2,7 +2,6 @@ package org.javaboy.vhr.service;
 
 import org.javaboy.vhr.mapper.HrMapper;
 import org.javaboy.vhr.mapper.HrRoleMapper;
-import org.javaboy.vhr.model.Department;
 import org.javaboy.vhr.model.Hr;
 import org.javaboy.vhr.utils.HrUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +55,12 @@ public class HrService implements UserDetailsService {
     @Transactional
     public boolean updateHrRole(Integer hrid, Integer[] rids) {
         hrRoleMapper.deleteByHrid(hrid);
-        return hrRoleMapper.addRole(hrid, rids) == rids.length;
+        if (rids!=null && rids.length>0) {
+            return hrRoleMapper.addRole(hrid, rids) == rids.length;
+        } else {
+            return true;
+        }
+
     }
 
     public Integer deleteHrById(Integer id) {

@@ -37,7 +37,8 @@ public class StockWeeklyLineResultController {
 
     @PostMapping("/")
     public RespBean newWeekly() {
-        execPython.runPython(new String[]{BaseConstants.PY_API_CREATE_A_WEEKLY});
+        // 传递2个参数{"操作指令:生成周线", "操作方式：0手动，1自动"}
+        execPython.runPython(new String[]{BaseConstants.PY_API_CREATE_A_WEEKLY, "0"});
         return RespBean.ok("正在生成Weekly数据线，请耐心等待!");
     }
 

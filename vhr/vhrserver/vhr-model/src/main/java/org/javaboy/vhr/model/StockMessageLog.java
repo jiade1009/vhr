@@ -21,7 +21,7 @@ public class StockMessageLog {
     /**
     * 0发送中，1发送成功，2发送失败
     */
-    private Integer status;
+    private Integer status = 0;
 
     /**
     * 路由键
@@ -36,7 +36,7 @@ public class StockMessageLog {
     /**
     * 重试次数
     */
-    private Integer count;
+    private Integer count = 0;
 
     /**
     * 第一次重试时间
@@ -56,6 +56,9 @@ public class StockMessageLog {
     * 发送形式（0短信、1邮件、2微信服务通知）
     */
     private Integer sendType;
+
+    // 消息内容
+    private String content;
 
     public String getMsgid() {
         return msgid;
@@ -143,5 +146,13 @@ public class StockMessageLog {
 
     public void setSendType(Integer sendType) {
         this.sendType = sendType;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

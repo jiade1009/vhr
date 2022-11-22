@@ -176,4 +176,20 @@
   <select id="getTotal" resultType="java.lang.Long">
     select count(*) from stock_weekly_line_result
   </select>
+
+  <select id="getBeanListByPro" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_weekly_line_result
+    <where>
+      result = 0 and date_weekly_research = #{dateWeeklyResearch,jdbcType=VARCHAR}
+      <if test="generateType!=null">
+        and generate_type = #{generateType,jdbcType=INTEGER}
+      </if>
+      <if test="emaStatus!=null">
+        and ema_result = #{emaStatus,jdbcType=INTEGER}
+      </if>
+      order by time_create desc
+    </where>
+  </select>
 </mapper>

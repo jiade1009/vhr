@@ -1,5 +1,7 @@
 package org.javaboy.vhr.model;
 
+import java.io.Serializable;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -9,7 +11,9 @@ import java.util.Map;
  * @version: : 1.0
  */
 
-public class RabbitBean {
+public class RabbitBean implements Serializable {
+
+    private static final long serialVersionUID = 1283902452775205894L;
 
     private Employee employee;
 
@@ -25,19 +29,42 @@ public class RabbitBean {
      */
     private Integer sendType;
 
+    private String content; //消息内容
+
     public RabbitBean(Employee employee) {
-        new RabbitBean(employee, null, null, null);
+        this(employee, "", null, null, null);
     }
 
-    public RabbitBean(Employee employee, Integer messageType, Integer sendType) {
-        new RabbitBean(employee, messageType, sendType, null);
+    public RabbitBean(Employee employee, String content, Integer messageType, Integer sendType) {
+        this(employee, content, messageType, sendType, null);
     }
 
-    public RabbitBean(Employee employee, Integer messageType, Integer sendType, Map dataMap) {
+    public RabbitBean(Employee employee, String content, Integer messageType, Integer sendType, Map dataMap) {
         this.employee = employee;
+        this.content = content;
         this.dataMap = dataMap;
         this.messageType = messageType;
         this.sendType = sendType;
+    }
+
+    @Override
+    public String toString() {
+        String json = "RabbitBean{" +
+                "messageType=" + messageType +
+                ", sendType=" + sendType +
+                ", content='" + content + '\'';
+        if (this.employee != null) {
+            json += ", employee=" + employee.toString();
+        }
+        if (this.dataMap !=null) {
+            Iterator iter = dataMap.entrySet().iterator();
+            while(iter.hasNext()) {
+                Map.Entry entry = (Map.Entry) iter.next();
+                json += ", " + entry.getKey().toString() + "='" + entry.getValue().toString() + '\'' ;
+            }
+        }
+        json += '}';
+        return json;
     }
 
     public Employee getEmployee() {
@@ -71,4 +98,13 @@ public class RabbitBean {
     public void setSendType(Integer sendType) {
         this.sendType = sendType;
     }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
 }

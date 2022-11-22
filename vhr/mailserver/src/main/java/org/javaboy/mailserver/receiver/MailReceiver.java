@@ -95,42 +95,53 @@ public class MailReceiver {
         MessageHeaders headers = message.getHeaders();
         Long tag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
         String msgId = (String) headers.get("spring_returned_message_correlation");
+
         if (redisTemplate.opsForHash().entries("mail_log").containsKey(msgId)) {
             //redis 中包含该 key，说明该消息已经被消费过
             logger.info(msgId + ":消息已经被消费");
             channel.basicAck(tag, false);//确认消息已消费
             return;
         }
+
         // 根据messageType判断进行不同的内容发送，0信号发现、1买入、2卖出
         Integer messageType = bean.getMessageType();
         Integer sendType = bean.getSendType();  //（0短信、1邮件、2微信服务通知）
         if (messageType == 0) {
-//            handerStockDiscover(employee, sendType);
             if (sendType == 1) {
                 //收到消息，发送邮件
                 MimeMessage msg = javaMailSender.createMimeMessage();
                 MimeMessageHelper helper = new MimeMessageHelper(msg);
                 try {
                     Date now = new Date();
-
                     helper.setTo(employee.getEmail());
                     helper.setFrom(mailProperties.getUsername());
                     helper.setSubject("纯阳信号-股票信号发现-" + DateUtils.formatDate(now, DateUtils.yyyyMMdd));
                     helper.setSentDate(now);
                     Context context = new Context();
                     context.setVariable("name", employee.getName());
-                    context.setVariable("", "");
-                    String mail = templateEngine.process("mail", context);
+                    context.setVariable("content", bean.getContent());
+                    String mail = templateEngine.process("mail_stock_discover", context);
                     helper.setText(mail, true);
                     javaMailSender.send(msg);
-                    redisTemplate.opsForHash().put("mail_log", msgId, "javaboy");
+                    redisTemplate.opsForHash().put("mail_log", msgId, "ghk");
+//                    deliveryTag:该消息的index
+//                    multiple：是否批量.true:将一次性拒绝所有小于deliveryTag的消息。
+//                    requeue：被拒绝的是否重新入队列
                     channel.basicAck(tag, false);
+                    channel.basicNack(tag, false, false);
                     logger.info(msgId + ":邮件发送成功");
                 } catch (MessagingException e) {
+//                    deliveryTag:该消息的index
+//                    multiple：是否批量.true:将一次性拒绝所有小于deliveryTag的消息。
+//                    requeue：被拒绝的是否重新入队列
                     channel.basicNack(tag, false, true);
                     e.printStackTrace();
                     logger.error("邮件发送失败：" + e.getMessage());
                 }
+            } else if (sendType == 0) {
+
+            } else if (sendType == 2) {
+
             }
         } else if (messageType == 1) {
 

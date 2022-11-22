@@ -274,7 +274,6 @@ export default {
     getEmaList(row) {
       // 根据weekly_result_id，获取对应的ema结果
       let url = "/stock/weeklylineemaresult/byweekly?wid="+row.id
-      let that = this
       this.getRequest(url).then(resp => {
         this.loading = false;
         if (resp) {
@@ -319,7 +318,7 @@ export default {
           if (resp) {
             // this.initBeanlist();
             //更新ema list信息
-            this.getEmaList(this.expandRow);
+            this.getEmaList(this.expandRow[0]);
           }
         })
       }).catch(() => {

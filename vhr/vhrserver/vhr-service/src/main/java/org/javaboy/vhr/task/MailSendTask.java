@@ -29,7 +29,7 @@ public class MailSendTask {
     @Autowired
     EmployeeService employeeService;
 
-    @Async("mySimpleAsync") //异步执行
+    @Async("employeeMailAsync") //异步执行
 //    @Scheduled(cron = "0/10 * * * * ?")
     @Scheduled(cron = "${task.cron.MailSend.resend}")
     public void mailResendTask() {

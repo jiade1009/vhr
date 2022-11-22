@@ -9,10 +9,18 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+    /**
+     * 这个方法的作用是添加一个服务端点，来接收客户端的连接。
+     * registry.addEndpoint("/socket")表示添加了一个/socket端点，客户端就可以通过这个端点来进行连接。
+     * withSockJS()的作用是开启SockJS支持。
+     * @param registry
+     */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        System.out.println("................==================");
         registry.addEndpoint("/ws/ep")
-                .setAllowedOrigins("http://localhost:8080")
+//                .setAllowedOrigins("http://localhost:*")
+                .setAllowedOriginPatterns("*")
                 .withSockJS();
     }
 

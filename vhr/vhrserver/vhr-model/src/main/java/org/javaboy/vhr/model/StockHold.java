@@ -27,6 +27,8 @@ public class StockHold {
     */
     private Integer status;
 
+    private String statusNote;
+
     /**
     * 买入股票数
     */
@@ -130,5 +132,28 @@ public class StockHold {
 
     public void setWeeklyEmaResultId(Integer weeklyEmaResultId) {
         this.weeklyEmaResultId = weeklyEmaResultId;
+    }
+
+    public String getStatusNote() {
+//        状态，0未购买、1购买中、2暂停购买、3已购买、4卖出中、5暂定卖出、6交易结束
+        if (status==null) return "";
+        switch (status) {
+            case 0:
+                return "未购买";
+            case 1:
+                return "购买中";
+            case 2:
+                return "暂停购买";
+            case 3:
+                return "已购买";
+            case 4:
+                return "卖出中";
+            case 5:
+                return "暂定卖出";
+            case 6:
+                return "交易结束";
+            default:
+                return "未知";
+        }
     }
 }

@@ -70,8 +70,7 @@
                           align="left">
                       </el-table-column>
                       <el-table-column
-                          prop="status"
-                          :formatter="detailFormat"
+                          prop="statusNote"
                           label="委托/撤单状态"
                           align="left">
                       </el-table-column>
@@ -81,8 +80,7 @@
                           align="left">
                       </el-table-column>
                       <el-table-column
-                          prop="taskstatus"
-                          :formatter="detailFormat"
+                          prop="taskstatusNote"
                           label="任务/指令状态"
                           align="left">
                       </el-table-column>
@@ -183,20 +181,10 @@ export default {
     columnFormat(row, column) {
       let property = column.property;
       let data = row[property];
-      if (property == "tradeType") {
-        // 交易类型：0买入，1卖出，2买入撤销，3卖出撤销
-        return data == "0" ? "买入" : data == "1" ? "卖出" : data == "2" ?
-            "买入撤销" : "卖出撤销";
-      } else if (property == "status") {
+      if (property == "status") {
         // 委托/撤单状态，1结束，0执行中，-1失败
-        return data == "0" ? "执行中" : data == "1" ? "结束" : "失败"
-      } else if (property == "taskStatus") {
-        // 任务/指令状态，0 未知,1 等待,2 提交中,3 执行中,4 暂停,5 撤销中,6 异常撤销中,7 完成,8 已撤,9 打回,10  异常终止,11  放弃，目前用于组合交易中，放弃补单,12  强制终止
-        return data == "0" ? "未知" : data == "1" ? "等待" : data == "2" ?
-            "提交中" : data == "3" ? "执行中" : data == "4" ? "暂停" : data == "5"?
-                "撤销中" : data == "6" ? "异常撤销中" : data == "7" ? "完成" : data == "8"?
-                    "已撤" : data == "9" ? "打回" : data == "10" ? "异常终止" : data == "11"?
-                        "放弃，目前用于组合交易中，放弃补单" : "强制终止";
+        // 状态，0未购买、1购买中、2暂停购买、3已购买、4卖出中、5暂定卖出、6交易结束
+        return row["statusNote"];
       } else {
         return data;
       }
@@ -204,10 +192,10 @@ export default {
     detailFormat(row, column) {
       let property = column.property;
       let data = row[property];
-      if (property == "status") {
-        // 状态，0未购买、1购买中、2暂停购买、3已购买、4卖出中、5暂定卖出、6交易结束
-        return data == "0" ? "未购买" : data == "1" ? "购买中" : data == "2" ?
-            "暂停购买" : data == "3" ? "已购买" : data == "4" ? "卖出中" : data == "5"? "暂定卖出" :"交易结束";
+      if (property == "tradeType") {
+        // 交易类型：0买入，1卖出，2买入撤销，3卖出撤销
+        return data == "0" ? "买入" : data == "1" ? "卖出" : data == "2" ?
+            "买入撤销" : "卖出撤销";
       } else {
         return data;
       }

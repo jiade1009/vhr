@@ -42,4 +42,10 @@ public class StockBasicInfoController {
         return RespBean.ok("正在重新更新数据，请耐心等待!");
     }
 
+    @PostMapping("/calendar")
+    public RespBean reloadCalendar() {
+        execPython.runPython(new String[]{BaseConstants.PY_API_LOAD_A_CALENDAR});
+        return RespBean.ok("正在重新更新交易日历，请耐心等待!");
+    }
+
 }

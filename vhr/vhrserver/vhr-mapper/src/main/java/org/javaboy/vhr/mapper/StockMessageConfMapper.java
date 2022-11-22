@@ -1,8 +1,11 @@
 package org.javaboy.vhr.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.javaboy.vhr.base.BaseMapper;
 import org.javaboy.vhr.model.StockMessageConf;
+
+import java.util.List;
 
 /**
  * @ClassName   : StockMessageConfMapper
@@ -16,4 +19,6 @@ import org.javaboy.vhr.model.StockMessageConf;
 public interface StockMessageConfMapper extends BaseMapper<StockMessageConf, Integer> {
     int deleteByEmpid(Integer empid);
     int insert(StockMessageConf record);
+
+    List<StockMessageConf> getListByStatus(@Param("status") boolean status);
 }

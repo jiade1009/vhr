@@ -1,7 +1,7 @@
 <template>
   <div id="card">
   	<header>
-  		<img class="avatar" v-bind:src="user.userface" v-bind:alt="user.name">
+  		<img class="avatar" v-bind:src="user.userface?user.userface:userface" v-bind:alt="user.name">
   		<p class="name">{{user.name}}</p>
   	</header>
   	<footer>
@@ -15,6 +15,7 @@ export default {
   name: 'card',
   data () {
     return {
+      userface: this.$ELEMENT.userface,
       user: JSON.parse(window.sessionStorage.getItem("user"))
     }
   }
