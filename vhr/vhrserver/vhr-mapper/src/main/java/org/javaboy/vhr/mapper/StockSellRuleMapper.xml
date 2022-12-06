@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.StockSellRuleMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.StockSellRule">
+    <!--@mbg.generated-->
+    <!--@Table stock_sell_rule-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="sell_ratio" jdbcType="FLOAT" property="sellRatio" />
+    <result column="p1_ratio" jdbcType="FLOAT" property="p1Ratio" />
+    <result column="p2_ratio" jdbcType="FLOAT" property="p2Ratio" />
+    <result column="p3_ratio" jdbcType="FLOAT" property="p3Ratio" />
+    <result column="p4_ratio" jdbcType="FLOAT" property="p4Ratio" />
+    <result column="p5_ratio" jdbcType="FLOAT" property="p5Ratio" />
+    <result column="sp1_ratio" jdbcType="FLOAT" property="sp1Ratio" />
+    <result column="sp2_ratio" jdbcType="FLOAT" property="sp2Ratio" />
+    <result column="sp3_ratio" jdbcType="FLOAT" property="sp3Ratio" />
+    <result column="sp4_ratio" jdbcType="FLOAT" property="sp4Ratio" />
+    <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
+    <result column="time_update" jdbcType="TIMESTAMP" property="timeUpdate" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, sell_ratio, p1_ratio, p2_ratio, p3_ratio, p4_ratio, p5_ratio, sp1_ratio, sp2_ratio, 
+    sp3_ratio, sp4_ratio, time_create, time_update, `status`
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from stock_sell_rule
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from stock_sell_rule
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockSellRule" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into stock_sell_rule (sell_ratio, p1_ratio, p2_ratio, 
+      p3_ratio, p4_ratio, p5_ratio, 
+      sp1_ratio, sp2_ratio, sp3_ratio, 
+      sp4_ratio, time_create, time_update, 
+      `status`)
+    values (#{sellRatio,jdbcType=FLOAT}, #{p1Ratio,jdbcType=FLOAT}, #{p2Ratio,jdbcType=FLOAT}, 
+      #{p3Ratio,jdbcType=FLOAT}, #{p4Ratio,jdbcType=FLOAT}, #{p5Ratio,jdbcType=FLOAT}, 
+      #{sp1Ratio,jdbcType=FLOAT}, #{sp2Ratio,jdbcType=FLOAT}, #{sp3Ratio,jdbcType=FLOAT}, 
+      #{sp4Ratio,jdbcType=FLOAT}, #{timeCreate,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockSellRule">
+    <!--@mbg.generated-->
+    update stock_sell_rule
+    set sell_ratio = #{sellRatio,jdbcType=FLOAT},
+      p1_ratio = #{p1Ratio,jdbcType=FLOAT},
+      p2_ratio = #{p2Ratio,jdbcType=FLOAT},
+      p3_ratio = #{p3Ratio,jdbcType=FLOAT},
+      p4_ratio = #{p4Ratio,jdbcType=FLOAT},
+      p5_ratio = #{p5Ratio,jdbcType=FLOAT},
+      sp1_ratio = #{sp1Ratio,jdbcType=FLOAT},
+      sp2_ratio = #{sp2Ratio,jdbcType=FLOAT},
+      sp3_ratio = #{sp3Ratio,jdbcType=FLOAT},
+      sp4_ratio = #{sp4Ratio,jdbcType=FLOAT},
+      time_create = #{timeCreate,jdbcType=TIMESTAMP},
+      time_update = #{timeUpdate,jdbcType=TIMESTAMP},
+      `status` = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_sell_rule order by status asc, id desc
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from stock_sell_rule
+  </select>
+
+  <update id="closeRunRule">
+    update stock_sell_rule set `status` = 2 , `time_update` = sysdate() where `status` = 1
+  </update>
+
+  <update id="updateStatusById">
+    update stock_sell_rule set `status` = #{status} , `time_update` = sysdate()
+    where id = #{id}
+  </update>
+
+  <select id="getBeanlistByStatus" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_sell_rule
+    where `status` = #{status,jdbcType=INTEGER}
+  </select>
+</mapper>
