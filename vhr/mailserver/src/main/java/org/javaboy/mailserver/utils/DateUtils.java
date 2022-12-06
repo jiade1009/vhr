@@ -34,9 +34,7 @@ public class DateUtils {
     private static long nm = 1000 * 60;//每分钟毫秒数
 
     public static final Date DEFAULT_DATE = parseDate("1970-01-01");
-
     private final static TimeZone timeZone = TimeZone.getTimeZone("GMT+08:00");
-
 
     /**
      * 获取日期的格式化字符串

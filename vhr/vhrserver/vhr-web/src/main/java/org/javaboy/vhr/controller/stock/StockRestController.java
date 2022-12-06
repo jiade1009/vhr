@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,13 +49,13 @@ public class StockRestController {
                         stockMessageLogService.insertSignalMessages(white_stocks, buy_stocks);
                     }
                 } else if (method.equals("buy")) { //股票买入
-                    String[] hold_trade_id_list = (String[]) data.get("hold_trade_id_list");
-                    if (hold_trade_id_list.length>0) {
+                    List<String> hold_trade_id_list = (List<String>) data.get("hold_trade_id_list");
+                    if (hold_trade_id_list!=null && hold_trade_id_list.size()>0) {
                         stockMessageLogService.insertBuyHoldMessages(hold_trade_id_list);
                     }
                 } else if (method.equals("buy_result")) { //股票买入结果
-                    String[] hold_trade_id_list = (String[]) data.get("hold_trade_id_list");
-                    if (hold_trade_id_list.length>0) {
+                    List<String> hold_trade_id_list = (List<String>) data.get("hold_trade_id_list");
+                    if (hold_trade_id_list!=null && hold_trade_id_list.size()>0) {
                         stockMessageLogService.insertBuyHoldResultMessages(hold_trade_id_list);
                     }
                 }

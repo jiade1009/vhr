@@ -1,7 +1,5 @@
 package org.javaboy.vhr.controller.system;
 
-import org.javaboy.vhr.VhrApplication;
-import org.javaboy.vhr.model.Employee;
 import org.javaboy.vhr.model.Hr;
 import org.javaboy.vhr.model.RespBean;
 import org.javaboy.vhr.model.Role;
@@ -9,7 +7,6 @@ import org.javaboy.vhr.service.HrService;
 import org.javaboy.vhr.service.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,7 +48,6 @@ public class HrController {
         String encodePass = encoder.encode(initPassword); //默认初始密码均为ghk
         hr.setPassword(encodePass);
         int result = hrService.addHr(hr);
-        System.out.println(hr.getPassword());
         if (result == 1) {
             return RespBean.ok("添加成功", hr);
         }

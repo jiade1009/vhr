@@ -71,11 +71,11 @@
                         placeholder="策略周期"></el-input>
               例如计算在多少周之内，ema75>ema18
             </el-form-item>
-            <el-form-item label="成交量比例:" prop="turnoverLimit">
+            <el-form-item label="成交金额比例:" prop="turnoverLimit">
               <el-input size="mini" prefix-icon="el-icon-edit" v-model="bean.turnoverLimit"
-                        placeholder="请输入成交量比例"></el-input>
+                        placeholder="请输入成交金额比例"></el-input>
               <el-switch v-model="bean.turnoverLimitOption" style="margin-right: 10px"></el-switch>是否开启
-              <div>平均成交量/买入量>turnoverLimit</div>
+              <div>5交易日平均成交金额/买入金额>turnoverLimit</div>
             </el-form-item>
             <el-form-item label="收敛度:" prop="converLimit">
               <el-input size="mini" prefix-icon="el-icon-edit" v-model="bean.converLimit"
@@ -88,6 +88,12 @@
                         placeholder="请输入下跌幅度"></el-input>
               <el-switch v-model="bean.shockLimitOption" style="margin-right: 10px"></el-switch>是否开启
               <div>最低价/最高价<=shockLimit</div>
+            </el-form-item>
+            <el-form-item label="买入价限价:" prop="buyPriceLimit">
+              <el-input size="mini" prefix-icon="el-icon-edit" v-model="bean.buyPriceLimit"
+                        placeholder="请输入买入价限价"></el-input>
+              <el-switch v-model="bean.buyPriceLimitOption" style="margin-right: 10px"></el-switch>是否开启
+              <div>买入价格/昨日的EMA_75的价格<=1.03，即不超过3%</div>
             </el-form-item>
             <el-input type="hidden" id="id"></el-input>
             <el-input type="hidden" id="status"></el-input>
@@ -146,12 +152,14 @@ export default {
         "timeMarket": 3,
         "timeMarketOption": 0,
         "rulePeriod": 52,
-        "turnoverLimit": 0,
+        "turnoverLimit": 20,
         "turnoverLimitOption": 0,
         "converLimit": 1.1,
         "converLimitOption": 0,
         "shockLimit": 0.45,
         "shockLimitOption": 0,
+        "buyPriceLimit": 1.03,
+        "buyPriceLimitOption": 0,
         "status": 0,
       },
       title: '添加买入策略',
@@ -167,12 +175,14 @@ export default {
         {prop: "timeMarket", label: "上市时长/年", show: true},
         {prop: "timeMarketOption", label: "开启", show: true},
         {prop: "rulePeriod", label: "策略周期/周", show: true},
-        {prop: "turnoverLimit", label: "成交量比例", show: true},
+        {prop: "turnoverLimit", label: "成交金额比例", show: true},
         {prop: "turnoverLimitOption", label: "开启", show: true},
         {prop: "converLimit", label: "收敛度", show: true},
         {prop: "converLimitOption", label: "开启", show: true},
         {prop: "shockLimit", label: "下跌幅度", show: true},
         {prop: "shockLimitOption", label: "开启", show: true},
+        {prop: "buyPriceLimit", label: "买入价限价", show: true},
+        {prop: "buyPriceLimitOption", label: "开启", show: true},
         {prop: "timeCreate", label: "创建时间", show: true},
         {prop: "timeUpdate", label: "更新时间", show: true},
       ],
@@ -189,20 +199,10 @@ export default {
       if (property == "status") {
         return data == "0" ? "草稿" : data == "1" ? "运行" : "结束";
       } else if (property == "timeMarketOption" || property == "turnoverLimitOption"
-          || property == "converLimitOption" || property == "shockLimitOption") {
+          || property == "converLimitOption" || property == "shockLimitOption" || property == "buyPriceLimitOption") {
         return data == "0" ? "否" : "是";
       }
       return data;
-    },
-    formatterText(row, column) {
-      let property = column.property;
-      let data = row[property];
-      if (property == "status") {
-        return data == "0" ? "草稿" : data == "1" ? "运行" : "结束";
-      } else if (property == "timeMarketOption" || property == "turnoverLimitOption"
-          || property == "converLimitOption" || property == "shockLimitOption") {
-        return data == "0" ? "否" : "是";
-      }
     },
     sizeChange(currentSize) {
       this.size = currentSize;
@@ -240,12 +240,14 @@ export default {
         "timeMarket": 3,
         "timeMarketOption": 0,
         "rulePeriod": 52,
-        "turnoverLimit": 0,
+        "turnoverLimit": 20,
         "turnoverLimitOption": 0,
         "converLimit": 1.1,
         "converLimitOption": 0,
         "shockLimit": 0.45,
         "shockLimitOption": 0,
+        "buyPriceLimit": 1.03,
+        "buyPriceLimitOption": 0,
         "status": 0,
       };
     },

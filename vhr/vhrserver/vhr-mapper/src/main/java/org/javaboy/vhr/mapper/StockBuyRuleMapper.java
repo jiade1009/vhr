@@ -2,6 +2,7 @@ package org.javaboy.vhr.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.javaboy.vhr.base.BaseMapper;
 import org.javaboy.vhr.model.StockBuyRule;
 
 import java.util.List;
@@ -15,22 +16,7 @@ import java.util.List;
  */
 
 @Mapper
-public interface StockBuyRuleMapper {
-    int deleteByPrimaryKey(Integer id);
-
-    int insert(StockBuyRule record);
-
-    int insertSelective(StockBuyRule record);
-
-    StockBuyRule selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(StockBuyRule record);
-
-    int updateByPrimaryKey(StockBuyRule record);
-
-    List<StockBuyRule> getBeanlistByPage(@Param("page") Integer page, @Param("size") Integer size);
-
-    Long getTotal();
+public interface StockBuyRuleMapper extends BaseMapper<StockBuyRule, Integer> {
 
     // 关闭当前正在运行的策略
     int closeRunRule();

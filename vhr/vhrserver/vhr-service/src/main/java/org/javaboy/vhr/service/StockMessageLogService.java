@@ -6,6 +6,7 @@ import org.javaboy.vhr.model.MailConstants;
 import org.javaboy.vhr.model.StockHoldTrade;
 import org.javaboy.vhr.model.StockMessageConf;
 import org.javaboy.vhr.model.StockMessageLog;
+import org.javaboy.vhr.model.util.MessageType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -61,23 +62,23 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
         white_stocks = StringUtils.hasLength(white_stocks)?white_stocks:"暂无数据";
         buy_stocks = StringUtils.hasLength(buy_stocks)?buy_stocks:"暂无数据";
         String content = "白色信号：" + white_stocks+"； 蓝色信号：" + buy_stocks;
-        insertMessage(content);
+        insertMessage(content, MessageType.SIGN.getIndex());
     }
 
-    public void insertBuyHoldMessages(String[] hold_trade_ids) {
-        if (hold_trade_ids.length>0) {
+    public void insertBuyHoldMessages(List<String> hold_trade_ids) {
+        if (hold_trade_ids.size()>0) {
             StringBuilder sbd = new StringBuilder("");
             for (String id: hold_trade_ids) {
                 StockHoldTrade trade = stockHoldTradeService.selectByPrimaryKey(Integer.valueOf(id));
                 sbd.append("[").append(trade.getCode()).append("]，买入价：").append(String.format("%.2f",trade.getPrice()));
                 sbd.append("，股票数：").append(trade.getAmount()).append(" ## ");
             }
-            insertMessage(sbd.toString());
+            insertMessage(sbd.toString(), MessageType.BUY.getIndex());
         }
     }
 
-    public void insertBuyHoldResultMessages(String[] hold_trade_ids) {
-        if (hold_trade_ids.length>0) {
+    public void insertBuyHoldResultMessages(List<String> hold_trade_ids) {
+        if (hold_trade_ids.size()>0) {
             StringBuilder sbd = new StringBuilder("");
             for (String id: hold_trade_ids) {
                 StockHoldTrade trade = stockHoldTradeService.selectByPrimaryKey(Integer.valueOf(id));
@@ -85,7 +86,7 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
                 sbd.append("[").append(trade.getCode()).append("]，委托状态：").append(trade.getTaskstatusNote());
                 sbd.append("，股票数：").append(trade.getAmount()).append(" ");
             }
-            insertMessage(sbd.toString());
+            insertMessage(sbd.toString(), MessageType.BUY.getIndex());
         }
     }
 
@@ -93,7 +94,7 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
      * 读取所有待接收信息的消息发送配置
      * @param content
      */
-    public void insertMessage(String content) {
+    public void insertMessage(String content, Integer messageType) {
         List<StockMessageConf> confList = stockMessageConfService.getListByStatus(true);
         for (StockMessageConf conf : confList) {
             String send_type = conf.getSendType();
@@ -106,7 +107,7 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
                         StockMessageLog log = new StockMessageLog();
                         log.setMsgid(msgId);
                         log.setSendType(i);
-                        log.setMessageType(0);
+                        log.setMessageType(messageType);
                         log.setEmpid(conf.getEmpid());
                         log.setExchange(MailConstants.STOCK_EXCHANGE_NAME);
                         log.setRoutekey(MailConstants.STOCK_ROUTING_KEY_NAME);

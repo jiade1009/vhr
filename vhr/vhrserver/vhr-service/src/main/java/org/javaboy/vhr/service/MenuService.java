@@ -4,7 +4,6 @@ import org.javaboy.vhr.mapper.MenuMapper;
 import org.javaboy.vhr.mapper.MenuRoleMapper;
 import org.javaboy.vhr.model.Hr;
 import org.javaboy.vhr.model.Menu;
-import org.javaboy.vhr.model.MenuRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;

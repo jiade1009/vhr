@@ -14,6 +14,8 @@
     <result column="conver_limit_option" jdbcType="BIT" property="converLimitOption" />
     <result column="shock_limit" jdbcType="FLOAT" property="shockLimit" />
     <result column="shock_limit_option" jdbcType="BIT" property="shockLimitOption" />
+    <result column="buy_price_limit" jdbcType="FLOAT" property="buyPriceLimit" />
+    <result column="buy_price_limit_option" jdbcType="BIT" property="buyPriceLimitOption" />
     <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
     <result column="time_update" jdbcType="TIMESTAMP" property="timeUpdate" />
     <result column="status" jdbcType="INTEGER" property="status" />
@@ -21,8 +23,8 @@
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, time_market, time_market_option, rule_period, turnover_limit, turnover_limit_option, 
-    conver_limit, conver_limit_option, shock_limit, shock_limit_option, time_create, 
-    time_update, `status`
+    conver_limit, conver_limit_option, shock_limit, shock_limit_option, buy_price_limit, buy_price_limit_option,
+    time_create, time_update, `status`
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -40,12 +42,13 @@
     <!--@mbg.generated-->
     insert into stock_buy_rule (time_market, time_market_option, rule_period, 
       turnover_limit, turnover_limit_option, conver_limit, 
-      conver_limit_option, shock_limit, shock_limit_option, 
+      conver_limit_option, shock_limit, shock_limit_option, buy_price_limit, buy_price_limit_option,
       time_create, time_update, `status`
       )
     values (#{timeMarket,jdbcType=INTEGER}, #{timeMarketOption,jdbcType=BIT}, #{rulePeriod,jdbcType=INTEGER},
       #{turnoverLimit,jdbcType=INTEGER}, #{turnoverLimitOption,jdbcType=BIT}, #{converLimit,jdbcType=FLOAT},
       #{converLimitOption,jdbcType=BIT}, #{shockLimit,jdbcType=FLOAT}, #{shockLimitOption,jdbcType=BIT},
+      #{buyPriceLimit,jdbcType=FLOAT}, #{buyPriceLimitOption,jdbcType=BIT},
       #{timeCreate,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}
       )
   </insert>
@@ -79,6 +82,12 @@
       </if>
       <if test="shockLimitOption != null">
         shock_limit_option,
+      </if>
+      <if test="buyPriceLimit != null">
+        buy_price_limit,
+      </if>
+      <if test="buyPriceLimitOption != null">
+        buy_price_limit_option,
       </if>
       <if test="timeCreate != null">
         time_create,
@@ -117,6 +126,12 @@
       </if>
       <if test="shockLimitOption != null">
         #{shockLimitOption,jdbcType=BIT},
+      </if>
+      <if test="buyPriceLimit != null">
+        #{buyPriceLimit,jdbcType=FLOAT},
+      </if>
+      <if test="buyPriceLimitOption != null">
+        #{buyPriceLimitOption,jdbcType=BIT},
       </if>
       <if test="timeCreate != null">
         #{timeCreate,jdbcType=TIMESTAMP},
@@ -160,6 +175,12 @@
       <if test="shockLimitOption != null">
         shock_limit_option = #{shockLimitOption,jdbcType=BIT},
       </if>
+      <if test="buyPriceLimit != null">
+        buy_price_limit = #{buyPriceLimit,jdbcType=FLOAT},
+      </if>
+      <if test="buyPriceLimitOption != null">
+        buy_price_limit_option = #{buyPriceLimitOption,jdbcType=BIT},
+      </if>
       <if test="timeCreate != null">
         time_create = #{timeCreate,jdbcType=TIMESTAMP},
       </if>
@@ -184,6 +205,8 @@
       conver_limit_option = #{converLimitOption,jdbcType=BIT},
       shock_limit = #{shockLimit,jdbcType=FLOAT},
       shock_limit_option = #{shockLimitOption,jdbcType=BIT},
+      buy_price_limit = #{buyPriceLimit,jdbcType=FLOAT},
+      buy_price_limit_option = #{buyPriceLimitOption,jdbcType=BIT},
       time_create = #{timeCreate,jdbcType=TIMESTAMP},
       time_update = #{timeUpdate,jdbcType=TIMESTAMP},
       `status` = #{status,jdbcType=INTEGER}

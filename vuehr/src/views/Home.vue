@@ -66,6 +66,8 @@
         },
         beforeMount() {
         },
+        mounted() {
+        },
       methods: {
             goChat() {
                 this.$router.push("/chat");

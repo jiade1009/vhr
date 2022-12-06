@@ -17,6 +17,13 @@
     <result column="send_type" jdbcType="INTEGER" property="sendType" />
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
+
+  <resultMap id="AllBeanInfo" type="org.javaboy.vhr.model.StockMessageLog" extends="BaseResultMap">
+    <association property="employee" javaType="org.javaboy.vhr.model.Employee">
+      <id column="eid" property="id"/>
+      <result column="ename" property="name"/>
+    </association>
+  </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     msgId, empId, `status`, routeKey, exchange, `count`, time_try, time_create, time_update, 
@@ -48,4 +55,21 @@
   <update id="updateCount">
     update stock_message_log set count=count+1,time_update=#{date} where msgId=#{msgId};
   </update>
+
+  <select id="getBeanlistByBeanAndPage" resultMap="AllBeanInfo">
+    select s.*,e.`id` as eid,e.`name` as ename from stock_message_log s, employee e where s.`empId` = e.`id`
+    <if test="bean.employee.name !=null and bean.employee.name!=''">
+      and e.name like concat('%',#{bean.employee.name},'%')
+    </if>
+    order by time_create desc
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotalByBean" resultType="java.lang.Long">
+    select count(*) from stock_message_log s, employee e where  s.`empId` = e.`id`
+    <if test="bean.employee.name !=null and bean.employee.name!=''">
+      and e.name like concat('%',#{bean.employee.name},'%')
+    </if>
+  </select>
 </mapper>

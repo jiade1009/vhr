@@ -14,11 +14,12 @@
     <result column="hold_amount" jdbcType="INTEGER" property="holdAmount" />
     <result column="sell_stage" jdbcType="INTEGER" property="sellStage" />
     <result column="weekly_ema_result_id" jdbcType="INTEGER" property="weeklyEmaResultId" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, code, time_create, time_update, `status`, buy_amount, buy_price, hold_amount, 
-    sell_stage, weekly_ema_result_id
+    sell_stage, weekly_ema_result_id, note
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -36,11 +37,12 @@
     <!--@mbg.generated-->
     insert into stock_hold (code, time_create, time_update, 
       `status`, buy_amount, buy_price, 
-      hold_amount, sell_stage, weekly_ema_result_id
+      hold_amount, sell_stage, weekly_ema_result_id, note
       )
     values (#{code,jdbcType=VARCHAR}, #{timeCreate,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP}, 
       #{status,jdbcType=INTEGER}, #{buyAmount,jdbcType=INTEGER}, #{buyPrice,jdbcType=FLOAT}, 
-      #{holdAmount,jdbcType=INTEGER}, #{sellStage,jdbcType=INTEGER}, #{weeklyEmaResultId,jdbcType=INTEGER}
+      #{holdAmount,jdbcType=INTEGER}, #{sellStage,jdbcType=INTEGER}, #{weeklyEmaResultId,jdbcType=INTEGER},
+      #{note,jdbcType=VARCHAR}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockHold">
@@ -54,7 +56,8 @@
       buy_price = #{buyPrice,jdbcType=FLOAT},
       hold_amount = #{holdAmount,jdbcType=INTEGER},
       sell_stage = #{sellStage,jdbcType=INTEGER},
-      weekly_ema_result_id = #{weeklyEmaResultId,jdbcType=INTEGER}
+      weekly_ema_result_id = #{weeklyEmaResultId,jdbcType=INTEGER},
+      note = #{note,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="getBeanlistByPage" resultMap="BaseResultMap">

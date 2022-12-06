@@ -83,7 +83,7 @@ public class StockCoreTask {
             Integer time = 0;
             //判断是否已经生成今天的周线和ema数据，即自动生成，且ema结果为成功生成的周线
             List<StockWeeklyLineResult> weeklyList = null;
-            while (!already && time<2) {
+            while (!already && time<90) {
                 weeklyList = stockWeeklyLineResultService.getBeanListByPro(searchDate, 1, 1);
                 if (weeklyList != null && weeklyList.size()>0) {
                     already = true;
@@ -112,7 +112,8 @@ public class StockCoreTask {
         StockATradeDate tradeDate = getTodayTradeDate();
         if (tradeDate!=null) { //当天为股票交易日
             LOGGER.info(".............开始【{}】的买入股票的运行..............", tradeDate.getTradeDate());
-            execPython.runPython(new String[]{BaseConstants.PY_API_RUN_A_BUY});
+//            传递stock_hold_id 如果为0，则查询所有的股票池数据
+            execPython.runPython(new String[]{BaseConstants.PY_API_RUN_A_BUY, "0"});
         } else {
             LOGGER.debug("今天不是A股股票交易日，不运行买入股票命令");
         }
@@ -130,12 +131,18 @@ public class StockCoreTask {
         }
     }
 
+    @Async("stockCoreAsync")
+    @Scheduled(cron = "${task.cron.StockCore.stockCodeUpdate}")
+    public void stockCodeUpdate() {
+        LOGGER.info(".............开始股票代码的更新..............");
+        execPython.runPython(new String[]{BaseConstants.PY_API_LOAD_A_STOCK});
+    }
+
     /**
      * 定时刷新股票各种操作的状态
      */
     public void freshStatus() {
         //定时更新查看是否已经完成周线数据的下载
-
         ValueOperations<String, String> ops1 = stringRedisTemplate.opsForValue();
         ops1.set(BaseConstants.OPE_STOCK_CREATE_A_WEEKLY, "false");
     }

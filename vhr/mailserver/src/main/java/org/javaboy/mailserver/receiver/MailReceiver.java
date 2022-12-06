@@ -5,6 +5,7 @@ import org.javaboy.mailserver.utils.DateUtils;
 import org.javaboy.vhr.model.Employee;
 import org.javaboy.vhr.model.MailConstants;
 import org.javaboy.vhr.model.RabbitBean;
+import org.javaboy.vhr.model.util.MessageType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -106,50 +107,60 @@ public class MailReceiver {
         // 根据messageType判断进行不同的内容发送，0信号发现、1买入、2卖出
         Integer messageType = bean.getMessageType();
         Integer sendType = bean.getSendType();  //（0短信、1邮件、2微信服务通知）
-        if (messageType == 0) {
-            if (sendType == 1) {
-                //收到消息，发送邮件
-                MimeMessage msg = javaMailSender.createMimeMessage();
-                MimeMessageHelper helper = new MimeMessageHelper(msg);
-                try {
-                    Date now = new Date();
-                    helper.setTo(employee.getEmail());
-                    helper.setFrom(mailProperties.getUsername());
-                    helper.setSubject("纯阳信号-股票信号发现-" + DateUtils.formatDate(now, DateUtils.yyyyMMdd));
-                    helper.setSentDate(now);
-                    Context context = new Context();
-                    context.setVariable("name", employee.getName());
-                    context.setVariable("content", bean.getContent());
-                    String mail = templateEngine.process("mail_stock_discover", context);
-                    helper.setText(mail, true);
-                    javaMailSender.send(msg);
-                    redisTemplate.opsForHash().put("mail_log", msgId, "ghk");
-//                    deliveryTag:该消息的index
-//                    multiple：是否批量.true:将一次性拒绝所有小于deliveryTag的消息。
-//                    requeue：被拒绝的是否重新入队列
-                    channel.basicAck(tag, false);
-                    channel.basicNack(tag, false, false);
-                    logger.info(msgId + ":邮件发送成功");
-                } catch (MessagingException e) {
-//                    deliveryTag:该消息的index
-//                    multiple：是否批量.true:将一次性拒绝所有小于deliveryTag的消息。
-//                    requeue：被拒绝的是否重新入队列
-                    channel.basicNack(tag, false, true);
-                    e.printStackTrace();
-                    logger.error("邮件发送失败：" + e.getMessage());
+        if (sendType == 1) {
+            //收到消息，发送邮件
+            MimeMessage msg = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(msg);
+            try {
+                Date now = new Date();
+                helper.setTo(employee.getEmail());
+                helper.setFrom(mailProperties.getUsername());
+                // 根据messageType，确定发送不同信息
+                String title = "股票信号发现";
+                if (messageType == MessageType.BUY.getIndex()) {
+                    title = "股票买入结果";
+                } else if (messageType == MessageType.SELL.getIndex()) {
+                    title = "股票卖出结果";
                 }
-            } else if (sendType == 0) {
-
-            } else if (sendType == 2) {
-
+                helper.setSubject(title + " - " + DateUtils.formatDate(now, DateUtils.yyyyMMdd));
+                helper.setSentDate(now);
+                Context context = new Context();
+                context.setVariable("name", employee.getName());
+                context.setVariable("content", bean.getContent());
+                context.setVariable("label", title);
+                String mail = templateEngine.process("mail_stock_discover", context);
+                helper.setText(mail, true);
+                javaMailSender.send(msg);
+                redisTemplate.opsForHash().put("mail_log", msgId, "ghk");
+//                    deliveryTag:该消息的index
+//                    multiple：是否批量.true:将一次性拒绝所有小于deliveryTag的消息。
+//                    requeue：被拒绝的是否重新入队列
+                System.out.println("tag:" + tag);
+                channel.basicAck(tag, false);
+                logger.info(msgId + ": 邮件发送成功");
+            } catch (MessagingException e) {
+//                    deliveryTag:该消息的index
+//                    multiple：是否批量.true:将一次性拒绝所有小于deliveryTag的消息。
+//                    requeue：被拒绝的是否重新入队列
+                channel.basicNack(tag, false, true);
+                e.printStackTrace();
+                logger.error("邮件发送失败：" + e.getMessage());
             }
-        } else if (messageType == 1) {
+        } else if (sendType == 0) {
 
-        } else if (messageType == 2) {
+        } else if (sendType == 2) {
 
-        } else {
-            logger.error("stock message发送失败：messageType 不合法 {}" + messageType);
         }
+
+//        if (messageType == 0) {
+//
+//        } else if (messageType == 1) {
+//
+//        } else if (messageType == 2) {
+//
+//        } else {
+//            logger.error("stock message发送失败：messageType 不合法 {}" + messageType);
+//        }
 
 
     }

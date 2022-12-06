@@ -27,7 +27,7 @@ public class StockBuyRuleController {
     @GetMapping("/")
     public RespPageBean getBeanlistByPage(@RequestParam(defaultValue = "1") Integer page,
                                           @RequestParam(defaultValue = "10") Integer size) {
-        return stockBuyRuleService.getBeanlistByPage(page, size);
+        return stockBuyRuleService.getBeanlistByPage(page, size, "");
     }
 
     @PostMapping("/")

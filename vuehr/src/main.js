@@ -50,7 +50,8 @@ import {
     DatePicker,
     RadioGroup,
     CollapseItem,
-    Switch
+    Switch,
+    Divider
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
@@ -106,6 +107,7 @@ Vue.use(Icon);
 Vue.use(Select);
 Vue.use(Form);
 Vue.use(Tag);
+Vue.use(Divider);
 //采用component 方式引入Message，如果采用use，则刷新会弹出一个空窗口
 // Vue.use(Message);
 Vue.component(Message.name, Message)

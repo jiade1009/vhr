@@ -28,12 +28,12 @@ public class StockBuyRule {
     private Integer rulePeriod;
 
     /**
-     * 成交量额度
+     * 成交金额额度
      */
     private Integer turnoverLimit;
 
     /**
-     * 成交量额度是否必要，0否，1是
+     * 成交金额额度是否必要，0否，1是
      */
     private Boolean turnoverLimitOption;
 
@@ -56,6 +56,16 @@ public class StockBuyRule {
      * 下跌幅度是否必要，0否，1是
      */
     private Boolean shockLimitOption;
+
+    /**
+     * 买入价限价，买入价格/昨日的EMA_75的价格，默认1.03
+     */
+    private Double buyPriceLimit;
+
+    /**
+     * 买入价限价开关，0否，1是
+     */
+    private Boolean buyPriceLimitOption;
 
     private Date timeCreate;
 
@@ -168,5 +178,21 @@ public class StockBuyRule {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Double getBuyPriceLimit() {
+        return buyPriceLimit;
+    }
+
+    public void setBuyPriceLimit(Double buyPriceLimit) {
+        this.buyPriceLimit = buyPriceLimit;
+    }
+
+    public Boolean getBuyPriceLimitOption() {
+        return buyPriceLimitOption;
+    }
+
+    public void setBuyPriceLimitOption(Boolean buyPriceLimitOption) {
+        this.buyPriceLimitOption = buyPriceLimitOption;
     }
 }

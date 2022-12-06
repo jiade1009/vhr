@@ -3,10 +3,7 @@ package org.javaboy.vhr.service;
 import org.javaboy.vhr.mapper.DatabaseTypeMapper;
 import org.javaboy.vhr.model.DatabaseType;
 import org.javaboy.vhr.model.RespPageBean;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,17 +16,17 @@ public class DatabaseTypeService{
     @Resource
     private DatabaseTypeMapper databaseTypeMapper;
 
-    @CacheEvict
+    @Caching(evict = { @CacheEvict(allEntries=true)})
     public int deleteByPrimaryKey(Integer id) {
         return databaseTypeMapper.deleteByPrimaryKey(id);
     }
 
-    @CachePut
+    @Caching(evict = { @CacheEvict(allEntries=true)})
     public int insert(DatabaseType record) {
         return databaseTypeMapper.insert(record);
     }
 
-    @CachePut
+    @Caching(evict = { @CacheEvict(allEntries=true)})
     public int insertSelective(DatabaseType record) {
         return databaseTypeMapper.insertSelective(record);
     }
@@ -56,12 +53,12 @@ public class DatabaseTypeService{
         return bean;
     }
 
-    @CachePut
+    @Caching(evict = { @CacheEvict(allEntries=true)})
     public int updateByPrimaryKeySelective(DatabaseType record) {
         return databaseTypeMapper.updateByPrimaryKeySelective(record);
     }
 
-    @CachePut
+    @Caching(evict = { @CacheEvict(allEntries=true)})
     public int updateByPrimaryKey(DatabaseType record) {
         return databaseTypeMapper.updateByPrimaryKey(record);
     }

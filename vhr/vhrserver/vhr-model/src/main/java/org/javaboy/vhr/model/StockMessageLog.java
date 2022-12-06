@@ -17,11 +17,13 @@ public class StockMessageLog {
     * 员工id
     */
     private Integer empid;
+    private Employee employee = new Employee();
 
     /**
     * 0发送中，1发送成功，2发送失败
     */
     private Integer status = 0;
+    private String statusNote;
 
     /**
     * 路由键
@@ -51,12 +53,13 @@ public class StockMessageLog {
     * 消息分类（信号发现、买入、卖出）
     */
     private Integer messageType;
+    private String messageTypeNote;
 
     /**
     * 发送形式（0短信、1邮件、2微信服务通知）
     */
     private Integer sendType;
-
+    private String sendTypeNote;
     // 消息内容
     private String content;
 
@@ -154,5 +157,54 @@ public class StockMessageLog {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+    public String getStatusNote() {
+        if (status==null) return "";
+        switch (status) {
+            case 0:
+                return "发送中";
+            case 1:
+                return "成功";
+            case 2:
+                return "失败";
+            default:
+                return "未知";
+        }
+    }
+
+    public String getMessageTypeNote() {
+        if (messageType==null) return "";
+        switch (messageType) {
+            case 0:
+                return "信号发现";
+            case 1:
+                return "买入";
+            case 2:
+                return "卖出";
+            default:
+                return "未知";
+        }
+    }
+
+    public String getSendTypeNote() {
+        if (sendType==null) return "";
+        switch (sendType) {
+            case 0:
+                return "短信";
+            case 1:
+                return "邮件";
+            case 2:
+                return "微信服务通知";
+            default:
+                return "未知";
+        }
     }
 }

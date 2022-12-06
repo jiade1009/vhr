@@ -39,6 +39,7 @@ logging:
   level:
     # web日志
     org.springframework.web: info
+    org.springframework.web.socket.config.WebSocketMessageBrokerStats: error
     # security 日志
     org.springframework.security: error
     # mybatis日志
@@ -95,11 +96,13 @@ task:
       buyrule: 0 0 16 ? * MON-FRI
 #      buyrule: 0 0/8 * ? * MON-FRI
       # 买入操作
-      buy: 0 0 9 ? * MON-FRI
+      buy: 0 31 9 ? * MON-FRI
 #      buy: 0 0/10 * ? * MON-FRI
       # 股票交易结果
-      tradeResult: 0 0/10 9-15 ? * MON-FRI
+      tradeResult: 0 0/10 9-14 ? * MON-FRI
 #      tradeResult: 0 0/10 * ? * MON-FRI
+      #股票代码更新
+      stockCodeUpdate: 0 0 1 ? * SAT
 
 
 # 与python客户端通信签名配置

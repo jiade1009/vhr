@@ -29,6 +29,8 @@ public class StockHold {
 
     private String statusNote;
 
+    private String note;
+
     /**
     * 买入股票数
     */
@@ -155,5 +157,13 @@ public class StockHold {
             default:
                 return "未知";
         }
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

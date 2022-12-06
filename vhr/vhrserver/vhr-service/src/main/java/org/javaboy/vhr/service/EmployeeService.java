@@ -53,10 +53,11 @@ public class EmployeeService {
     }
 
     public Integer addEmp(Employee employee) {
-        Date beginContract = employee.getBeginContract();
+        // 注释去掉员工的入职和离职时间的记录
+        /*Date beginContract = employee.getBeginContract();
         Date endContract = employee.getEndContract();
         double month = (Double.parseDouble(yearFormat.format(endContract)) - Double.parseDouble(yearFormat.format(beginContract))) * 12 + (Double.parseDouble(monthFormat.format(endContract)) - Double.parseDouble(monthFormat.format(beginContract)));
-        employee.setContractTerm(Double.parseDouble(decimalFormat.format(month / 12)));
+        employee.setContractTerm(Double.parseDouble(decimalFormat.format(month / 12)));*/
         int result = employeeMapper.insertSelective(employee);
         if (result == 1) {
             Employee emp = employeeMapper.getEmployeeById(employee.getId());

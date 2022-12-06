@@ -122,17 +122,19 @@
               align="left">
           </el-table-column>
 
-          <!--<el-table-column
+          <el-table-column
               fixed="right"
               width="120"
               label="操作">
             <template slot-scope="scope">
-              <el-button type="info" @click="" style="padding: 3px" size="mini" v-if="scope.row.status==2">恢复购买</el-button>
+              <el-button type="info" @click.stop="viewDetail(scope.row)" style="padding: 3px" size="mini">查看交易</el-button>
+              <el-button type="success" @click.stop="runBuy(scope.row)" style="padding: 3px" size="mini" v-if="scope.row.status==0">购买</el-button>
+              <!--<el-button type="info" @click="" style="padding: 3px" size="mini" v-if="scope.row.status==2">恢复购买</el-button>
               <el-button type="warning" @click="" style="padding: 3px" size="mini" v-if="scope.row.status==0">暂停购买</el-button>
               <el-button type="success" @click="" style="padding: 3px" size="mini" v-if="scope.row.status==3">暂停卖出</el-button>
-              <el-button type="danger" @click="" style="padding: 3px" size="mini" v-if="scope.row.status!=6">关闭交易</el-button>
+              <el-button type="danger" @click="" style="padding: 3px" size="mini" v-if="scope.row.status!=6">关闭交易</el-button>-->
             </template>
-          </el-table-column>-->
+          </el-table-column>
         </el-table>
         <div style="display: flex;justify-content: flex-end">
           <el-pagination
@@ -152,7 +154,7 @@
 
 <script>
 export default {
-  name: "StockBasicinfo",
+  name: "StockHold",
   data () {
     return {
       //分页参数
@@ -167,7 +169,8 @@ export default {
         {prop: "code", label: "代码", show: true},
         {prop: "timeCreate", label: "创建时间", show: true},
         {prop: "status", label: "状态", show: true},
-        {prop: "holdAmount", label: "持有数量", show: true}
+        {prop: "holdAmount", label: "持有数量", show: true},
+        {prop: "note", label: "备注", show: true}
       ],
       //下拉明细内容
       expands:[],
@@ -184,6 +187,7 @@ export default {
       if (property == "status") {
         // 委托/撤单状态，1结束，0执行中，-1失败
         // 状态，0未购买、1购买中、2暂停购买、3已购买、4卖出中、5暂定卖出、6交易结束
+        // return data;
         return row["statusNote"];
       } else {
         return data;
@@ -257,6 +261,25 @@ export default {
     // 通过样式隐藏expand图标
     getRowClassName() {
       return 'row-expand-cover'
+    },
+    runBuy(row) {
+      this.$confirm('确认购买该股票吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.putRequest("/stock/hold/runBuy?holdId=" + row.id).then(resp => {
+          if (resp) {
+            //更新list信息
+            this.initBeanlist();
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消操作'
+        });
+      });
     },
   }
 }
