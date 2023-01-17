@@ -123,6 +123,9 @@ import {getRequest} from "./utils/api";
 import {initMenu} from "./utils/menus";
 import utils from "./utils/utils";
 import 'font-awesome/css/font-awesome.min.css'
+// 此处引入静态资源
+// require('@/assets/css/style.css')
+import '@/assets/css/style.css'
 
 Vue.prototype.postRequest = postRequest;
 Vue.prototype.postKeyValueRequest = postKeyValueRequest;

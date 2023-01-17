@@ -22,11 +22,19 @@
     <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
     <result column="time_update" jdbcType="TIMESTAMP" property="timeUpdate" />
     <result column="price" jdbcType="FLOAT" property="price" />
+    <result column="counter" jdbcType="INTEGER" property="counter" />
+    <result column="price_type" jdbcType="VARCHAR" property="priceType" />
+    <result column="cj_price" jdbcType="FLOAT" property="cjPrice" />
+    <result column="cj_amount" jdbcType="INTEGER" property="cjAmount" />
+    <result column="cj_time" jdbcType="VARCHAR" property="cjTime" />
+    <result column="cj_fee" jdbcType="FLOAT" property="cjFee" />
+    <result column="cj_total" jdbcType="FLOAT" property="cjTotal" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, hold_id, code, amount, trade_type, trade_note, orderid, message, `status`, note, 
-    taskid, taskstatus, taskmsg, taskpro, ordernum, time_create, time_update, price
+    taskid, taskstatus, taskmsg, taskpro, ordernum, time_create, time_update, price, counter,
+    price_type, cj_price, cj_amount, cj_time, cj_fee, cj_total
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -47,13 +55,16 @@
       message, `status`, note, 
       taskid, taskstatus, taskmsg, 
       taskpro, ordernum, time_create, 
-      time_update, price)
+      time_update, price, counter,price_type, cj_price,
+      cj_amount, cj_time, cj_fee, cj_total)
     values (#{holdId,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, 
       #{tradeType,jdbcType=INTEGER}, #{tradeNote,jdbcType=VARCHAR}, #{orderid,jdbcType=VARCHAR}, 
       #{message,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{note,jdbcType=VARCHAR}, 
       #{taskid,jdbcType=VARCHAR}, #{taskstatus,jdbcType=INTEGER}, #{taskmsg,jdbcType=VARCHAR}, 
       #{taskpro,jdbcType=VARCHAR}, #{ordernum,jdbcType=VARCHAR}, #{timeCreate,jdbcType=TIMESTAMP}, 
-      #{timeUpdate,jdbcType=TIMESTAMP}, #{price,jdbcType=FLOAT})
+      #{timeUpdate,jdbcType=TIMESTAMP}, #{price,jdbcType=FLOAT}, #{counter,jdbcType=INTEGER},
+      #{priceType,jdbcType=VARCHAR}, #{cjPrice,jdbcType=FLOAT}, #{cjAmount,jdbcType=INTEGER},
+      #{cjTime,jdbcType=VARCHAR}, #{cjFee,jdbcType=FLOAT}, #{cjTotal,jdbcType=FLOAT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockHoldTrade">
     <!--@mbg.generated-->
@@ -74,7 +85,14 @@
       ordernum = #{ordernum,jdbcType=VARCHAR},
       time_create = #{timeCreate,jdbcType=TIMESTAMP},
       time_update = #{timeUpdate,jdbcType=TIMESTAMP},
-      price = #{price,jdbcType=FLOAT}
+      price = #{price,jdbcType=FLOAT},
+      counter = #{counter,jdbcType=INTEGER},
+      price_type = #{priceType,jdbcType=VARCHAR},
+      cj_price = #{cjPrice,jdbcType=FLOAT},
+      cj_amount = #{cjAmount,jdbcType=INTEGER},
+      cj_time = #{cjTime,jdbcType=VARCHAR},
+      cj_fee = #{cjFee,jdbcType=FLOAT},
+      cj_total = #{cjTotal,jdbcType=FLOAT}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="getBeanlistByPage" resultMap="BaseResultMap">

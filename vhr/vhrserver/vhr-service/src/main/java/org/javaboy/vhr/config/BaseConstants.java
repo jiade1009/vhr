@@ -19,7 +19,10 @@ public class BaseConstants {
     public static final String PY_API_CREATE_A_EMA = "create_a_ema";   // 生成ema数据线
     public static final String PY_API_RUN_A_BUY_RULE = "run_a_buy_rule";  //  运行A股购买策略
     public static final String PY_API_RUN_A_BUY = "run_a_buy";  //  运行A股股票买入
-    public static final String PY_API_RUN_A_BUY_QUERY = "run_a_buy_query";  //  运行A股股票交易结果查询
+    public static final String PY_API_RUN_A_SELL = "run_a_sell";  //  运行A股股票卖出
+    public static final String PY_API_RUN_A_ORDER_QUERY = "run_a_order_query";  //  运行A股股票交易结果（买入和卖出）查询
+    public static final String PY_API_RUN_A_DAILY_REFRESH = "run_a_daily_refresh";  //  收盘股票信息更新
+    public static final String PY_API_RUN_A_CJCX = "run_a_cjcx";  //  收盘股票成交结果更新
 
 
     // 标记现在开始进行周线数据下载 true/false

@@ -90,6 +90,14 @@ public class StockHoldTrade {
 
     private Double price;
 
+    private Integer counter;
+    private String priceType;
+    private Double cjPrice;
+    private Integer cjAmount;
+    private String cjTime;
+    private Double cjFee;
+    private Double cjTotal;
+
     public Integer getId() {
         return id;
     }
@@ -265,6 +273,7 @@ public class StockHoldTrade {
                 return "未知";
         }
     }
+
     public String getStatusNote() {
         if (status==null) return "";
         switch (status) {
@@ -278,4 +287,61 @@ public class StockHoldTrade {
                 return "未知";
         }
     }
+
+    public Integer getCounter() {
+        return counter;
+    }
+
+    public void setCounter(Integer counter) {
+        this.counter = counter;
+    }
+
+    public String getPriceType() {
+        return priceType;
+    }
+
+    public void setPriceType(String priceType) {
+        this.priceType = priceType;
+    }
+
+    public Double getCjPrice() {
+        return cjPrice;
+    }
+
+    public void setCjPrice(Double cjPrice) {
+        this.cjPrice = cjPrice;
+    }
+
+    public Integer getCjAmount() {
+        return cjAmount;
+    }
+
+    public void setCjAmount(Integer cjAmount) {
+        this.cjAmount = cjAmount;
+    }
+
+    public String getCjTime() {
+        return cjTime;
+    }
+
+    public void setCjTime(String cjTime) {
+        this.cjTime = cjTime;
+    }
+
+    public Double getCjFee() {
+        return cjFee;
+    }
+
+    public void setCjFee(Double cjFee) {
+        this.cjFee = cjFee;
+    }
+
+    public Double getCjTotal() {
+        return cjTotal;
+    }
+
+    public void setCjTotal(Double cjTotal) {
+        this.cjTotal = cjTotal;
+    }
+
 }

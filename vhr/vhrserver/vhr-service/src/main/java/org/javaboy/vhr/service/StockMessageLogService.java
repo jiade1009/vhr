@@ -90,6 +90,14 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
         }
     }
 
+    public void insertSellHoldMessages(Integer holdTradeId) {
+        StringBuilder sbd = new StringBuilder("");
+        StockHoldTrade trade = stockHoldTradeService.selectByPrimaryKey(holdTradeId);
+        sbd.append("[").append(trade.getCode()).append("]，卖出价：").append(String.format("%.2f",trade.getPrice()));
+        sbd.append("，股票数：").append(trade.getAmount());
+        insertMessage(sbd.toString(), MessageType.SELL.getIndex());
+    }
+
     /**
      * 读取所有待接收信息的消息发送配置
      * @param content

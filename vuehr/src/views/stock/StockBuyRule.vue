@@ -81,7 +81,7 @@
               <el-input size="mini" prefix-icon="el-icon-edit" v-model="bean.converLimit"
                         placeholder="请输入收敛度"></el-input>
               <el-switch v-model="bean.converLimitOption" style="margin-right: 10px"></el-switch>是否开启
-              <div>最大EMA75/当前ema18&lt;converLimit </div>
+              <div>当天EMA75/当天EMA18&lt;converLimit </div>
             </el-form-item>
             <el-form-item label="下跌幅度:" prop="shockLimit">
               <el-input size="mini" prefix-icon="el-icon-edit" v-model="bean.shockLimit"

@@ -97,12 +97,21 @@ task:
 #      buyrule: 0 0/8 * ? * MON-FRI
       # 买入操作
       buy: 0 31 9 ? * MON-FRI
+      # 卖出操作
+      sell_0: 0 30-59/5 9 ? * MON-FRI
+      sell_1: 0 0-29/5 11 ? * MON-FRI
+      sell_2: 0 */5 10,13,14 ? * MON-FRI
 #      buy: 0 0/10 * ? * MON-FRI
-      # 股票交易结果
-      tradeResult: 0 0/10 9-14 ? * MON-FRI
-#      tradeResult: 0 0/10 * ? * MON-FRI
+      # 股票交易结果查询（买入和卖出）
+      orderQuery_0: 0 30-59/10 9 ? * MON-FRI
+      orderQuery_1: 0 0-30/10 11 ? * MON-FRI
+      orderQuery_2: 0 */10 10,13,14 ? * MON-FRI
       #股票代码更新
       stockCodeUpdate: 0 0 1 ? * SAT
+      # 每日收盘信息更新（所持股票）
+      dailyRefresh: 0 0 17 ? * MON-FRI
+      # 每日股票成交结果查询
+      cjcx:  0 10 15 ? * MON-FRI
 
 
 # 与python客户端通信签名配置

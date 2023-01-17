@@ -69,7 +69,7 @@
         and code like concat('%',#{keywords},'%')
       </if>
     </where>
-    order by time_create desc
+    order by time_create desc, id desc
     <if test="page !=null and size!=null">
       limit #{page},#{size}
     </if>

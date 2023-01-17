@@ -42,24 +42,37 @@ public class StockRestController {
             Integer r = encryptUtils.checkSign(maps);
             if (r==0) {
                 HashMap<String, Object> data = (HashMap<String, Object>) maps.get("data");
-                if (method.equals("sign")) { //发现信号
-                    String white_stocks = (String) data.get("white_stock_list");
-                    String buy_stocks = (String) data.get("buy_stock_list");
-                    if (StringUtils.hasLength(white_stocks)) {
-                        stockMessageLogService.insertSignalMessages(white_stocks, buy_stocks);
-                    }
-                } else if (method.equals("buy")) { //股票买入
-                    List<String> hold_trade_id_list = (List<String>) data.get("hold_trade_id_list");
-                    if (hold_trade_id_list!=null && hold_trade_id_list.size()>0) {
-                        stockMessageLogService.insertBuyHoldMessages(hold_trade_id_list);
-                    }
-                } else if (method.equals("buy_result")) { //股票买入结果
-                    List<String> hold_trade_id_list = (List<String>) data.get("hold_trade_id_list");
-                    if (hold_trade_id_list!=null && hold_trade_id_list.size()>0) {
-                        stockMessageLogService.insertBuyHoldResultMessages(hold_trade_id_list);
-                    }
-                }
+                List<String> hold_trade_id_list;
+                switch (method) {
+                    case "sign":
+                        String white_stocks = (String) data.get("white_stock_list");
+                        String buy_stocks = (String) data.get("buy_stock_list");
+                        if (StringUtils.hasLength(white_stocks)) {
+                            stockMessageLogService.insertSignalMessages(white_stocks, buy_stocks);
+                        }
+                        break;
+                    case "buy":
+                        hold_trade_id_list = (List<String>) data.get("hold_trade_id_list");
+                        if (hold_trade_id_list!=null && hold_trade_id_list.size()>0) {
+                            stockMessageLogService.insertBuyHoldMessages(hold_trade_id_list);
+                        }
+                        break;
+                    case "buy_result":
+                        hold_trade_id_list = (List<String>) data.get("hold_trade_id_list");
+                        if (hold_trade_id_list!=null && hold_trade_id_list.size()>0) {
+                            stockMessageLogService.insertBuyHoldResultMessages(hold_trade_id_list);
+                        }
+                        break;
+                    case "sell":
+                        Integer holdTradeId = Integer.valueOf((String) data.get("hold_trade_id"));
+                        stockMessageLogService.insertSellHoldMessages(holdTradeId);
+                        break;
+                    case "sell_result":
+                        break;
+                    case "revoke":
+                        break;
 
+                }
             } else {
                 RespBean.error("签名验签失败", r);
             }

@@ -6,6 +6,18 @@ function formatDate(date_str) {
         return "";
     }
 }
+
+//将两个json对象合并
+function twoJsonMerge(json1,json2){
+    let length1 = 0,length2 = 0,jsonStr,str;
+    for(let ever in json1) length1++;
+    for(let ever in json2) length2++;
+    if(length1 && length2) str = ',';
+    else str = '';
+    jsonStr = ((JSON.stringify(json1)).replace(/,}/,'}') + (JSON.stringify(json2)).replace(/,}/,'}')).replace(/}{/,str);
+    return JSON.parse(jsonStr);
+}
 export default {
-    formatDate
+    formatDate,
+    twoJsonMerge
 }

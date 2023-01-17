@@ -81,4 +81,14 @@ public class StockSellRuleController {
             return RespBean.ok("运行成功!", list.get(0), false);
         }
     }
+
+    @GetMapping("/getRunning")
+    public RespBean getRunning() {
+        List<StockSellRule> list = stockSellRuleService.getBeanlistByStatus(1);
+        if (list.isEmpty()){
+            return RespBean.ok("运行成功!", false);
+        } else {
+            return RespBean.ok("运行成功!", list.get(0), false);
+        }
+    }
 }

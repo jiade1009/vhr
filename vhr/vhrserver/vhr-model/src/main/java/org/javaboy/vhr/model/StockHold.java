@@ -23,7 +23,7 @@ public class StockHold {
     private Date timeUpdate;
 
     /**
-    * 状态，0未购买、1购买中、2暂停购买、3已购买、4卖出中、5暂定卖出、6交易结束
+    * 状态，0未购买、1购买中、2暂停购买、3已购买、4卖出中、5暂定卖出、6交易结束、7交易失败
     */
     private Integer status;
 
@@ -137,7 +137,7 @@ public class StockHold {
     }
 
     public String getStatusNote() {
-//        状态，0未购买、1购买中、2暂停购买、3已购买、4卖出中、5暂定卖出、6交易结束
+//        状态，0未购买、1购买中、2暂停购买、3已购买、4卖出中、5暂定卖出、6交易结束、7交易失败
         if (status==null) return "";
         switch (status) {
             case 0:
@@ -154,6 +154,8 @@ public class StockHold {
                 return "暂定卖出";
             case 6:
                 return "交易结束";
+            case 7:
+                return "交易失败";
             default:
                 return "未知";
         }

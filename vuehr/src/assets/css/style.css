@@ -1,0 +1,18 @@
+.common-text {
+    font-size: 14px;
+    line-height: 1.5em;
+}
+.maim-text-c {
+    color: #303133;
+}
+.com-text-c {
+    color: #606266;
+}
+.sub-text-c {
+    color: #909399;
+}
+
+.margin-tb-md {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}

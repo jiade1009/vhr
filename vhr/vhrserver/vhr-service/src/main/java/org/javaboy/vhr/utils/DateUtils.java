@@ -21,6 +21,7 @@ import java.util.TimeZone;
  */
 public class DateUtils {
     public static final String yyyy__MM__dd = "yyyy/MM/dd";
+    public static final String yyyyMMdd = "yyyyMMdd";
     public static final String yyyy_MM_dd = "yyyy-MM-dd";
     public static final String HH_mm_ss = "HH:mm:ss";
     public static final String yyyy_MM_dd_HH_mm_ss = "yyyy-MM-dd HH:mm:ss";
