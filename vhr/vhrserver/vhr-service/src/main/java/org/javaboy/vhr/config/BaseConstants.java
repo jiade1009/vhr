@@ -21,6 +21,8 @@ public class BaseConstants {
     public static final String PY_API_RUN_A_BUY = "run_a_buy";  //  运行A股股票买入
     public static final String PY_API_RUN_A_SELL = "run_a_sell";  //  运行A股股票卖出
     public static final String PY_API_RUN_A_ORDER_QUERY = "run_a_order_query";  //  运行A股股票交易结果（买入和卖出）查询
+    public static final String PY_API_RUN_A_REVOKE_QUERY = "run_a_revoke_query";  //  运行A股股票撤销交易查询
+
     public static final String PY_API_RUN_A_DAILY_REFRESH = "run_a_daily_refresh";  //  收盘股票信息更新
     public static final String PY_API_RUN_A_CJCX = "run_a_cjcx";  //  收盘股票成交结果更新
 

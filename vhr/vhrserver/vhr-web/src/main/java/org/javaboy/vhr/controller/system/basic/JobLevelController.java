@@ -1,6 +1,5 @@
 package org.javaboy.vhr.controller.system.basic;
 
-import org.apache.ibatis.annotations.Delete;
 import org.javaboy.vhr.model.JobLevel;
 import org.javaboy.vhr.model.RespBean;
 import org.javaboy.vhr.service.JobLevelService;
@@ -9,15 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * @作者 江南一点雨
- * @公众号 江南一点雨
- * @微信号 a_java_boy
- * @GitHub https://github.com/lenve
- * @博客 http://wangsong.blog.csdn.net
- * @网站 http://www.javaboy.org
- * @时间 2019-10-01 17:59
- */
 @RestController
 @RequestMapping("/system/basic/joblevel")
 public class JobLevelController {

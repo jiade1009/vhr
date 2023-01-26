@@ -108,6 +108,7 @@
                       <el-table-column
                           prop="taskmsg"
                           label="任务信息"
+                          show-overflow-tooltip="true"
                           align="left">
                       </el-table-column>
                       <el-table-column

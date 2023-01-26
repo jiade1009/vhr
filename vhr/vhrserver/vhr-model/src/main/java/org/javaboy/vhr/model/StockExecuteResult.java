@@ -1,5 +1,7 @@
 package org.javaboy.vhr.model;
 
+import org.javaboy.vhr.model.util.CommandType;
+
 import java.util.Date;
 
 /**
@@ -25,11 +27,17 @@ public class StockExecuteResult {
     * 任务命令
     */
     private String command;
+    private String commandDesc;
 
     /**
     * 执行结果（-1失败，0执行中，1成功）
     */
     private Integer status;
+
+    /**
+     * 生成方式，0手动，1自动
+     */
+    private Integer generateType;
 
     private Date timeCreate;
 
@@ -81,5 +89,45 @@ public class StockExecuteResult {
 
     public void setTimeUpdate(Date timeUpdate) {
         this.timeUpdate = timeUpdate;
+    }
+
+    public Integer getGenerateType() {
+        return generateType;
+    }
+
+    public void setGenerateType(Integer generateType) {
+        this.generateType = generateType;
+    }
+
+    public String getCommandDesc() {
+        CommandType type = CommandType.valueOf(this.command);
+        String desc = "";
+        switch (type) {
+            case WEEKLY:
+                desc = "周线数据生成";
+                break;
+            case WEEKLY_EMA:
+                desc = "ema数据生成";
+                break;
+            case DAILY_REFRESH:
+                desc = "收盘数据更新";
+                break;
+            case BUY:
+                desc = "每日开盘买入";
+                break;
+            case BUY_RULE:
+                desc = "买入策略运行";
+                break;
+            case CODE_REFRESH:
+                desc = "股票代码刷新";
+                break;
+            case TRADE_DATE:
+                desc = "交易日数据更新";
+                break;
+            case CJCX:
+                desc = "成交信息查询";
+                break;
+        }
+        return desc;
     }
 }

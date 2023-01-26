@@ -8,12 +8,13 @@
     <result column="date_exec" jdbcType="VARCHAR" property="dateExec" />
     <result column="command" jdbcType="VARCHAR" property="command" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="generate_type" jdbcType="INTEGER" property="generateType" />
     <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
     <result column="time_update" jdbcType="TIMESTAMP" property="timeUpdate" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, date_exec, command, `status`, time_create, time_update
+    id, date_exec, command, `status`, generate_type, time_create, time_update
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -29,10 +30,10 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockExecuteResult" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into stock_execute_result (date_exec, command, `status`, 
+    insert into stock_execute_result (date_exec, command, `status`, generate_type,
       time_create, time_update)
-    values (#{dateExec,jdbcType=VARCHAR}, #{command,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{timeCreate,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP})
+    values (#{dateExec,jdbcType=VARCHAR}, #{command,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
+    #{generateType,jdbcType=INTEGER}, #{timeCreate,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP})
   </insert>
   <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockExecuteResult">
     <!--@mbg.generated-->
@@ -40,6 +41,7 @@
     set date_exec = #{dateExec,jdbcType=VARCHAR},
       command = #{command,jdbcType=VARCHAR},
       `status` = #{status,jdbcType=INTEGER},
+      generate_type = #{generateType,jdbcType=INTEGER},
       time_create = #{timeCreate,jdbcType=TIMESTAMP},
       time_update = #{timeUpdate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
@@ -58,5 +60,18 @@
       </if>
       order by time_create desc
     </where>
+  </select>
+
+  <select id="getBeanlistByBeanAndPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_execute_result
+    order by time_create desc
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotalByBean" resultType="java.lang.Long">
+    select count(*) from stock_execute_result
   </select>
 </mapper>

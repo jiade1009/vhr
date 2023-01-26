@@ -91,10 +91,10 @@ task:
     StockCore:
       # 每周一到周五的15:30 周线数据生成
       weekly: 0 30 15 ? * MON-FRI
-#      weekly: 0 0/1 * ? * MON-FRI
+      # weekly: 0 0/1 * ? * MON-FRI
       # 买入策略运行
       buyrule: 0 0 16 ? * MON-FRI
-#      buyrule: 0 0/2 * ? * MON-FRI
+      # buyrule: 0 0/2 * ? * MON-FRI
       # 买入操作
       buy: 0 31 9 ? * MON-FRI
       # 卖出操作
@@ -106,6 +106,10 @@ task:
       orderQuery_0: 0 30-59/10 9 ? * MON-FRI
       orderQuery_1: 0 0-30/10 11 ? * MON-FRI
       orderQuery_2: 0 */10 10,13,14 ? * MON-FRI
+      # 股票撤销交易结果查询（买入和卖出）
+      revokeQuery_0: 0 30-59/1 9 ? * MON-FRI
+      revokeQuery_1: 0 0-30/1 11 ? * MON-FRI
+      revokeQuery_2: 0 */1 10,13,14 ? * MON-FRI
       #股票代码更新
       stockCodeUpdate: 0 0 1 ? * SAT
       # 每日收盘信息更新（所持股票）

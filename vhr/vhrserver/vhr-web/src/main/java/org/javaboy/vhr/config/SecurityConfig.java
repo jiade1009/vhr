@@ -18,20 +18,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.session.ConcurrentSessionControlAuthenticationStrategy;
 import org.springframework.security.web.session.ConcurrentSessionFilter;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 
-/**
- * @作者 江南一点雨
- * @公众号 江南一点雨
- * @微信号 a_java_boy
- * @GitHub https://github.com/lenve
- * @博客 http://wangsong.blog.csdn.net
- * @网站 http://www.javaboy.org
- */
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
@@ -92,11 +83,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     out.close();
                 }
         );
+
         loginFilter.setAuthenticationManager(authenticationManagerBean());
         loginFilter.setFilterProcessesUrl("/doLogin");
-        ConcurrentSessionControlAuthenticationStrategy sessionStrategy = new ConcurrentSessionControlAuthenticationStrategy(sessionRegistry());
-        sessionStrategy.setMaximumSessions(1);
-        loginFilter.setSessionAuthenticationStrategy(sessionStrategy);
+        // 取消并发登录的限制
+//        ConcurrentSessionControlAuthenticationStrategy sessionStrategy = new ConcurrentSessionControlAuthenticationStrategy(sessionRegistry());
+//        sessionStrategy.setMaximumSessions(1);
+//        loginFilter.setSessionAuthenticationStrategy(sessionStrategy);
         return loginFilter;
     }
 
@@ -118,9 +111,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 })
                 .and()
                 .logout()
-                .logoutUrl("/logout")
-                .clearAuthentication(true)
-                .invalidateHttpSession(true)
+//                .logoutUrl("/logout")
+//                .clearAuthentication(true)
+//                .invalidateHttpSession(true)
                 .logoutSuccessHandler((req, resp, authentication) -> {
                             resp.setContentType("application/json;charset=utf-8");
                             PrintWriter out = resp.getWriter();

@@ -203,6 +203,34 @@ public class StockCoreTask {
     }
 
     /**
+     * qmt客户端股票撤销交易请求
+     */
+    @Async("stockCoreAsync")
+    @Scheduled(cron = "${task.cron.StockCore.revokeQuery_0}")
+    public void revokeQuery_0() {
+        revokeQueryTask();
+    }
+    @Async("stockCoreAsync")
+    @Scheduled(cron = "${task.cron.StockCore.revokeQuery_1}")
+    public void revokeQuery_1() {
+        revokeQueryTask();
+    }
+    @Async("stockCoreAsync")
+    @Scheduled(cron = "${task.cron.StockCore.revokeQuery_2}")
+    public void revokeQuery_2() {
+        revokeQueryTask();
+    }
+
+    private void revokeQueryTask() {
+        StockATradeDate tradeDate = getTodayTradeDate();
+        if (tradeDate!=null) { //当天为股票交易日
+            LOGGER.info(".............开始【{}】的股票撤销交易查询的运行..............", tradeDate.getTradeDate());
+            execPython.runPython(new String[]{BaseConstants.PY_API_RUN_A_REVOKE_QUERY});
+        } else {
+            LOGGER.debug("今天不是A股股票交易日，不运行股票撤销交易查询命令");
+        }
+    }
+    /**
      * 股票最高价相关信息更新（收盘股票信息更新）
      */
     @Async("stockCoreAsync")
