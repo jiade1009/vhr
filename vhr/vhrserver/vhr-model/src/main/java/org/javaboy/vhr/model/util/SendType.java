@@ -6,21 +6,20 @@ import java.util.List;
 /**
  * @author : sam
  * @ClassName : MessageType
- * @description : 消息通知类型
+ * @description : 通知类型
  * @datetime : 2022年 11月 23日 16:55
  * @version: : 1.0
  */
-public enum MessageType {
-    SIGN(0,"信号发现"),
-    BUY(1,"股票买入"),
-    SELL(2,"股票卖出"),
-    INSPECTION(3, "巡检结果");
+public enum SendType {
+    MESSAGE(0,"短信"),
+    EMAIL(1,"邮件"),
+    WX_NOTICE(2,"微信通知");
 
     // 成员变量
     private String name;
     private int index;
 
-    MessageType(int index, String name) {
+    SendType(int index, String name) {
         this.name = name;
         this.index = index;
     }
@@ -43,7 +42,7 @@ public enum MessageType {
 
     // 普通方法
     public static String getName(int index) {
-        for (MessageType c : MessageType.values()) {
+        for (SendType c : SendType.values()) {
             if (c.getIndex() == index) {
                 return c.name;
             }
@@ -51,21 +50,11 @@ public enum MessageType {
         return null;
     }
 
-    public static MessageType getMessageType(int index) {
-        for (MessageType c : MessageType.values()) {
-            if (c.getIndex() == index) {
-                return c;
-            }
-        }
-        return null;
-    }
-
     public static List getNames() {
         List names = new ArrayList();
-        for (MessageType c : MessageType.values()) {
+        for (SendType c : SendType.values()) {
             names.add(c.name);
         }
         return names;
     }
-
 }

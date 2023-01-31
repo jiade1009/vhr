@@ -7,10 +7,7 @@ import org.javaboy.vhr.model.StockWeeklyLineEmaResult;
 import org.javaboy.vhr.model.StockWeeklyLineResult;
 import org.javaboy.vhr.model.util.CommandType;
 import org.javaboy.vhr.pythonutil.ExecPython;
-import org.javaboy.vhr.service.StockATradeDateService;
-import org.javaboy.vhr.service.StockExecuteResultService;
-import org.javaboy.vhr.service.StockWeeklyLineEmaResultService;
-import org.javaboy.vhr.service.StockWeeklyLineResultService;
+import org.javaboy.vhr.service.*;
 import org.javaboy.vhr.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -48,6 +46,8 @@ public class StockCoreTask {
     private StockWeeklyLineEmaResultService stockWeeklyLineEmaResultService;
     @Resource
     private StockExecuteResultService stockExecuteResultService;
+    @Resource
+    private StockMessageLogService stockMessageLogService;
     @Value("${task.cron.StockCore.weekly}")
     private String weekly;
 
@@ -278,6 +278,41 @@ public class StockCoreTask {
             execPython.runPython(new String[]{BaseConstants.PY_API_RUN_A_CJCX, now});
         } else {
             LOGGER.debug("今天不是A股股票交易日，不运行股票成交结果信息查询命令");
+        }
+    }
+
+    /**
+     * 针对每天的定时任务的运行结果进行巡检
+     * 每日的21：00点开始巡检
+     * 巡检项目：周线数据、周线ema数据、买入策略、行情信息查询、成交记录查询
+     */
+    @Async("stockCoreAsync")
+    @Scheduled(cron = "${task.cron.StockCore.inspection}")
+    public void inspection() {
+        StockATradeDate tradeDate = getTodayTradeDate();
+        String now = DateUtils.formatDate(new Date(), DateUtils.yyyyMMdd);
+        if (tradeDate!=null) { //当天为股票交易日
+            LOGGER.info(".............开始【{}】的巡检查询..............", tradeDate.getTradeDate());
+            LinkedHashMap<CommandType, Boolean> params = new LinkedHashMap();
+            //今天的ema数据是否已经生成
+            List<StockExecuteResult> weekly_list = stockExecuteResultService.getBeanlistByCommand(CommandType.WEEKLY.name(), now);
+            if (weekly_list.size()>0) params.put(CommandType.WEEKLY, true);
+            //今天的ema数据是否已经生成
+            List<StockExecuteResult> ema_list = stockExecuteResultService.getBeanlistByCommand(CommandType.WEEKLY_EMA.name(), now);
+            if (ema_list.size()>0) params.put(CommandType.WEEKLY_EMA, true);
+            //今天的买入策略的运行结果数据是否已经生成
+            List<StockExecuteResult> buy_rule_run_list = stockExecuteResultService.getBeanlistByCommand(CommandType.BUY_RULE.name(), now);
+            if (buy_rule_run_list.size()>0) params.put(CommandType.BUY_RULE, true);
+            //今天的收盘信息数据是否已经更新
+            List<StockExecuteResult> daily_list = stockExecuteResultService.getBeanlistByCommand(CommandType.DAILY_REFRESH.name(), now);
+            if (daily_list.size()>0) params.put(CommandType.DAILY_REFRESH, true);
+            //今天的成交记录是否已经更新
+            List<StockExecuteResult> cjcx_list = stockExecuteResultService.getBeanlistByCommand(CommandType.CJCX.name(), now);
+            if (cjcx_list.size()>0) params.put(CommandType.CJCX, true);
+
+//            stockMessageLogService.insertInspectionMessages(params);
+        } else {
+            LOGGER.debug("今天不是A股股票交易日，不运行巡检操作");
         }
     }
 }

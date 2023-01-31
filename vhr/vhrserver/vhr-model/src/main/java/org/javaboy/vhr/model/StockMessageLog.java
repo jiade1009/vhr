@@ -1,5 +1,8 @@
 package org.javaboy.vhr.model;
 
+import org.javaboy.vhr.model.util.MessageType;
+import org.javaboy.vhr.model.util.SendType;
+
 import java.util.Date;
 
 /**
@@ -50,7 +53,7 @@ public class StockMessageLog {
     private Date timeUpdate;
 
     /**
-    * 消息分类（信号发现、买入、卖出）
+    * 消息分类（信号发现、买入、卖出、巡检结果）
     */
     private Integer messageType;
     private String messageTypeNote;
@@ -182,29 +185,10 @@ public class StockMessageLog {
 
     public String getMessageTypeNote() {
         if (messageType==null) return "";
-        switch (messageType) {
-            case 0:
-                return "信号发现";
-            case 1:
-                return "买入";
-            case 2:
-                return "卖出";
-            default:
-                return "未知";
-        }
+        return MessageType.getName(messageType);
     }
 
     public String getSendTypeNote() {
-        if (sendType==null) return "";
-        switch (sendType) {
-            case 0:
-                return "短信";
-            case 1:
-                return "邮件";
-            case 2:
-                return "微信服务通知";
-            default:
-                return "未知";
-        }
+        return SendType.getName(sendType);
     }
 }

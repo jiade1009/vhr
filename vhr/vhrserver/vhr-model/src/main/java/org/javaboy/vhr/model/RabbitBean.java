@@ -1,7 +1,13 @@
 package org.javaboy.vhr.model;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.javaboy.vhr.model.util.CommandType;
+import org.javaboy.vhr.model.util.MessageType;
+
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -20,9 +26,9 @@ public class RabbitBean implements Serializable {
     private Map dataMap;
 
     /**
-     * 消息分类（例如：0信号发现、1买入、2卖出）
+     * 消息分类
      */
-    private Integer messageType;
+    private MessageType messageType;
 
     /**
      * 发送形式（0短信、1邮件、2微信服务通知）
@@ -35,11 +41,11 @@ public class RabbitBean implements Serializable {
         this(employee, "", null, null, null);
     }
 
-    public RabbitBean(Employee employee, String content, Integer messageType, Integer sendType) {
+    public RabbitBean(Employee employee, String content, MessageType messageType, Integer sendType) {
         this(employee, content, messageType, sendType, null);
     }
 
-    public RabbitBean(Employee employee, String content, Integer messageType, Integer sendType, Map dataMap) {
+    public RabbitBean(Employee employee, String content, MessageType messageType, Integer sendType, Map dataMap) {
         this.employee = employee;
         this.content = content;
         this.dataMap = dataMap;
@@ -83,11 +89,11 @@ public class RabbitBean implements Serializable {
         this.dataMap = dataMap;
     }
 
-    public Integer getMessageType() {
+    public MessageType getMessageType() {
         return messageType;
     }
 
-    public void setMessageType(Integer messageType) {
+    public void setMessageType(MessageType messageType) {
         this.messageType = messageType;
     }
 
@@ -105,6 +111,24 @@ public class RabbitBean implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public static void main(String[] args) {
+        LinkedHashMap<CommandType, Boolean> params = new LinkedHashMap();
+        params.put(CommandType.WEEKLY_EMA, true);
+        params.put(CommandType.WEEKLY, false);
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String json_str = mapper.writeValueAsString(params);
+            System.out.println(json_str);
+            Map map = mapper.readValue(json_str, Map.class);
+            for (Object o : map.keySet()) {
+                System.out.println(o.getClass());
+                System.out.println(map.get(o).getClass());
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
 }

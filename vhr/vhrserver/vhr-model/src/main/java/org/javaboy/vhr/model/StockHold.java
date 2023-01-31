@@ -1,5 +1,7 @@
 package org.javaboy.vhr.model;
 
+import org.javaboy.vhr.model.util.StockHoldStatus;
+
 import java.util.Date;
 
 /**
@@ -137,28 +139,7 @@ public class StockHold {
     }
 
     public String getStatusNote() {
-//        状态，0未购买、1购买中、2暂停购买、3已购买、4卖出中、5暂定卖出、6交易结束、7交易失败
-        if (status==null) return "";
-        switch (status) {
-            case 0:
-                return "未购买";
-            case 1:
-                return "购买中";
-            case 2:
-                return "暂停购买";
-            case 3:
-                return "已购买";
-            case 4:
-                return "卖出中";
-            case 5:
-                return "暂定卖出";
-            case 6:
-                return "交易结束";
-            case 7:
-                return "交易失败";
-            default:
-                return "未知";
-        }
+      return StockHoldStatus.getName(this.status);
     }
 
     public String getNote() {

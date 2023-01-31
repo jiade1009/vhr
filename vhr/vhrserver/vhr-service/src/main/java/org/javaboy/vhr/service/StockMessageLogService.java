@@ -1,17 +1,21 @@
 package org.javaboy.vhr.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.javaboy.vhr.base.BaseService;
 import org.javaboy.vhr.mapper.StockMessageLogMapper;
 import org.javaboy.vhr.model.MailConstants;
 import org.javaboy.vhr.model.StockHoldTrade;
 import org.javaboy.vhr.model.StockMessageConf;
 import org.javaboy.vhr.model.StockMessageLog;
+import org.javaboy.vhr.model.util.CommandType;
 import org.javaboy.vhr.model.util.MessageType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,7 +65,7 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
     public void insertSignalMessages(String white_stocks, String buy_stocks) {
         white_stocks = StringUtils.hasLength(white_stocks)?white_stocks:"暂无数据";
         buy_stocks = StringUtils.hasLength(buy_stocks)?buy_stocks:"暂无数据";
-        String content = "白色信号：" + white_stocks+"； 蓝色信号：" + buy_stocks;
+        String content = "白色信号：" + white_stocks+"； <br/>蓝色信号：" + buy_stocks;
         insertMessage(content, MessageType.SIGN.getIndex());
     }
 
@@ -71,7 +75,7 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
             for (String id: hold_trade_ids) {
                 StockHoldTrade trade = stockHoldTradeService.selectByPrimaryKey(Integer.valueOf(id));
                 sbd.append("[").append(trade.getCode()).append("]，买入价：").append(String.format("%.2f",trade.getPrice()));
-                sbd.append("，股票数：").append(trade.getAmount()).append(" ## ");
+                sbd.append("，股票数：").append(trade.getAmount()).append(" <br/> ");
             }
             insertMessage(sbd.toString(), MessageType.BUY.getIndex());
         }
@@ -84,7 +88,7 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
                 StockHoldTrade trade = stockHoldTradeService.selectByPrimaryKey(Integer.valueOf(id));
                 //委托状态、委托信息、任务状态、任务状态信息
                 sbd.append("[").append(trade.getCode()).append("]，委托状态：").append(trade.getTaskstatusNote());
-                sbd.append("，股票数：").append(trade.getAmount()).append(" ");
+                sbd.append("，股票数：").append(trade.getAmount()).append(" <br/>");
             }
             insertMessage(sbd.toString(), MessageType.BUY.getIndex());
         }
@@ -96,6 +100,19 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
         sbd.append("[").append(trade.getCode()).append("]，卖出价：").append(String.format("%.2f",trade.getPrice()));
         sbd.append("，股票数：").append(trade.getAmount());
         insertMessage(sbd.toString(), MessageType.SELL.getIndex());
+    }
+
+    /**
+     * 插入巡检结果信息
+     */
+    public void insertInspectionMessages(LinkedHashMap<CommandType, Boolean> params) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String json_str = mapper.writeValueAsString(params);
+            insertMessage(json_str, MessageType.INSPECTION.getIndex());
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

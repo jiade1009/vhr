@@ -3,6 +3,7 @@ package org.javaboy.vhr.task;
 import org.javaboy.vhr.model.Employee;
 import org.javaboy.vhr.model.RabbitBean;
 import org.javaboy.vhr.model.StockMessageLog;
+import org.javaboy.vhr.model.util.MessageType;
 import org.javaboy.vhr.service.EmployeeService;
 import org.javaboy.vhr.service.StockMessageLogService;
 import org.slf4j.Logger;
@@ -42,7 +43,8 @@ public class StockMessageSendTask {
                 stockMessageLogService.updateStockMessageLogStatus(log.getMsgid(), 2);//直接设置该条消息发送失败
             } else {
                 Employee emp = employeeService.getEmployeeById(log.getEmpid());
-                RabbitBean bean = new RabbitBean(emp, log.getContent(), log.getMessageType(), log.getSendType());
+                RabbitBean bean = new RabbitBean(emp, log.getContent(),
+                        MessageType.getMessageType(log.getMessageType()), log.getSendType());
                 stockRabbitTemplate.convertAndSend(log.getExchange(), log.getRoutekey(), bean, new CorrelationData(log.getMsgid()));
                 stockMessageLogService.updateCount(log.getMsgid(), new Date());
             }

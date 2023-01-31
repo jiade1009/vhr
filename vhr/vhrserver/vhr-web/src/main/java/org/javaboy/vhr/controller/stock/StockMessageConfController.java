@@ -3,10 +3,15 @@ package org.javaboy.vhr.controller.stock;
 import org.javaboy.vhr.model.RespBean;
 import org.javaboy.vhr.model.RespPageBean;
 import org.javaboy.vhr.model.StockMessageConf;
+import org.javaboy.vhr.model.util.MessageType;
+import org.javaboy.vhr.model.util.SendType;
 import org.javaboy.vhr.service.StockMessageConfService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author : sam
@@ -30,6 +35,17 @@ public class StockMessageConfController {
                                           StockMessageConf bean) {
         RespPageBean result = stockMessageConfService.getBeanlistByBeanAndPage(page, size, bean);
         return result;
+    }
+
+    @GetMapping("/type")
+    public RespBean getMessageType() {
+        List messageTypes = MessageType.getNames();
+        List sendTypes = SendType.getNames();
+        Map<String, Object> map = new HashMap<>();
+        map.put("msg_type", messageTypes);
+        map.put("send_type", sendTypes);
+
+        return RespBean.ok("加载成功", map, false);
     }
 
     @PostMapping("/")

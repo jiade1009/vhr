@@ -116,6 +116,8 @@ task:
       dailyRefresh: 0 0 17 ? * MON-FRI
       # 每日股票成交结果查询
       cjcx:  0 10 15 ? * MON-FRI
+      # 每日巡检
+      inspection: 0 0 21 ? * MON-FRI
 
 
 # 与python客户端通信签名配置

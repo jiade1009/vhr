@@ -20,7 +20,7 @@ public class StockMessageConf implements Serializable {
     private Integer empid;
 
     /**
-     * 消息分类（信号发现、买入、卖出），采用二进制机制保存，例如100，表示接收信号发现消息
+     * 消息分类（信号发现、买入、卖出、巡检结果），采用二进制机制保存，例如1000，表示接收信号发现消息
      */
     private String messageType;
 

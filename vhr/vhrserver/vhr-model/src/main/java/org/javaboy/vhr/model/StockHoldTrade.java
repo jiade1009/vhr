@@ -278,7 +278,7 @@ public class StockHoldTrade {
         if (status==null) return "";
         switch (status) {
             case 0:
-                return "0执行中";
+                return "执行中";
             case 1:
                 return "结束";
             case -1:
