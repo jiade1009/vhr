@@ -293,7 +293,7 @@ export default {
           return "最新价"
         } else if (data.substring(0, 1) == 'B') {
           return "买" + data.substring(1) + "价"
-        } else if (data.substring(0, 1) == 'B') {
+        } else if (data.substring(0, 1) == 'S') {
           return "卖" + data.substring(1) + "价"
         } else {
           return data;

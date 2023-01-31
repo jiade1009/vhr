@@ -44,7 +44,7 @@
               label="接收的消息">
             <template slot-scope="scope">
               <el-tag v-for="(item, i) in scope.row.messageType" v-if="item=='1'" type="success"
-                  disable-transitions>{{msg_type_label[i]}}</el-tag>
+                      class="msg_tag" disable-transitions>{{msg_type_label[i]}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -53,7 +53,7 @@
               label="接收方式">
             <template slot-scope="scope">
               <el-tag v-for="(item, i) in scope.row.sendType" v-if="item=='1'" type="primary"
-                      disable-transitions>{{send_type_label[i]}}</el-tag>
+                      class="send_tag" disable-transitions>{{send_type_label[i]}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -161,15 +161,9 @@ export default {
       },
       msg_type_checked: [],
       msg_type_checkbox: [
-        {'name': '发现信号', 'label': '0'},
-        {'name': '买入通知', 'label': '1'},
-        {'name': '卖出通知', 'label': '2'},
       ],
       send_type_checked: [],
       send_type_checkbox: [
-        {'name': '短信', 'label': '0'},
-        {'name': '邮件', 'label': '1'},
-        {'name': '微信', 'label': '2'},
       ],
       action: 'insert',
       title: '新增',
@@ -179,6 +173,7 @@ export default {
     }
   },
   mounted() {
+    this.loadMessageConfType();
     this.initBeanlist();
   },
   methods: {
@@ -263,6 +258,32 @@ export default {
           type: 'info',
           message: '已取消删除'
         });
+      });
+    },
+    loadMessageConfType() {
+      let url = '/stock/messageconf/type';
+
+      this.getRequest(url).then(resp => {
+        console.log(resp);
+        if (resp) {
+          let msg_type = resp.obj.msg_type;
+          let send_type = resp.obj.send_type;
+          this.msg_type_label = msg_type;
+          this.send_type_label = send_type;
+          for (let i = 0; i < msg_type.length; i++) {
+            this.msg_type_checkbox[i] = {
+              'name': msg_type[i],
+              "label": i+""
+            }
+          }
+          for (let i = 0; i < send_type.length; i++) {
+            this.send_type_checkbox[i] = {
+              'name': send_type[i],
+              "label": i+""
+            }
+          }
+
+        }
       });
     },
     initBeanlist() {
@@ -362,6 +383,9 @@ export default {
 
 <style>
 .el-tag+.el-tag {
-  margin-left: 10px;
+  margin-left: 5px;
+}
+.msg_tag, send_tag {
+  margin-bottom:2px;
 }
 </style>
