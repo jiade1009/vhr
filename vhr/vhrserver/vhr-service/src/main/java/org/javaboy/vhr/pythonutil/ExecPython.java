@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author sam
@@ -27,10 +31,11 @@ public class ExecPython {
 
     @Value("${python.apiFile:#{null}}")
     private String apiFile;
+    private Pattern p = Pattern.compile("\\#begin#(.*?)\\#end#");
 
 
-
-    public void runPython(String[] parameter) {
+    public List<String> runPython(String[] parameter) {
+        List<String> responseList = new ArrayList<String>();
         try {
         	/*
 			附加：
@@ -64,17 +69,27 @@ public class ExecPython {
             /* "标准输出流"就在当前方法中读取 */
             BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
             String line = null;
+
             while ((line = in.readLine()) != null) {
                 LOGGER.info("the result of invoking python: {}", line);
+                Matcher m = p.matcher(line);
+                while (m.find()) {
+//                    m.group(0) 是包含那两个字符，m.group(1) 不包含那两个字符
+                    System.out.println(m.group(1));
+                    responseList.add(m.group(1));
+                }
+
             }
             in.close();
             int result = proc.waitFor(); //返回值为0表示我们调用python脚本成功，1表示失败
             LOGGER.info("the status of invoking python: {}", result);
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        return responseList;
     }
     /*public static void main(String[] args) {
         try {

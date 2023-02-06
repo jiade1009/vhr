@@ -310,7 +310,7 @@ public class StockCoreTask {
             List<StockExecuteResult> cjcx_list = stockExecuteResultService.getBeanlistByCommand(CommandType.CJCX.name(), now);
             if (cjcx_list.size()>0) params.put(CommandType.CJCX, true);
 
-//            stockMessageLogService.insertInspectionMessages(params);
+            stockMessageLogService.insertInspectionMessages(params);
         } else {
             LOGGER.debug("今天不是A股股票交易日，不运行巡检操作");
         }

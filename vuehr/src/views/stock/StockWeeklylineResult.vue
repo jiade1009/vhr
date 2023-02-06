@@ -68,11 +68,14 @@
                       <el-table-column
                           prop="runStatusDesc"
                           label="运行结果"
+                          min-width="300"
                           align="left">
+                        <template slot-scope="scope">
+                          <span v-html="scope.row['runStatusDesc']"></span>
+                        </template>
                       </el-table-column>
                       <el-table-column
                           fixed="right"
-                          width="200"
                           label="操作">
                         <template slot-scope="scope">
                           <el-button v-if="scope.row.runStatus==0" type="danger" @click="runBuyRule(scope.row)" style="padding: 3px"size="mini">运行策略
@@ -112,7 +115,7 @@
           <el-table-column
               prop="resultDesc"
               label="备注"
-              width="200"
+              min-width="300"
               align="left">
           </el-table-column>
           <el-table-column

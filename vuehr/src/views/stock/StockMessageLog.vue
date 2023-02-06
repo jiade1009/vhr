@@ -35,6 +35,15 @@
               :width="column.width"
               align="left">
           </el-table-column>
+          <el-table-column
+              prop="content"
+              label="内容"
+              width="320"
+              align="left">
+            <template slot-scope="scope">
+              <span v-html="scope.row['content']"></span>
+            </template>
+          </el-table-column>
         </el-table>
         <div style="display: flex;justify-content: flex-end">
           <el-pagination
@@ -71,8 +80,7 @@ export default {
         {prop: "statusNote", label: "状态", width: 0},
         {prop: "messageTypeNote", label: "消息分类", width: 0},
         {prop: "sendTypeNote", label: "发送方式", width: 0},
-        {prop: "content", label: "内容", width: 260},
-        {prop: "timeCreate", label: "创建时间", width: 0}
+        {prop: "timeCreate", label: "创建时间", width: 0},
       ],
     }
   },

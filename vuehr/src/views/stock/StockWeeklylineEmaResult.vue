@@ -46,7 +46,11 @@
           <el-table-column
               prop="runStatusDesc"
               label="运行结果"
+              min-width="200"
               align="left">
+            <template slot-scope="scope">
+              <span v-html="scope.row['runStatusDesc']"></span>
+            </template>
           </el-table-column>
           <el-table-column
               fixed="right"

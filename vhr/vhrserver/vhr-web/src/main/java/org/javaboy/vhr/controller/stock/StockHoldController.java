@@ -40,5 +40,4 @@ public class StockHoldController {
         execPython.runPython(new String[]{BaseConstants.PY_API_RUN_A_BUY, String.valueOf(holdId)});
         return RespBean.ok("正在执行股票买入操作，请耐心等待!");
     }
-
 }

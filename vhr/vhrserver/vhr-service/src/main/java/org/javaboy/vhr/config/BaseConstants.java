@@ -25,6 +25,7 @@ public class BaseConstants {
 
     public static final String PY_API_RUN_A_DAILY_REFRESH = "run_a_daily_refresh";  //  收盘股票信息更新
     public static final String PY_API_RUN_A_CJCX = "run_a_cjcx";  //  收盘股票成交结果更新
+    public static final String PY_API_RUN_A_CCTJ = "run_a_cctj";  //  调用qmt客户端查询股票账户持仓结果
 
 
     // 标记现在开始进行周线数据下载 true/false
