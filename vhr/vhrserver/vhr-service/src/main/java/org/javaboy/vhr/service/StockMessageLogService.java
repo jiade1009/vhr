@@ -83,14 +83,27 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
 
     public void insertBuyHoldResultMessages(List<String> hold_trade_ids) {
         if (hold_trade_ids.size()>0) {
-            StringBuilder sbd = new StringBuilder("");
+            StringBuilder sbdBuy = new StringBuilder("");
+            StringBuilder sellBuy = new StringBuilder("");
             for (String id: hold_trade_ids) {
                 StockHoldTrade trade = stockHoldTradeService.selectByPrimaryKey(Integer.valueOf(id));
-                //委托状态、委托信息、任务状态、任务状态信息
-                sbd.append("[").append(trade.getCode()).append("]，委托状态：").append(trade.getTaskstatusNote());
-                sbd.append("，股票数：").append(trade.getAmount()).append(" <br/>");
+                if (trade.getTradeType().equals(0)) {
+                    //买入交易
+                    //委托状态、委托信息、任务状态、任务状态信息
+                    sbdBuy.append("[").append(trade.getCode()).append("]，委托状态：").append(trade.getTaskstatusNote());
+                    sbdBuy.append("，股票数：").append(trade.getAmount()).append(" <br/>");
+                } else if(trade.getTradeType().equals(1)) {
+                    //卖出交易
+                    sellBuy.append("[").append(trade.getCode()).append("]，委托状态：").append(trade.getTaskstatusNote());
+                    sellBuy.append("，股票数：").append(trade.getAmount()).append(" <br/>");
+                }
             }
-            insertMessage(sbd.toString(), MessageType.BUY.getIndex());
+            if (sbdBuy.length()>0) {
+                insertMessage(sbdBuy.toString(), MessageType.BUY.getIndex());
+            }
+            if (sellBuy.length()>0) {
+                insertMessage(sellBuy.toString(), MessageType.SELL.getIndex());
+            }
         }
     }
 

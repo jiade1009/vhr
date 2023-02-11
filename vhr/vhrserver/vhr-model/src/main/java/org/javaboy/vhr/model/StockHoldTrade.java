@@ -264,7 +264,7 @@ public class StockHoldTrade {
             case 9:
                 return "打回";
             case 10:
-                return "等异常终止待";
+                return "异常终止";
             case 11:
                 return "放弃，目前用于组合交易中，放弃补单";
             case 12:

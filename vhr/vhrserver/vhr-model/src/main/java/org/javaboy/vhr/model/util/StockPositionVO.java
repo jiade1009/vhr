@@ -21,6 +21,8 @@ public class StockPositionVO {
     private Double costPrice;
     // 盈亏
     private Double profitLoss;
+    // 盈亏比例（百分比）
+    private Double profitLossRatio;
     // 市值
     private Double marketValue;
     // 可用数
@@ -118,5 +120,13 @@ public class StockPositionVO {
 
     public void setCurrentIncrease(Double currentIncrease) {
         this.currentIncrease = currentIncrease;
+    }
+
+    public Double getProfitLossRatio() {
+        return profitLossRatio;
+    }
+
+    public void setProfitLossRatio(Double profitLossRatio) {
+        this.profitLossRatio = profitLossRatio;
     }
 }

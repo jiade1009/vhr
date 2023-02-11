@@ -40,7 +40,7 @@ public class StockPositionController {
     @GetMapping("/")
     public RespBean cctj() {
         String now = DateUtils.formatDate(new Date(), DateUtils.yyyyMMdd);
-        List<String> responseList = execPython.runPython(new String[]{BaseConstants.PY_API_RUN_A_CCTJ, "20230203"});
+        List<String> responseList = execPython.runPython(new String[]{BaseConstants.PY_API_RUN_A_CCTJ, now});
         ObjectMapper mapper = new ObjectMapper();
         List<StockPositionVO> list = new ArrayList<>();
         if (responseList.size()>0) {

@@ -1,10 +1,7 @@
 package org.javaboy.vhr.task;
 
 import org.javaboy.vhr.config.BaseConstants;
-import org.javaboy.vhr.model.StockATradeDate;
-import org.javaboy.vhr.model.StockExecuteResult;
-import org.javaboy.vhr.model.StockWeeklyLineEmaResult;
-import org.javaboy.vhr.model.StockWeeklyLineResult;
+import org.javaboy.vhr.model.*;
 import org.javaboy.vhr.model.util.CommandType;
 import org.javaboy.vhr.pythonutil.ExecPython;
 import org.javaboy.vhr.service.*;
@@ -38,6 +35,8 @@ public class StockCoreTask {
     private StringRedisTemplate stringRedisTemplate;
     @Resource
     private ExecPython execPython;
+    @Resource
+    private DatabaseTypeService databaseTypeService;
     @Resource
     private StockATradeDateService stockATradeDateService;
     @Resource
@@ -113,13 +112,16 @@ public class StockCoreTask {
     @Async("stockCoreAsync")
     @Scheduled(cron = "${task.cron.StockCore.buy}")
     public void buy() {
-        StockATradeDate tradeDate = getTodayTradeDate();
-        if (tradeDate!=null) { //当天为股票交易日
-            LOGGER.info(".............开始【{}】的买入股票的运行..............", tradeDate.getTradeDate());
+        DatabaseType vo = databaseTypeService.getByCode("stk_auto_order");
+        if (vo.getValue().equals("1")) { //开启自动下单
+            StockATradeDate tradeDate = getTodayTradeDate();
+            if (tradeDate!=null) { //当天为股票交易日
+                LOGGER.info(".............开始【{}】的买入股票的运行..............", tradeDate.getTradeDate());
 //            传递stock_hold_id 如果为0，则查询所有的股票池数据
-            execPython.runPython(new String[]{BaseConstants.PY_API_RUN_A_BUY, "0"});
-        } else {
-            LOGGER.debug("今天不是A股股票交易日，不运行买入股票命令");
+                execPython.runPython(new String[]{BaseConstants.PY_API_RUN_A_BUY, "0"});
+            } else {
+                LOGGER.debug("今天不是A股股票交易日，不运行买入股票命令");
+            }
         }
     }
 
@@ -266,7 +268,7 @@ public class StockCoreTask {
     }
 
     /**
-     * 收盘查询今日的股票成交结果信息。（买入和卖出成交记录）
+     * 查询今日的股票成交结果信息。（买入和卖出成交记录）
      */
     @Async("stockCoreAsync")
     @Scheduled(cron = "${task.cron.StockCore.cjcx}")
@@ -294,21 +296,41 @@ public class StockCoreTask {
         if (tradeDate!=null) { //当天为股票交易日
             LOGGER.info(".............开始【{}】的巡检查询..............", tradeDate.getTradeDate());
             LinkedHashMap<CommandType, Boolean> params = new LinkedHashMap();
-            //今天的ema数据是否已经生成
+            //今天的weekly数据是否已经生成
             List<StockExecuteResult> weekly_list = stockExecuteResultService.getBeanlistByCommand(CommandType.WEEKLY.name(), now);
-            if (weekly_list.size()>0) params.put(CommandType.WEEKLY, true);
+            if (weekly_list.size()>0) {
+                params.put(CommandType.WEEKLY, true);
+            } else {
+                params.put(CommandType.WEEKLY, false);
+            }
             //今天的ema数据是否已经生成
             List<StockExecuteResult> ema_list = stockExecuteResultService.getBeanlistByCommand(CommandType.WEEKLY_EMA.name(), now);
-            if (ema_list.size()>0) params.put(CommandType.WEEKLY_EMA, true);
+            if (ema_list.size()>0) {
+                params.put(CommandType.WEEKLY_EMA, true);
+            } else {
+                params.put(CommandType.WEEKLY_EMA, false);
+            }
             //今天的买入策略的运行结果数据是否已经生成
             List<StockExecuteResult> buy_rule_run_list = stockExecuteResultService.getBeanlistByCommand(CommandType.BUY_RULE.name(), now);
-            if (buy_rule_run_list.size()>0) params.put(CommandType.BUY_RULE, true);
+            if (buy_rule_run_list.size()>0) {
+                params.put(CommandType.BUY_RULE, true);
+            } else {
+                params.put(CommandType.BUY_RULE, false);
+            }
             //今天的收盘信息数据是否已经更新
             List<StockExecuteResult> daily_list = stockExecuteResultService.getBeanlistByCommand(CommandType.DAILY_REFRESH.name(), now);
-            if (daily_list.size()>0) params.put(CommandType.DAILY_REFRESH, true);
+            if (daily_list.size()>0) {
+                params.put(CommandType.DAILY_REFRESH, true);
+            } else {
+                params.put(CommandType.DAILY_REFRESH, false);
+            }
             //今天的成交记录是否已经更新
             List<StockExecuteResult> cjcx_list = stockExecuteResultService.getBeanlistByCommand(CommandType.CJCX.name(), now);
-            if (cjcx_list.size()>0) params.put(CommandType.CJCX, true);
+            if (cjcx_list.size()>0) {
+                params.put(CommandType.CJCX, true);
+            } else {
+                params.put(CommandType.CJCX, false);
+            }
 
             stockMessageLogService.insertInspectionMessages(params);
         } else {

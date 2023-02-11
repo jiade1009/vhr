@@ -57,6 +57,7 @@ export default {
         {prop: "cost", label: "持仓成本", show: true},
         {prop: "costPrice", label: "成本价", show: true},
         {prop: "profitLoss", label: "盈亏", show: true},
+        {prop: "profitLossRatio", label: "盈亏比例(%)", show: true},
         {prop: "marketValue", label: "市值", show: true},
         {prop: "usable", label: "可用数", show: true},
         {prop: "currentProfitLoss", label: "当日盈亏", show: true},

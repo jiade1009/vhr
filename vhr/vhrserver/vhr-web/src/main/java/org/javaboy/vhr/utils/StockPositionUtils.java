@@ -39,9 +39,11 @@ public class StockPositionUtils {
             vo.setProfitLoss(Double.valueOf(arr[12].substring(0, arr[12].length()-1).trim().substring(1)));
             vo.setMarketValue(Double.valueOf(arr[13].substring(0, arr[13].length()-1).trim().substring(1)));
             vo.setUsable(Integer.valueOf(arr[15].substring(0, arr[15].length()-1).trim().substring(1)));
+            //盈亏比例字符串存在百分号，因此需要截取掉最后两个字符
+            vo.setProfitLossRatio(Double.valueOf(arr[17].substring(0, arr[17].length()-2).trim().substring(1)));
             vo.setLastestPrice(Double.valueOf(arr[18].substring(0, arr[18].length()-1).trim().substring(1)));
             vo.setCurrentProfitLoss(Double.valueOf(arr[21].substring(0, arr[21].length()-1).trim().substring(1)));
-            //盈亏比例字符串存在百分号，因此需要截取掉最后两个字符
+            //当日涨幅字符串存在百分号，因此需要截取掉最后两个字符
             vo.setCurrentIncrease(Double.valueOf(arr[25].substring(0, arr[25].length()-2).trim().substring(1)));
             list.add(vo);
         }

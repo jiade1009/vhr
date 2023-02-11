@@ -69,4 +69,10 @@ public class DatabaseTypeService{
     public Long checkUniqueCode(String code, Integer id) {
         return databaseTypeMapper.checkUniqueCode(code, id);
     }
+
+    @Cacheable
+    public DatabaseType getByCode(String code) {
+        System.out.println(".........." + code);
+        return databaseTypeMapper.getByCode(code);
+    }
 }

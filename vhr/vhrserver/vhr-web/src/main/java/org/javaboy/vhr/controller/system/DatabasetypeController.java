@@ -1,18 +1,15 @@
 package org.javaboy.vhr.controller.system;
 
-import org.javaboy.vhr.model.*;
+import org.javaboy.vhr.model.DatabaseType;
+import org.javaboy.vhr.model.RespBean;
+import org.javaboy.vhr.model.RespPageBean;
 import org.javaboy.vhr.service.DatabaseTypeService;
-import org.javaboy.vhr.service.HrService;
-import org.javaboy.vhr.service.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 /**
  * @author sam
@@ -89,6 +86,29 @@ public class DatabasetypeController {
             return RespBean.ok("");
         } else {
             return RespBean.error("存在重复");
+        }
+    }
+
+    @GetMapping("/getByCode")
+    public RespBean getByCode(@RequestParam String code ) {
+        DatabaseType vo = beanService.getByCode(code);
+        if (vo != null) {
+            return RespBean.ok("", vo, false);
+        } else {
+            return RespBean.error("不存在", false);
+        }
+    }
+
+
+    @PostMapping("/updateByCode")
+    public RespBean updateByCode(@RequestBody Map<String, Object> map) {
+        DatabaseType vo = beanService.getByCode(map.get("code").toString());
+        if (vo != null) {
+            vo.setValue(map.get("val").toString());
+            beanService.updateByPrimaryKey(vo);
+            return RespBean.ok("");
+        } else {
+            return RespBean.error("操作失败", true);
         }
     }
 }

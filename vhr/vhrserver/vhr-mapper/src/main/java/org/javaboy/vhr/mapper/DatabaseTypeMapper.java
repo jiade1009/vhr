@@ -30,4 +30,6 @@ public interface DatabaseTypeMapper {
     Long checkUniqueName(@Param("name") String name, @Param("id") Integer id);
     //校验是否存在重复的code
     Long checkUniqueCode(@Param("code") String code, @Param("id") Integer id);
+
+    DatabaseType getByCode(@Param("code") String code);
 }

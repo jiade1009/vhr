@@ -115,7 +115,7 @@ task:
       # 每日收盘信息更新（所持股票）
       dailyRefresh: 0 0 17 ? * MON-FRI
       # 每日股票成交结果查询
-      cjcx:  0 10 15 ? * MON-FRI
+      cjcx:  0 10 10-15/1 ? * MON-FRI
       # 每日巡检
       inspection: 0 0 21 ? * MON-FRI
 

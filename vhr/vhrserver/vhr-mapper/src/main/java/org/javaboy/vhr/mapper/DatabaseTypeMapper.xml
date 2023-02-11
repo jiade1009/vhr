@@ -68,6 +68,13 @@
     </if>
   </select>
 
+  <select id="getByCode" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from database_type
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--@mbg.generated-->
     delete from database_type

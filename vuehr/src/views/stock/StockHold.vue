@@ -13,6 +13,11 @@
             搜索
           </el-button>
         </div>
+        <div>
+          <el-button type="danger" icon="el-icon-switch-button" @click="changeBuySwitch($event)">
+            {{autoBuy?'暂停股票自动买入':'开启股票自动买入'}}
+          </el-button>
+        </div>
       </div>
       <!--search section end-->
       <!--list section begin-->
@@ -140,12 +145,13 @@
             <template slot-scope="scope">
               <el-button type="info" @click.stop="viewDetail(scope.row)" style="padding: 3px" size="mini">查看交易</el-button>
               <el-button type="success" @click.stop="doCalculator(scope.row)" style="padding: 3px" size="mini">价格计算器</el-button>
+              <el-button type="danger" @click.stop="closeStock(scope.row)" style="padding: 3px" size="mini" v-if="scope.row.status==0">关闭交易</el-button>
               <!--
               <el-button type="success" @click.stop="runBuy(scope.row)" style="padding: 3px" size="mini" v-if="scope.row.status==0">购买</el-button>
               <el-button type="info" @click="" style="padding: 3px" size="mini" v-if="scope.row.status==2">恢复购买</el-button>
               <el-button type="warning" @click="" style="padding: 3px" size="mini" v-if="scope.row.status==0">暂停购买</el-button>
               <el-button type="success" @click="" style="padding: 3px" size="mini" v-if="scope.row.status==3">暂停卖出</el-button>
-              <el-button type="danger" @click="" style="padding: 3px" size="mini" v-if="scope.row.status!=6">关闭交易</el-button>-->
+              -->
             </template>
           </el-table-column>
         </el-table>
@@ -205,6 +211,7 @@ export default {
   name: "StockHold",
   data () {
     return {
+      autoBuy: false,   // 是否自动买入
       //分页参数
       total: 0,
       page: 1,
@@ -267,8 +274,45 @@ export default {
   mounted() {
     this.initBeanlist();
     this.getSellRule();
+    this.getBuySwitch();
   },
   methods: {
+    getBuySwitch() {
+      // 查询是否关闭买入交易
+      this.getRequest("/system/databasetype/getByCode?code=stk_auto_order").then(resp =>{
+        if (resp) {
+          if (resp.obj) {
+            this.autoBuy = resp.obj.value==0?false:true;
+          }
+        }
+      });
+    },
+    changeBuySwitch(e) {
+      let o = e.currentTarget;
+      let msg = this.autoBuy ? "是否关闭自动购买交易功能，请确认" : "确认开启自动购买交易功能";
+      this.$confirm(msg, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let data = {
+          code: 'stk_auto_order',
+          val: this.autoBuy?"0":"1"
+        }
+        this.disabled = true;
+        this.postRequest("/system/databasetype/updateByCode", data).then(resp => {
+          this.disabled = false
+          if (resp) {
+            this.autoBuy = !this.autoBuy
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消操作'
+        });
+      });
+    },
     columnFormat(row, column) {
       let property = column.property;
       let data = row[property];
@@ -367,6 +411,25 @@ export default {
         type: 'warning'
       }).then(() => {
         this.putRequest("/stock/hold/runBuy?holdId=" + row.id).then(resp => {
+          if (resp) {
+            //更新list信息
+            this.initBeanlist();
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消操作'
+        });
+      });
+    },
+    closeStock(row) {
+      this.$confirm('确认关闭该股票吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.putRequest("/stock/hold/close?holdId=" + row.id).then(resp => {
           if (resp) {
             //更新list信息
             this.initBeanlist();
