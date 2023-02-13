@@ -44,7 +44,11 @@ public class StockPositionUtils {
             vo.setLastestPrice(Double.valueOf(arr[18].substring(0, arr[18].length()-1).trim().substring(1)));
             vo.setCurrentProfitLoss(Double.valueOf(arr[21].substring(0, arr[21].length()-1).trim().substring(1)));
             //当日涨幅字符串存在百分号，因此需要截取掉最后两个字符
-            vo.setCurrentIncrease(Double.valueOf(arr[25].substring(0, arr[25].length()-2).trim().substring(1)));
+            if (arr[25].length()<3) {  // 意外的字符格式： '-'
+                vo.setCurrentIncrease(0d);
+            } else {
+                vo.setCurrentIncrease(Double.valueOf(arr[25].substring(0, arr[25].length()-2).trim().substring(1)));
+            }
             list.add(vo);
         }
         return list;
