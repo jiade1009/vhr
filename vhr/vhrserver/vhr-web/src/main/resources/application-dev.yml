@@ -113,7 +113,7 @@ task:
       #股票代码更新
       stockCodeUpdate: 0 0 1 ? * SAT
       # 每日收盘信息更新（所持股票）
-      dailyRefresh: 0 0 17 ? * MON-FRI
+      dailyRefresh: 0 0 17-19/1 ? * MON-FRI
       # 每日股票成交结果查询
       cjcx:  0 10 10-15/1 ? * MON-FRI
       # 每日巡检

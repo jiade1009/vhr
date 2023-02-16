@@ -243,7 +243,7 @@ public class StockCoreTask {
         if (tradeDate!=null) { //当天为股票交易日
             boolean already = false;
             Integer time = 0;
-            while (!already && time<90) {
+            while (!already && time<59) {
                 //今天的ema数据是否已经生成
                 List<StockExecuteResult> list = stockExecuteResultService.getBeanlistByCommand(CommandType.WEEKLY_EMA.name(), now);
                 if (list.size()>0) {

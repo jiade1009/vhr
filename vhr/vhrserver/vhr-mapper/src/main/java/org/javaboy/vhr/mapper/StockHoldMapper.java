@@ -5,13 +5,20 @@ import org.javaboy.vhr.base.BaseMapper;
 import org.javaboy.vhr.model.StockHold;
 
 /**
- * @ClassName   : StockHoldMapper
+ * @author : sam
+ * @ClassName : StockHoldMapper
  * @description : TODO
- * @author      : sam
- * @datetime    : 2022年 10月 20日 21:50
- * @version:    : 1.0
+ * @datetime : 2023年 02月 15日 09:59
+ * @version: : 1.0
  */
 
 @Mapper
-public interface StockHoldMapper extends BaseMapper<StockHold, Integer> {
+public interface StockHoldMapper extends BaseMapper {
+    int deleteByPrimaryKey(Integer id);
+
+    int insert(StockHold record);
+
+    StockHold selectByPrimaryKey(Integer id);
+
+    int updateByPrimaryKey(StockHold record);
 }

@@ -102,14 +102,10 @@ public class MailReceiver {
         MessageType messageType = bean.getMessageType();
         Integer sendType = bean.getSendType();  //（0短信、1邮件、2微信服务通知）
         if (sendType == 1) {
-            String title = "股票信号发现";
+//            String title = "股票信号发现";
+            String title = messageType.getName();
             String content = bean.getContent();
-            if (messageType == MessageType.BUY) {
-                title = "股票买入结果";
-            } else if (messageType == MessageType.SELL) {
-                title = "股票卖出结果";
-            } else if (messageType == MessageType.INSPECTION) {
-                title = "每日定时脚本巡检结果";
+            if (messageType == MessageType.INSPECTION) {
                 ObjectMapper mapper = new ObjectMapper();
                 Map map = mapper.readValue(content, Map.class);
                 StringBuilder sbd = new StringBuilder("");

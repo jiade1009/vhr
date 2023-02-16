@@ -87,15 +87,18 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
             StringBuilder sellBuy = new StringBuilder("");
             for (String id: hold_trade_ids) {
                 StockHoldTrade trade = stockHoldTradeService.selectByPrimaryKey(Integer.valueOf(id));
+                String price = getPriceInfo(trade.getPriceType());
                 if (trade.getTradeType().equals(0)) {
                     //买入交易
                     //委托状态、委托信息、任务状态、任务状态信息
-                    sbdBuy.append("[").append(trade.getCode()).append("]，委托状态：").append(trade.getTaskstatusNote());
-                    sbdBuy.append("，股票数：").append(trade.getAmount()).append(" <br/>");
+                    sbdBuy.append("[").append(trade.getCode()).append("]，买入价格：").append(price);
+                    sbdBuy.append("，股票数：").append(trade.getAmount()).append("，委托结果：")
+                            .append(trade.getTaskstatusNote()).append(" <br/>");
                 } else if(trade.getTradeType().equals(1)) {
                     //卖出交易
-                    sellBuy.append("[").append(trade.getCode()).append("]，委托状态：").append(trade.getTaskstatusNote());
-                    sellBuy.append("，股票数：").append(trade.getAmount()).append(" <br/>");
+                    sellBuy.append("[").append(trade.getCode()).append("]，卖出价格：").append(price);
+                    sellBuy.append("，股票数：").append(trade.getAmount()).append("，委托结果：")
+                            .append(trade.getTaskstatusNote()).append(" <br/>");
                 }
             }
             if (sbdBuy.length()>0) {
@@ -104,6 +107,17 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
             if (sellBuy.length()>0) {
                 insertMessage(sellBuy.toString(), MessageType.SELL.getIndex());
             }
+        }
+    }
+    private String getPriceInfo(String flag) {
+        if (flag.equals("1")) {
+            return "最新价";
+        } else if (flag.substring(0, 1).equals("B")) {
+            return "买" + flag.substring(1) + "价";
+        } else if (flag.substring(0, 1).equals("S")) {
+            return "卖" + flag.substring(1) + "价";
+        } else {
+            return flag;
         }
     }
 
@@ -133,13 +147,18 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
      * @param content
      */
     public void insertMessage(String content, Integer messageType) {
+        System.out.println(".............content" + content);
         List<StockMessageConf> confList = stockMessageConfService.getListByStatus(true);
         for (StockMessageConf conf : confList) {
             String send_type = conf.getSendType();
             String[] send_type_arr = send_type.split("");
             for (int i = 0; i < send_type_arr.length; i++) {
+
                 if (send_type_arr[i].equals("1")) {
-                    if (conf.getMessageType().substring(0, 1).equals("1")) {
+                    String flag = String.valueOf(conf.getMessageType().charAt(messageType));
+                    System.out.println("消息类型值：" + conf.getMessageType());
+                    System.out.println(flag);
+                    if (flag.equals("1")) {
                         //接收信号
                         String msgId = UUID.randomUUID().toString();
                         StockMessageLog log = new StockMessageLog();

@@ -173,6 +173,7 @@
           :visible.sync="dialogVisible"
           width="60%">
         <div>
+          <p>股票代码：{{bean.code}}</p>
           <el-row :gutter="20">
             <el-col :span="6"><div class="grid-content grid-label">P1阶段：</div></el-col>
             <el-col :span="6"><div class="grid-content">{{bean.p1Price}}</div></el-col>
@@ -195,9 +196,11 @@
             <el-col :span="6"><div class="grid-content grid-label">最高价：</div></el-col>
             <el-col :span="6"><div class="grid-content">{{bean.priceHigh}}</div></el-col>
           </el-row>
-          <el-row :gutter="20" :hidden="bean.sellStage<1">
-            <el-col :span="6"><div class="grid-content grid-label">当前阶段卖出价格：</div></el-col>
+          <el-row :gutter="20">
+            <el-col :span="6"><div class="grid-content grid-label">卖出价格：</div></el-col>
             <el-col :span="6"><div class="grid-content">{{bean.sellPrice}}</div></el-col>
+            <el-col :span="6"><div class="grid-content grid-label">止损价格：</div></el-col>
+            <el-col :span="6"><div class="grid-content">{{bean.priceStop}}</div></el-col>
           </el-row>
         </div>
       </el-dialog>
@@ -453,25 +456,27 @@ export default {
     },
     doCalculator(row) {
       this.dialogVisible = true;
-      let bean = row;
+      this.bean = row;
       let sellRule = this.sellRule;
-      let p1Price = (bean.buyPrice * sellRule.p1Ratio).toFixed(2);
+      let p1Price = (this.bean.buyPrice * sellRule.p1Ratio).toFixed(2);
       let p2Price = (p1Price * sellRule.p2Ratio).toFixed(2);
       let p3Price = (p2Price * sellRule.p3Ratio).toFixed(2);
       let p4Price = (p3Price * sellRule.p4Ratio).toFixed(2);
       let p5Price = (p4Price * sellRule.p5Ratio).toFixed(2);
-
-      let buyPrice = this.bean.buyPrice;
       let priceHigh = this.bean.priceHigh;
-      let stage = 0;
+      let stage = this.bean.sellStage;
       let spRatio = 0;
-      if (parseFloat(priceHigh)<parseFloat(buyPrice)) stage = 0, spRatio = '无';
-      else if (priceHigh>p1Price && priceHigh<p2Price) stage = 1, spRatio = sellRule.sp1Ratio;
-      else if (priceHigh>p2Price && priceHigh<p3Price) stage = 2, spRatio = sellRule.sp2Ratio;
-      else if (priceHigh>p3Price && priceHigh<p4Price) stage = 3, spRatio = sellRule.sp3Ratio;
-      else if (priceHigh>p4Price && priceHigh<p5Price) stage = 4, spRatio = sellRule.sp4Ratio;
-      else if (priceHigh>p5Price) stage = 5, spRatio = 1, priceHigh = p5Price;
-      let sellPrice = spRatio == '无'? '暂无': (priceHigh*spRatio).toFixed(2);
+      let sellPrice = 0;
+      if (stage == 1)spRatio = sellRule.sp1Ratio;
+      else if (stage == 2)spRatio = sellRule.sp2Ratio;
+      else if (stage == 3)spRatio = sellRule.sp3Ratio;
+      else if (stage == 4)spRatio = sellRule.sp4Ratio;
+      else if (stage == 5)spRatio = 1, priceHigh = p5Price;
+      if (stage == -1) {
+        sellPrice = this.bean.priceStop;
+      } else {
+        sellPrice = stage == 0? p1Price: (priceHigh*spRatio).toFixed(2);
+      }
       let result = this.$utils.twoJsonMerge(this.bean, {
         p1Price: p1Price,
         p2Price: p2Price,
@@ -482,6 +487,7 @@ export default {
         spRatio: spRatio,
         sellPrice: sellPrice,
       });
+      console.log(result);
       this.bean = result;
     },
   }

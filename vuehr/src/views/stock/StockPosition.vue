@@ -82,7 +82,6 @@ export default {
       let data = row[property];
 
       if (property == "currentProfitLoss" || property == "currentIncrease" ) {
-        console.log(data)
         if (data>0) {
           return 'profit-cell';
         } else {
