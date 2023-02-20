@@ -109,6 +109,43 @@ public class StockCoreTask {
         }
     }
 
+
+    /**
+     * 回头草策略运行
+     */
+    @Async("stockCoreAsync")
+    @Scheduled(cron = "${task.cron.StockCore.uturnrule}")
+    public void uTurnRule() {
+        StockATradeDate tradeDate = getTodayTradeDate();
+        if (tradeDate!=null) { //当天为股票交易日
+            LOGGER.info(".............开始【{}】的回头草策略的运行..............", tradeDate.getTradeDate());
+            String searchDate = tradeDate.getTradeDate().replace("-", "");
+            boolean already = false;
+            Integer time = 0;
+            //判断是否已经生成今天的周线和ema数据，即自动生成，且ema结果为成功生成的周线
+            List<StockWeeklyLineResult> weeklyList = null;
+            while (!already && time<90) {
+                weeklyList = stockWeeklyLineResultService.getBeanListByPro(searchDate, 1, 1);
+                if (weeklyList != null && weeklyList.size()>0) {
+                    already = true;
+                } else {
+                    try {
+                        time ++;
+                        LOGGER.info("time:{}", String.valueOf(time));
+                        Thread.sleep(60000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            if (weeklyList!=null && weeklyList.size()>0) {
+                execPython.runPython(new String[]{BaseConstants.PY_API_RUN_A_UTURN_RULE});
+            }
+        } else {
+            LOGGER.debug("今天不是A股股票交易日，不运行回头草策略命令");
+        }
+    }
+
     @Async("stockCoreAsync")
     @Scheduled(cron = "${task.cron.StockCore.buy}")
     public void buy() {
@@ -316,6 +353,13 @@ public class StockCoreTask {
                 params.put(CommandType.BUY_RULE, true);
             } else {
                 params.put(CommandType.BUY_RULE, false);
+            }
+            //今天的回头草策略的运行结果数据是否已经生成
+            List<StockExecuteResult> u_return_run_list = stockExecuteResultService.getBeanlistByCommand(CommandType.U_RETURN_RUN.name(), now);
+            if (u_return_run_list.size()>0) {
+                params.put(CommandType.U_RETURN_RUN, true);
+            } else {
+                params.put(CommandType.U_RETURN_RUN, false);
             }
             //今天的收盘信息数据是否已经更新
             List<StockExecuteResult> daily_list = stockExecuteResultService.getBeanlistByCommand(CommandType.DAILY_REFRESH.name(), now);

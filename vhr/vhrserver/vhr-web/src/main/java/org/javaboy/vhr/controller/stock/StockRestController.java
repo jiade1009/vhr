@@ -51,6 +51,12 @@ public class StockRestController {
                             stockMessageLogService.insertSignalMessages(white_stocks, buy_stocks);
                         }
                         break;
+                    case "uturn_sign":
+                        List<String> uturn_stocks = (List<String>) data.get("list");
+                        if (uturn_stocks!=null && uturn_stocks.size()>0) {
+                            stockMessageLogService.insertUreturnSignalMessages(uturn_stocks);
+                        }
+                        break;
                     case "buy":
                         hold_trade_id_list = (List<String>) data.get("hold_trade_id_list");
                         if (hold_trade_id_list!=null && hold_trade_id_list.size()>0) {

@@ -1,11 +1,13 @@
 package org.javaboy.vhr.model;
 
+import org.javaboy.vhr.model.util.StockHoldStatus;
+
 import java.util.Date;
 
 /**
  * @author : sam
  * @ClassName : StockHold
- * @description : TODO
+ * @description : 股票池数据
  * @datetime : 2023年 02月 15日 09:59
  * @version: : 1.0
  */
@@ -101,6 +103,11 @@ public class StockHold {
      * 止损价格
      */
     private Double priceStop;
+
+    /**
+     * 加入方式，0直接，1回头草
+     */
+    private Integer generateType;
 
     public Integer getId() {
         return id;
@@ -260,5 +267,17 @@ public class StockHold {
 
     public void setPriceStop(Double priceStop) {
         this.priceStop = priceStop;
+    }
+
+    public String getStatusNote() {
+        return StockHoldStatus.getName(this.status);
+    }
+
+    public Integer getGenerateType() {
+        return generateType;
+    }
+
+    public void setGenerateType(Integer generateType) {
+        this.generateType = generateType;
     }
 }

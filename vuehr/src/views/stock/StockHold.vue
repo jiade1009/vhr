@@ -232,6 +232,7 @@ export default {
         {prop: "buyAmount", label: "买入数量", show: true},
         {prop: "holdAmount", label: "持有数量", show: true},
         {prop: "sellStage", label: "交易阶段", show: true},
+        {prop: "generateType", label: "加入方式", show: true},
         {prop: "note", label: "备注", show: true}
       ],
       //下拉明细内容
@@ -324,6 +325,8 @@ export default {
         // 状态，0未购买、1购买中、2暂停购买、3已购买、4卖出中、5暂定卖出、6交易结束
         // return data;
         return row["statusNote"];
+      } else if (property == "generateType"){
+        return data == "0"?"直接加入":"回头草";
       } else {
         return data;
       }

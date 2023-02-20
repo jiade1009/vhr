@@ -14,7 +14,8 @@ public enum MessageType {
     SIGN(0,"信号发现"),
     BUY(1,"股票买入"),
     SELL(2,"股票卖出"),
-    INSPECTION(3, "巡检结果");
+    INSPECTION(3, "巡检结果"),
+    URETURNSIGN(4,"回头草发现");
 
     // 成员变量
     private String name;

@@ -69,6 +69,14 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
         insertMessage(content, MessageType.SIGN.getIndex());
     }
 
+    public void insertUreturnSignalMessages(List<String> ureturn_stocks) {
+        if (ureturn_stocks.size()>0) {
+            String codes = String.join(",", ureturn_stocks);
+            StringBuilder sbd = new StringBuilder("[").append(codes).append("]满足回头草策略，加入股票池中待购买");
+            insertMessage(sbd.toString(), MessageType.URETURNSIGN.getIndex());
+        }
+    }
+
     public void insertBuyHoldMessages(List<String> hold_trade_ids) {
         if (hold_trade_ids.size()>0) {
             StringBuilder sbd = new StringBuilder("");
@@ -147,7 +155,6 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
      * @param content
      */
     public void insertMessage(String content, Integer messageType) {
-        System.out.println(".............content" + content);
         List<StockMessageConf> confList = stockMessageConfService.getListByStatus(true);
         for (StockMessageConf conf : confList) {
             String send_type = conf.getSendType();
@@ -156,8 +163,6 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
 
                 if (send_type_arr[i].equals("1")) {
                     String flag = String.valueOf(conf.getMessageType().charAt(messageType));
-                    System.out.println("消息类型值：" + conf.getMessageType());
-                    System.out.println(flag);
                     if (flag.equals("1")) {
                         //接收信号
                         String msgId = UUID.randomUUID().toString();

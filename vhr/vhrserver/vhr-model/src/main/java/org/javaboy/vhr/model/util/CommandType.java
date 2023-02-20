@@ -16,7 +16,8 @@ public enum CommandType {
     BUY_RULE, // 每日买入策略运行
     CODE_REFRESH,  // 每周股票代码刷新
     TRADE_DATE,  // 交易日数据更新
-    CJCX;  // 收盘股票成交信息查询
+    CJCX,  // 收盘股票成交信息查询
+    U_RETURN_RUN;  //  回头草策略运行
 
     public String getCommandDesc() {
         String desc = "";
@@ -44,6 +45,9 @@ public enum CommandType {
                 break;
             case CJCX:
                 desc = "成交信息查询";
+                break;
+            case U_RETURN_RUN:
+                desc = "回头草策略运行";
                 break;
         }
         return desc;

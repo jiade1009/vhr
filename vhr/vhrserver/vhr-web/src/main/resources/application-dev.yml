@@ -95,6 +95,8 @@ task:
       # 买入策略运行
       buyrule: 0 0 16 ? * MON-FRI
       # buyrule: 0 0/2 * ? * MON-FRI
+      # 回头草策略运行
+      uturnrule: 0 30 16 ? * MON-FRI
       # 买入操作
       buy: 0 31 9 ? * MON-FRI
       # 卖出操作

@@ -145,8 +145,8 @@ export default {
       total: 0,
       page: 1,
       size: this.$ELEMENT.pagesize,
-      msg_type_label: ["发现信号", "买入通知", '卖出通知'],
-      send_type_label: ["短信", "邮件", '微信'],
+      msg_type_label: [],
+      send_type_label: [],
       //列表参数
       keyword: '',
       loading: false,
@@ -160,11 +160,9 @@ export default {
         "status": true,
       },
       msg_type_checked: [],
-      msg_type_checkbox: [
-      ],
+      msg_type_checkbox: [],
       send_type_checked: [],
-      send_type_checkbox: [
-      ],
+      send_type_checkbox: [],
       action: 'insert',
       title: '新增',
       dialogVisible: false,
@@ -316,7 +314,7 @@ export default {
     },
     doAddBean() {
       let msg_checked = this.msg_type_checked;
-      let msgType = ['0','0','0'];
+      let msgType = new Array(this.msg_type_label.length).fill(0);
       if (!!msg_checked) {
         msg_checked = msg_checked.sort((x,y)=>x-y)
         for (let key in msg_checked) {
@@ -326,7 +324,7 @@ export default {
       let msgType_str = msgType.join('');
 
       let send_checked = this.send_type_checked;
-      let sendType = ['0','0','0'];
+      let sendType = new Array(this.send_type_label.length).fill(0);
       if (!!send_checked) {
         send_checked = send_checked.sort((x,y)=>x-y)
         for (let key in send_checked) {

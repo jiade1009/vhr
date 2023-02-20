@@ -24,12 +24,13 @@
     <result column="price_sell_low" jdbcType="FLOAT" property="priceSellLow" />
     <result column="close_ema_18" jdbcType="FLOAT" property="closeEma18" />
     <result column="price_stop" jdbcType="FLOAT" property="priceStop" />
+    <result column="generate_type" jdbcType="INTEGER" property="generateType" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, code, time_create, time_update, `status`, buy_amount, buy_price, hold_amount, 
     sell_stage, weekly_ema_result_id, note, price_close, price_high, price_low, enhance_white_sign, 
-    lose_enhance_white_sign, price_sell_high, price_sell_low, close_ema_18, price_stop
+    lose_enhance_white_sign, price_sell_high, price_sell_low, close_ema_18, price_stop, generate_type
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -51,14 +52,14 @@
       note, price_close, price_high, 
       price_low, enhance_white_sign, lose_enhance_white_sign, 
       price_sell_high, price_sell_low, close_ema_18, 
-      price_stop)
+      price_stop, generate_type)
     values (#{code,jdbcType=VARCHAR}, #{timeCreate,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP}, 
       #{status,jdbcType=INTEGER}, #{buyAmount,jdbcType=INTEGER}, #{buyPrice,jdbcType=FLOAT}, 
       #{holdAmount,jdbcType=INTEGER}, #{sellStage,jdbcType=INTEGER}, #{weeklyEmaResultId,jdbcType=INTEGER}, 
       #{note,jdbcType=VARCHAR}, #{priceClose,jdbcType=FLOAT}, #{priceHigh,jdbcType=FLOAT}, 
       #{priceLow,jdbcType=FLOAT}, #{enhanceWhiteSign,jdbcType=BOOLEAN}, #{loseEnhanceWhiteSign,jdbcType=BOOLEAN}, 
       #{priceSellHigh,jdbcType=FLOAT}, #{priceSellLow,jdbcType=FLOAT}, #{closeEma18,jdbcType=FLOAT}, 
-      #{priceStop,jdbcType=FLOAT})
+      #{priceStop,jdbcType=FLOAT}, #{generateType, jdbcType=INTEGER})
   </insert>
   <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockHold">
     <!--@mbg.generated-->
@@ -81,7 +82,8 @@
       price_sell_high = #{priceSellHigh,jdbcType=FLOAT},
       price_sell_low = #{priceSellLow,jdbcType=FLOAT},
       close_ema_18 = #{closeEma18,jdbcType=FLOAT},
-      price_stop = #{priceStop,jdbcType=FLOAT}
+      price_stop = #{priceStop,jdbcType=FLOAT},
+      generate_type = #{generateType,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="getBeanlistByPage" resultMap="BaseResultMap">
