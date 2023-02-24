@@ -149,9 +149,9 @@
         <el-table-column
             fixed="right"
             width="200"
-            label="操作">
+            label="操作" v-if="flag=='stock'" >
           <template slot-scope="scope">
-            <el-button v-if="flag=='stock'" type="info" @click.stop="viewDetail(scope.row)" style="padding: 3px" size="mini">查看交易</el-button>
+            <el-button type="info" @click.stop="viewDetail(scope.row)" style="padding: 3px" size="mini">查看交易</el-button>
             <el-button type="success" @click.stop="doCalculator(scope.row)" style="padding: 3px" size="mini">价格计算器</el-button>
             <el-button type="danger" @click.stop="closeStock(scope.row)" style="padding: 3px" size="mini" v-if="scope.row.status==0 && flag=='stock'">关闭交易</el-button>
             <!--
@@ -397,6 +397,7 @@ export default {
       });
     },
     viewDetail(row) {
+      if (this.flag != 'stock') return false;
       if (!!!row.detaillist) {
         this.getDetailList(row);
       } else {

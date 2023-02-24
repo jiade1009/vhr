@@ -237,7 +237,14 @@ export default {
     },
     reloadWeekly(e) {
       let o = e.currentTarget;
-      this.$confirm('如果时间未超过下午15点，则生成上一个交易日的周线；此操作将需要时间生成A股周线历史数据和EMA数据，是否继续?', '提示', {
+      let msg = "";
+      if (this.flag=='stock') {
+        msg = "如果时间未超过下午15点，则生成上一个交易日的周线；此操作将需要时间生成A股周线历史数据和EMA数据，是否继续?"
+      } else if (this.flag == 'hstock'){
+        msg = "如果时间未超过下午16点，则生成上一个交易日的周线；此操作将需要时间生成H股周线历史数据和EMA数据，是否继续?"
+      }
+
+      this.$confirm(msg, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
