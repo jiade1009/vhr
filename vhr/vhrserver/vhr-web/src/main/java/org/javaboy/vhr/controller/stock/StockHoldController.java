@@ -1,13 +1,18 @@
 package org.javaboy.vhr.controller.stock;
 
 import org.javaboy.vhr.config.BaseConstants;
+import org.javaboy.vhr.model.HStockHold;
 import org.javaboy.vhr.model.RespBean;
 import org.javaboy.vhr.model.RespPageBean;
 import org.javaboy.vhr.model.StockHold;
 import org.javaboy.vhr.model.util.StockHoldStatus;
 import org.javaboy.vhr.pythonutil.ExecPython;
+import org.javaboy.vhr.service.HStockHoldService;
 import org.javaboy.vhr.service.StockHoldService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
@@ -17,9 +22,7 @@ import javax.annotation.Resource;
  * @datetime    : 2022-10-20 21:58:51
  * @version:    : 1.0
  */
-
 @RestController
-@RequestMapping("/stock/hold")
 public class StockHoldController {
     /**
      * 服务对象
@@ -27,9 +30,11 @@ public class StockHoldController {
     @Resource
     private StockHoldService stockHoldService;
     @Resource
+    private HStockHoldService hStockHoldService;
+    @Resource
     private ExecPython execPython;
 
-    @GetMapping("/")
+    @GetMapping("/stock/hold/")
     public RespPageBean getBeanlistByPage(@RequestParam(defaultValue = "1") Integer page,
                                           @RequestParam(defaultValue = "10") Integer size,
                                           @RequestParam String keyword) {
@@ -37,7 +42,7 @@ public class StockHoldController {
         return bean;
     }
 
-    @PutMapping("/runBuy")
+    @PutMapping("/stock/hold/runBuy")
     public RespBean runBuy(@RequestParam Integer holdId) {
         execPython.runPython(new String[]{BaseConstants.PY_API_RUN_A_BUY, String.valueOf(holdId)});
         return RespBean.ok("正在执行股票买入操作，请耐心等待!");
@@ -48,7 +53,7 @@ public class StockHoldController {
      * @param holdId
      * @return
      */
-    @PutMapping("/close")
+    @PutMapping("/stock/hold/close")
     public RespBean closeStock(@RequestParam Integer holdId) {
         StockHold hold = stockHoldService.selectByPrimaryKey(holdId);
         if (hold.getStatus()==0) {
@@ -60,12 +65,30 @@ public class StockHoldController {
         }
     }
 
+
+    // --------H股方法定义 begin -----------
+    @GetMapping("/hstock/hold/")
+    public RespPageBean getHBeanlistByPage(@RequestParam(defaultValue = "1") Integer page,
+                                          @RequestParam(defaultValue = "10") Integer size,
+                                          @RequestParam String keyword) {
+        RespPageBean bean = hStockHoldService.getBeanlistByPage(page, size, keyword);
+        return bean;
+    }
+
     /**
      * 关闭交易
+     * @param holdId
      * @return
      */
-    @PutMapping("/pauseStocks")
-    public RespBean pauseStocks() {
-        return RespBean.error("股票状态不正确，无法关闭买入交易");
+    @PutMapping("/hstock/hold/close")
+    public RespBean closeHStock(@RequestParam Integer holdId) {
+        HStockHold hold = hStockHoldService.selectByPrimaryKey(holdId);
+        if (hold.getStatus()==0) {
+            hold.setStatus(StockHoldStatus.FINISH.getIndex());
+            hStockHoldService.updateByPrimaryKey(hold);
+            return RespBean.ok("操作成功");
+        } else {
+            return RespBean.error("股票状态不正确，无法关闭买入交易");
+        }
     }
 }

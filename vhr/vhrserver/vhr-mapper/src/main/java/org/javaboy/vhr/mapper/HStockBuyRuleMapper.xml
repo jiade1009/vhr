@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.HStockBuyRuleMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.HStockBuyRule">
+    <!--@mbg.generated-->
+    <!--@Table h_stock_buy_rule-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="time_market" jdbcType="INTEGER" property="timeMarket" />
+    <result column="time_market_option" jdbcType="BOOLEAN" property="timeMarketOption" />
+    <result column="rule_period" jdbcType="INTEGER" property="rulePeriod" />
+    <result column="turnover_limit" jdbcType="INTEGER" property="turnoverLimit" />
+    <result column="turnover_limit_option" jdbcType="BOOLEAN" property="turnoverLimitOption" />
+    <result column="conver_limit" jdbcType="FLOAT" property="converLimit" />
+    <result column="conver_limit_option" jdbcType="BOOLEAN" property="converLimitOption" />
+    <result column="shock_limit" jdbcType="FLOAT" property="shockLimit" />
+    <result column="shock_limit_option" jdbcType="BOOLEAN" property="shockLimitOption" />
+    <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
+    <result column="time_update" jdbcType="TIMESTAMP" property="timeUpdate" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="buy_price_limit" jdbcType="FLOAT" property="buyPriceLimit" />
+    <result column="buy_price_limit_option" jdbcType="BOOLEAN" property="buyPriceLimitOption" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, time_market, time_market_option, rule_period, turnover_limit, turnover_limit_option, 
+    conver_limit, conver_limit_option, shock_limit, shock_limit_option, time_create, 
+    time_update, `status`, buy_price_limit, buy_price_limit_option
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from h_stock_buy_rule
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from h_stock_buy_rule
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.HStockBuyRule" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into h_stock_buy_rule (time_market, time_market_option, rule_period, 
+      turnover_limit, turnover_limit_option, conver_limit, 
+      conver_limit_option, shock_limit, shock_limit_option, 
+      time_create, time_update, `status`, 
+      buy_price_limit, buy_price_limit_option)
+    values (#{timeMarket,jdbcType=INTEGER}, #{timeMarketOption,jdbcType=BOOLEAN}, #{rulePeriod,jdbcType=INTEGER}, 
+      #{turnoverLimit,jdbcType=INTEGER}, #{turnoverLimitOption,jdbcType=BOOLEAN}, #{converLimit,jdbcType=FLOAT}, 
+      #{converLimitOption,jdbcType=BOOLEAN}, #{shockLimit,jdbcType=FLOAT}, #{shockLimitOption,jdbcType=BOOLEAN}, 
+      #{timeCreate,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
+      #{buyPriceLimit,jdbcType=FLOAT}, #{buyPriceLimitOption,jdbcType=BOOLEAN})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.HStockBuyRule">
+    <!--@mbg.generated-->
+    update h_stock_buy_rule
+    set time_market = #{timeMarket,jdbcType=INTEGER},
+      time_market_option = #{timeMarketOption,jdbcType=BOOLEAN},
+      rule_period = #{rulePeriod,jdbcType=INTEGER},
+      turnover_limit = #{turnoverLimit,jdbcType=INTEGER},
+      turnover_limit_option = #{turnoverLimitOption,jdbcType=BOOLEAN},
+      conver_limit = #{converLimit,jdbcType=FLOAT},
+      conver_limit_option = #{converLimitOption,jdbcType=BOOLEAN},
+      shock_limit = #{shockLimit,jdbcType=FLOAT},
+      shock_limit_option = #{shockLimitOption,jdbcType=BOOLEAN},
+      time_create = #{timeCreate,jdbcType=TIMESTAMP},
+      time_update = #{timeUpdate,jdbcType=TIMESTAMP},
+      `status` = #{status,jdbcType=INTEGER},
+      buy_price_limit = #{buyPriceLimit,jdbcType=FLOAT},
+      buy_price_limit_option = #{buyPriceLimitOption,jdbcType=BOOLEAN}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from h_stock_buy_rule order by status asc, id desc
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from h_stock_buy_rule
+  </select>
+
+  <update id="closeRunRule">
+    update h_stock_buy_rule set `status` = 2 , `time_update` = sysdate() where `status` = 1
+  </update>
+
+  <update id="updateStatusById">
+    update h_stock_buy_rule set `status` = #{status} , `time_update` = sysdate()
+    where id = #{id}
+  </update>
+
+  <select id="getBeanlistByStatus" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from h_stock_buy_rule
+    where `status` = #{status,jdbcType=INTEGER}
+  </select>
+</mapper>

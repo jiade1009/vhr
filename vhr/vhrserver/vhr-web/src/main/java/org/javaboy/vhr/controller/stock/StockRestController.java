@@ -43,35 +43,41 @@ public class StockRestController {
             if (r==0) {
                 HashMap<String, Object> data = (HashMap<String, Object>) maps.get("data");
                 List<String> hold_trade_id_list;
+                String flag = "";
                 switch (method) {
                     case "sign":
                         String white_stocks = (String) data.get("white_stock_list");
                         String buy_stocks = (String) data.get("buy_stock_list");
+                        flag = (String) data.get("flag");
                         if (StringUtils.hasLength(white_stocks)) {
-                            stockMessageLogService.insertSignalMessages(white_stocks, buy_stocks);
+                            stockMessageLogService.insertSignalMessages(white_stocks, buy_stocks, flag);
                         }
                         break;
                     case "uturn_sign":
                         List<String> uturn_stocks = (List<String>) data.get("list");
+                        flag = (String) data.get("flag");
                         if (uturn_stocks!=null && uturn_stocks.size()>0) {
-                            stockMessageLogService.insertUreturnSignalMessages(uturn_stocks);
+                            stockMessageLogService.insertUreturnSignalMessages(uturn_stocks, flag);
                         }
                         break;
                     case "buy":
                         hold_trade_id_list = (List<String>) data.get("hold_trade_id_list");
+                        flag = (String) data.get("flag");
                         if (hold_trade_id_list!=null && hold_trade_id_list.size()>0) {
-                            stockMessageLogService.insertBuyHoldMessages(hold_trade_id_list);
+                            stockMessageLogService.insertBuyHoldMessages(hold_trade_id_list, flag);
                         }
                         break;
                     case "buy_result":
                         hold_trade_id_list = (List<String>) data.get("hold_trade_id_list");
+                        flag = (String) data.get("flag");
                         if (hold_trade_id_list!=null && hold_trade_id_list.size()>0) {
-                            stockMessageLogService.insertBuyHoldResultMessages(hold_trade_id_list);
+                            stockMessageLogService.insertBuyHoldResultMessages(hold_trade_id_list, flag);
                         }
                         break;
                     case "sell":
                         Integer holdTradeId = Integer.valueOf((String) data.get("hold_trade_id"));
-                        stockMessageLogService.insertSellHoldMessages(holdTradeId);
+                        flag = (String) data.get("flag");
+                        stockMessageLogService.insertSellHoldMessages(holdTradeId, flag);
                         break;
                     case "sell_result":
                         break;

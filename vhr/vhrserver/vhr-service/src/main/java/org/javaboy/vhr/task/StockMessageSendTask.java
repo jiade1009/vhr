@@ -44,7 +44,7 @@ public class StockMessageSendTask {
             } else {
                 Employee emp = employeeService.getEmployeeById(log.getEmpid());
                 RabbitBean bean = new RabbitBean(emp, log.getContent(),
-                        MessageType.getMessageType(log.getMessageType()), log.getSendType());
+                        MessageType.getMessageType(log.getMessageType()), log.getSendType(), log.getFlag());
                 stockRabbitTemplate.convertAndSend(log.getExchange(), log.getRoutekey(), bean, new CorrelationData(log.getMsgid()));
                 stockMessageLogService.updateCount(log.getMsgid(), new Date());
             }

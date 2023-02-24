@@ -3,7 +3,6 @@ package org.javaboy.vhr.service;
 import org.javaboy.vhr.base.BaseService;
 import org.javaboy.vhr.mapper.StockATradeDateMapper;
 import org.javaboy.vhr.model.StockATradeDate;
-import org.javaboy.vhr.model.StockMessageConf;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -16,7 +15,7 @@ import javax.annotation.Resource;
  */
 
 @Service
-public class StockATradeDateService extends BaseService<StockMessageConf, String> {
+public class StockATradeDateService extends BaseService<StockATradeDate, String> {
 
     @Resource
     private StockATradeDateMapper stockATradeDateMapper;

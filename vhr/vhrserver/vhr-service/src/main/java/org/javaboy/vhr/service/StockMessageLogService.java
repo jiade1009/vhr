@@ -62,22 +62,22 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
      * @param white_stocks
      * @param buy_stocks
      */
-    public void insertSignalMessages(String white_stocks, String buy_stocks) {
+    public void insertSignalMessages(String white_stocks, String buy_stocks, String flag) {
         white_stocks = StringUtils.hasLength(white_stocks)?white_stocks:"暂无数据";
         buy_stocks = StringUtils.hasLength(buy_stocks)?buy_stocks:"暂无数据";
         String content = "白色信号：" + white_stocks+"； <br/>蓝色信号：" + buy_stocks;
-        insertMessage(content, MessageType.SIGN.getIndex());
+        insertMessage(content, MessageType.SIGN.getIndex(), flag);
     }
 
-    public void insertUreturnSignalMessages(List<String> ureturn_stocks) {
+    public void insertUreturnSignalMessages(List<String> ureturn_stocks, String flag) {
         if (ureturn_stocks.size()>0) {
             String codes = String.join(",", ureturn_stocks);
             StringBuilder sbd = new StringBuilder("[").append(codes).append("]满足回头草策略，加入股票池中待购买");
-            insertMessage(sbd.toString(), MessageType.URETURNSIGN.getIndex());
+            insertMessage(sbd.toString(), MessageType.URETURNSIGN.getIndex(), flag);
         }
     }
 
-    public void insertBuyHoldMessages(List<String> hold_trade_ids) {
+    public void insertBuyHoldMessages(List<String> hold_trade_ids, String flag) {
         if (hold_trade_ids.size()>0) {
             StringBuilder sbd = new StringBuilder("");
             for (String id: hold_trade_ids) {
@@ -85,11 +85,11 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
                 sbd.append("[").append(trade.getCode()).append("]，买入价：").append(String.format("%.2f",trade.getPrice()));
                 sbd.append("，股票数：").append(trade.getAmount()).append(" <br/> ");
             }
-            insertMessage(sbd.toString(), MessageType.BUY.getIndex());
+            insertMessage(sbd.toString(), MessageType.BUY.getIndex(), flag);
         }
     }
 
-    public void insertBuyHoldResultMessages(List<String> hold_trade_ids) {
+    public void insertBuyHoldResultMessages(List<String> hold_trade_ids, String flag) {
         if (hold_trade_ids.size()>0) {
             StringBuilder sbdBuy = new StringBuilder("");
             StringBuilder sellBuy = new StringBuilder("");
@@ -110,10 +110,10 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
                 }
             }
             if (sbdBuy.length()>0) {
-                insertMessage(sbdBuy.toString(), MessageType.BUY.getIndex());
+                insertMessage(sbdBuy.toString(), MessageType.BUY.getIndex(), flag);
             }
             if (sellBuy.length()>0) {
-                insertMessage(sellBuy.toString(), MessageType.SELL.getIndex());
+                insertMessage(sellBuy.toString(), MessageType.SELL.getIndex(), flag);
             }
         }
     }
@@ -129,22 +129,22 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
         }
     }
 
-    public void insertSellHoldMessages(Integer holdTradeId) {
+    public void insertSellHoldMessages(Integer holdTradeId, String flag) {
         StringBuilder sbd = new StringBuilder("");
         StockHoldTrade trade = stockHoldTradeService.selectByPrimaryKey(holdTradeId);
         sbd.append("[").append(trade.getCode()).append("]，卖出价：").append(String.format("%.2f",trade.getPrice()));
         sbd.append("，股票数：").append(trade.getAmount());
-        insertMessage(sbd.toString(), MessageType.SELL.getIndex());
+        insertMessage(sbd.toString(), MessageType.SELL.getIndex(), flag);
     }
 
     /**
      * 插入巡检结果信息
      */
-    public void insertInspectionMessages(LinkedHashMap<CommandType, Boolean> params) {
+    public void insertInspectionMessages(LinkedHashMap<CommandType, Boolean> params, String flag) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             String json_str = mapper.writeValueAsString(params);
-            insertMessage(json_str, MessageType.INSPECTION.getIndex());
+            insertMessage(json_str, MessageType.INSPECTION.getIndex(), flag);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -154,7 +154,7 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
      * 读取所有待接收信息的消息发送配置
      * @param content
      */
-    public void insertMessage(String content, Integer messageType) {
+    public void insertMessage(String content, Integer messageType, String flag) {
         List<StockMessageConf> confList = stockMessageConfService.getListByStatus(true);
         for (StockMessageConf conf : confList) {
             String send_type = conf.getSendType();
@@ -162,13 +162,14 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
             for (int i = 0; i < send_type_arr.length; i++) {
 
                 if (send_type_arr[i].equals("1")) {
-                    String flag = String.valueOf(conf.getMessageType().charAt(messageType));
-                    if (flag.equals("1")) {
+                    String tag = String.valueOf(conf.getMessageType().charAt(messageType));
+                    if (tag.equals("1")) {
                         //接收信号
                         String msgId = UUID.randomUUID().toString();
                         StockMessageLog log = new StockMessageLog();
                         log.setMsgid(msgId);
                         log.setSendType(i);
+                        log.setFlag(flag);
                         log.setMessageType(messageType);
                         log.setEmpid(conf.getEmpid());
                         log.setExchange(MailConstants.STOCK_EXCHANGE_NAME);

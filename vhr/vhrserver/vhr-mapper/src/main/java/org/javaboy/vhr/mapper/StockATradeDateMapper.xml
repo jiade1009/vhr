@@ -15,12 +15,22 @@
     select
     <include refid="Base_Column_List" />
     from stock_a_trade_date
+    <where>
+      <if test="keywords!=null">
+        and trade_date like concat('%',#{keywords},'%')
+      </if>
+    </where>
     <if test="page !=null and size!=null">
       limit #{page},#{size}
     </if>
   </select>
   <select id="getTotal" resultType="java.lang.Long">
     select count(*) from stock_a_trade_date
+    <where>
+      <if test="keywords!=null">
+        and trade_date like concat('%',#{keywords},'%')
+      </if>
+    </where>
   </select>
   <select id="getByDate" resultMap="BaseResultMap">
     select

@@ -13,7 +13,7 @@ import org.javaboy.vhr.model.StockHold;
  */
 
 @Mapper
-public interface StockHoldMapper extends BaseMapper {
+public interface StockHoldMapper extends BaseMapper<StockHold, Integer> {
     int deleteByPrimaryKey(Integer id);
 
     int insert(StockHold record);

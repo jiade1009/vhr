@@ -66,6 +66,8 @@ public class StockMessageLog {
     // 消息内容
     private String content;
 
+    private String flag;
+
     public String getMsgid() {
         return msgid;
     }
@@ -190,5 +192,13 @@ public class StockMessageLog {
 
     public String getSendTypeNote() {
         return SendType.getName(sendType);
+    }
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
     }
 }

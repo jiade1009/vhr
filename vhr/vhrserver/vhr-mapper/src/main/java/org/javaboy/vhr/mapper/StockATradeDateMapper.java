@@ -3,7 +3,6 @@ package org.javaboy.vhr.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.javaboy.vhr.base.BaseMapper;
 import org.javaboy.vhr.model.StockATradeDate;
-import org.javaboy.vhr.model.StockMessageConf;
 
 /**
  * @ClassName   : StockATradeDateMapper
@@ -14,6 +13,6 @@ import org.javaboy.vhr.model.StockMessageConf;
  */
 
 @Mapper
-public interface StockATradeDateMapper extends BaseMapper<StockMessageConf, String> {
+public interface StockATradeDateMapper extends BaseMapper<StockATradeDate, String> {
     StockATradeDate getByDate(String date);
 }

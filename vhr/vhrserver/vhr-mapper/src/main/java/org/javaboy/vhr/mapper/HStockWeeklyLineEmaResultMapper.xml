@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.HStockWeeklyLineEmaResultMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.HStockWeeklyLineEmaResult">
+    <!--@mbg.generated-->
+    <!--@Table h_stock_weekly_line_ema_result-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
+    <result column="time_end" jdbcType="TIMESTAMP" property="timeEnd" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="status_desc" jdbcType="LONGVARCHAR" property="statusDesc" />
+    <result column="weekly_line_id" jdbcType="INTEGER" property="weeklyLineId" />
+    <result column="ema_index" jdbcType="VARCHAR" property="emaIndex" />
+    <result column="time_run_begin" jdbcType="TIMESTAMP" property="timeRunBegin" />
+    <result column="time_run_end" jdbcType="TIMESTAMP" property="timeRunEnd" />
+    <result column="run_status" jdbcType="INTEGER" property="runStatus" />
+    <result column="run_status_desc" jdbcType="LONGVARCHAR" property="runStatusDesc" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, time_create, time_end, `status`, status_desc, weekly_line_id, ema_index, time_run_begin, 
+    time_run_end, run_status, run_status_desc
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from h_stock_weekly_line_ema_result
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from h_stock_weekly_line_ema_result
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.HStockWeeklyLineEmaResult" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into h_stock_weekly_line_ema_result (time_create, time_end, `status`, 
+      status_desc, weekly_line_id, ema_index, 
+      time_run_begin, time_run_end, run_status, 
+      run_status_desc)
+    values (#{timeCreate,jdbcType=TIMESTAMP}, #{timeEnd,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
+      #{statusDesc,jdbcType=LONGVARCHAR}, #{weeklyLineId,jdbcType=INTEGER}, #{emaIndex,jdbcType=VARCHAR}, 
+      #{timeRunBegin,jdbcType=TIMESTAMP}, #{timeRunEnd,jdbcType=TIMESTAMP}, #{runStatus,jdbcType=INTEGER}, 
+      #{runStatusDesc,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.HStockWeeklyLineEmaResult">
+    <!--@mbg.generated-->
+    update h_stock_weekly_line_ema_result
+    set time_create = #{timeCreate,jdbcType=TIMESTAMP},
+      time_end = #{timeEnd,jdbcType=TIMESTAMP},
+      `status` = #{status,jdbcType=INTEGER},
+      status_desc = #{statusDesc,jdbcType=LONGVARCHAR},
+      weekly_line_id = #{weeklyLineId,jdbcType=INTEGER},
+      ema_index = #{emaIndex,jdbcType=VARCHAR},
+      time_run_begin = #{timeRunBegin,jdbcType=TIMESTAMP},
+      time_run_end = #{timeRunEnd,jdbcType=TIMESTAMP},
+      run_status = #{runStatus,jdbcType=INTEGER},
+      run_status_desc = #{runStatusDesc,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getBeanlistByWeeklyId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from h_stock_weekly_line_ema_result
+    where weekly_line_id = #{weeklyId,jdbcType=INTEGER}
+    order by time_create desc
+  </select>
+
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from h_stock_weekly_line_ema_result order by time_create desc
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from h_stock_weekly_line_ema_result
+  </select>
+</mapper>

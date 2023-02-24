@@ -1,8 +1,10 @@
 package org.javaboy.vhr.controller.stock;
 
+import org.javaboy.vhr.model.HStockSellRule;
 import org.javaboy.vhr.model.RespBean;
 import org.javaboy.vhr.model.RespPageBean;
 import org.javaboy.vhr.model.StockSellRule;
+import org.javaboy.vhr.service.HStockSellRuleService;
 import org.javaboy.vhr.service.StockSellRuleService;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,21 +20,22 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/stock/sellrule")
 public class StockSellRuleController {
     /**
      * 服务对象
      */
     @Resource
     private StockSellRuleService stockSellRuleService;
+    @Resource
+    private HStockSellRuleService hStockSellRuleService;
 
-    @GetMapping("/")
+    @GetMapping("/stock/sellrule/")
     public RespPageBean getBeanlistByPage(@RequestParam(defaultValue = "1") Integer page,
                                           @RequestParam(defaultValue = "10") Integer size) {
         return stockSellRuleService.getBeanlistByPage(page, size, "");
     }
 
-    @PostMapping("/")
+    @PostMapping("/stock/sellrule/")
     public RespBean addBean(@RequestBody StockSellRule bean) {
         Date now = new Date();
         bean.setTimeCreate(now);
@@ -44,7 +47,7 @@ public class StockSellRuleController {
         return RespBean.error("添加失败");
     }
 
-    @PutMapping("/")
+    @PutMapping("/stock/sellrule/")
     public RespBean updateBean(@RequestBody StockSellRule bean) {
         bean.setTimeUpdate(new Date());
         if (stockSellRuleService.updateByPrimaryKey(bean) == 1) {
@@ -59,7 +62,7 @@ public class StockSellRuleController {
      * @param id
      * @return
      */
-    @GetMapping("/run/{id}")
+    @GetMapping("/stock/sellrule/run/{id}")
     public RespBean runBeanById(@PathVariable Integer id) {
         if (stockSellRuleService.runRuleById(id) == 1) {
             return RespBean.ok("运行成功!");
@@ -72,7 +75,7 @@ public class StockSellRuleController {
      *
      * @return
      */
-    @GetMapping("/getDraft")
+    @GetMapping("/stock/sellrule/getDraft")
     public RespBean getDraft() {
         List<StockSellRule> list = stockSellRuleService.getBeanlistByStatus(0);
         if (list.isEmpty()) {
@@ -82,9 +85,20 @@ public class StockSellRuleController {
         }
     }
 
-    @GetMapping("/getRunning")
+    @GetMapping("/stock/sellrule/getRunning")
     public RespBean getRunning() {
         List<StockSellRule> list = stockSellRuleService.getBeanlistByStatus(1);
+        if (list.isEmpty()){
+            return RespBean.ok("运行成功!", false);
+        } else {
+            return RespBean.ok("运行成功!", list.get(0), false);
+        }
+    }
+
+    // --------H股方法定义 begin -----------
+    @GetMapping("/hstock/sellrule/getRunning")
+    public RespBean getHRunning() {
+        List<HStockSellRule> list = hStockSellRuleService.getBeanlistByStatus(1);
         if (list.isEmpty()){
             return RespBean.ok("运行成功!", false);
         } else {

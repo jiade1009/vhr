@@ -16,6 +16,7 @@
     <result column="message_type" jdbcType="INTEGER" property="messageType" />
     <result column="send_type" jdbcType="INTEGER" property="sendType" />
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="flag" jdbcType="VARCHAR" property="flag" />
   </resultMap>
 
   <resultMap id="AllBeanInfo" type="org.javaboy.vhr.model.StockMessageLog" extends="BaseResultMap">
@@ -27,18 +28,19 @@
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     msgId, empId, `status`, routeKey, exchange, `count`, time_try, time_create, time_update, 
-    message_type, send_type, content
+    message_type, send_type, content, flag
   </sql>
   <insert id="insert" parameterType="org.javaboy.vhr.model.StockMessageLog">
     <!--@mbg.generated-->
     insert into stock_message_log (msgId, empId, `status`, 
       routeKey, exchange, `count`, 
       time_try, time_create, time_update, 
-      message_type, send_type, content)
+      message_type, send_type, content, flag)
     values (#{msgid,jdbcType=VARCHAR}, #{empid,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
       #{routekey,jdbcType=VARCHAR}, #{exchange,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER}, 
       #{timeTry,jdbcType=TIMESTAMP}, #{timeCreate,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP}, 
-      #{messageType,jdbcType=INTEGER}, #{sendType,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR})
+      #{messageType,jdbcType=INTEGER}, #{sendType,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR},
+      #{flag,jdbcType=VARCHAR})
   </insert>
 
   <update id="updateStockMessageLogStatus">

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.HStockHoldMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.HStockHold">
+    <!--@mbg.generated-->
+    <!--@Table h_stock_hold-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
+    <result column="time_update" jdbcType="TIMESTAMP" property="timeUpdate" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="buy_amount" jdbcType="INTEGER" property="buyAmount" />
+    <result column="buy_price" jdbcType="FLOAT" property="buyPrice" />
+    <result column="hold_amount" jdbcType="INTEGER" property="holdAmount" />
+    <result column="sell_stage" jdbcType="INTEGER" property="sellStage" />
+    <result column="weekly_ema_result_id" jdbcType="INTEGER" property="weeklyEmaResultId" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="price_close" jdbcType="FLOAT" property="priceClose" />
+    <result column="price_high" jdbcType="FLOAT" property="priceHigh" />
+    <result column="price_low" jdbcType="FLOAT" property="priceLow" />
+    <result column="enhance_white_sign" jdbcType="BOOLEAN" property="enhanceWhiteSign" />
+    <result column="lose_enhance_white_sign" jdbcType="BOOLEAN" property="loseEnhanceWhiteSign" />
+    <result column="price_sell_high" jdbcType="FLOAT" property="priceSellHigh" />
+    <result column="price_sell_low" jdbcType="FLOAT" property="priceSellLow" />
+    <result column="close_ema_18" jdbcType="FLOAT" property="closeEma18" />
+    <result column="price_stop" jdbcType="FLOAT" property="priceStop" />
+    <result column="generate_type" jdbcType="INTEGER" property="generateType" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, code, time_create, time_update, `status`, buy_amount, buy_price, hold_amount, 
+    sell_stage, weekly_ema_result_id, note, price_close, price_high, price_low, enhance_white_sign, 
+    lose_enhance_white_sign, price_sell_high, price_sell_low, close_ema_18, price_stop, 
+    generate_type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from h_stock_hold
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from h_stock_hold
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.HStockHold" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into h_stock_hold (code, time_create, time_update, 
+      `status`, buy_amount, buy_price, 
+      hold_amount, sell_stage, weekly_ema_result_id, 
+      note, price_close, price_high, 
+      price_low, enhance_white_sign, lose_enhance_white_sign, 
+      price_sell_high, price_sell_low, close_ema_18, 
+      price_stop, generate_type)
+    values (#{code,jdbcType=VARCHAR}, #{timeCreate,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=INTEGER}, #{buyAmount,jdbcType=INTEGER}, #{buyPrice,jdbcType=FLOAT}, 
+      #{holdAmount,jdbcType=INTEGER}, #{sellStage,jdbcType=INTEGER}, #{weeklyEmaResultId,jdbcType=INTEGER}, 
+      #{note,jdbcType=VARCHAR}, #{priceClose,jdbcType=FLOAT}, #{priceHigh,jdbcType=FLOAT}, 
+      #{priceLow,jdbcType=FLOAT}, #{enhanceWhiteSign,jdbcType=BOOLEAN}, #{loseEnhanceWhiteSign,jdbcType=BOOLEAN}, 
+      #{priceSellHigh,jdbcType=FLOAT}, #{priceSellLow,jdbcType=FLOAT}, #{closeEma18,jdbcType=FLOAT}, 
+      #{priceStop,jdbcType=FLOAT}, #{generateType,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.HStockHold">
+    <!--@mbg.generated-->
+    update h_stock_hold
+    set code = #{code,jdbcType=VARCHAR},
+      time_create = #{timeCreate,jdbcType=TIMESTAMP},
+      time_update = #{timeUpdate,jdbcType=TIMESTAMP},
+      `status` = #{status,jdbcType=INTEGER},
+      buy_amount = #{buyAmount,jdbcType=INTEGER},
+      buy_price = #{buyPrice,jdbcType=FLOAT},
+      hold_amount = #{holdAmount,jdbcType=INTEGER},
+      sell_stage = #{sellStage,jdbcType=INTEGER},
+      weekly_ema_result_id = #{weeklyEmaResultId,jdbcType=INTEGER},
+      note = #{note,jdbcType=VARCHAR},
+      price_close = #{priceClose,jdbcType=FLOAT},
+      price_high = #{priceHigh,jdbcType=FLOAT},
+      price_low = #{priceLow,jdbcType=FLOAT},
+      enhance_white_sign = #{enhanceWhiteSign,jdbcType=BOOLEAN},
+      lose_enhance_white_sign = #{loseEnhanceWhiteSign,jdbcType=BOOLEAN},
+      price_sell_high = #{priceSellHigh,jdbcType=FLOAT},
+      price_sell_low = #{priceSellLow,jdbcType=FLOAT},
+      close_ema_18 = #{closeEma18,jdbcType=FLOAT},
+      price_stop = #{priceStop,jdbcType=FLOAT},
+      generate_type = #{generateType,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from h_stock_hold
+    <where>
+      <if test="keywords!=null">
+        and code like concat('%',#{keywords},'%')
+      </if>
+    </where>
+    order by time_create desc, id desc
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from h_stock_hold
+    <where>
+      <if test="keywords!=null">
+        and code like concat('%',#{keywords},'%')
+      </if>
+    </where>
+  </select>
+</mapper>

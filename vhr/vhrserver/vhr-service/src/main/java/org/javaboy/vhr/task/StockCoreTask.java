@@ -40,9 +40,15 @@ public class StockCoreTask {
     @Resource
     private StockATradeDateService stockATradeDateService;
     @Resource
+    private HStockTradeDateService hStockTradeDateService;
+    @Resource
     private StockWeeklyLineResultService stockWeeklyLineResultService;
     @Resource
+    private HStockWeeklyLineResultService hStockWeeklyLineResultService;
+    @Resource
     private StockWeeklyLineEmaResultService stockWeeklyLineEmaResultService;
+    @Resource
+    private HStockWeeklyLineEmaResultService hStockWeeklyLineEmaResultService;
     @Resource
     private StockExecuteResultService stockExecuteResultService;
     @Resource
@@ -54,9 +60,9 @@ public class StockCoreTask {
     @Async("stockCoreAsync")
     @Scheduled(cron = "${task.cron.StockCore.weekly}")
     public void weekly() {
-        StockATradeDate tradeDate = getTodayTradeDate();
+        String tradeDate = getTodayTradeDate("A");
         if (tradeDate!=null) { //当天为股票交易日
-            LOGGER.info(".............开始【{}】的周线数据下载..............", tradeDate.getTradeDate());
+            LOGGER.info(".............开始A股【{}】的周线数据下载..............", tradeDate);
             // 传递2个参数{"操作指令:生成周线", "操作方式：0手动，1自动"}
             execPython.runPython(new String[]{BaseConstants.PY_API_CREATE_A_WEEKLY, "1"});
 
@@ -65,6 +71,19 @@ public class StockCoreTask {
             ops1.set(BaseConstants.OPE_STOCK_CREATE_A_WEEKLY, "true");
         } else {
             LOGGER.debug("今天不是A股股票交易日，不生成周线数据");
+        }
+    }
+
+    @Async("stockCoreAsync")
+    @Scheduled(cron = "${task.cron.StockCore.h_weekly}")
+    public void hWeekly() {
+        String tradeDate = getTodayTradeDate("H");
+        if (tradeDate!=null) { //当天为股票交易日
+            LOGGER.info(".............开始H股【{}】的周线数据下载..............", tradeDate);
+            // 传递2个参数{"操作指令:生成周线", "操作方式：0手动，1自动"}
+            execPython.runPython(new String[]{BaseConstants.PY_API_CREATE_H_WEEKLY, "1"});
+        } else {
+            LOGGER.debug("今天不是H股股票交易日，不生成周线数据");
         }
     }
 
@@ -78,10 +97,10 @@ public class StockCoreTask {
     @Async("stockCoreAsync")
     @Scheduled(cron = "${task.cron.StockCore.buyrule}")
     public void buyrule() {
-        StockATradeDate tradeDate = getTodayTradeDate();
+        String tradeDate = getTodayTradeDate("A");
         if (tradeDate!=null) { //当天为股票交易日
-            LOGGER.info(".............开始【{}】的买入策略的运行..............", tradeDate.getTradeDate());
-            String searchDate = tradeDate.getTradeDate().replace("-", "");
+            LOGGER.info(".............开始A股【{}】的买入策略的运行..............", tradeDate);
+            String searchDate = tradeDate.replace("-", "");
             boolean already = false;
             Integer time = 0;
             //判断是否已经生成今天的周线和ema数据，即自动生成，且ema结果为成功生成的周线
@@ -109,6 +128,39 @@ public class StockCoreTask {
         }
     }
 
+    @Async("stockCoreAsync")
+    @Scheduled(cron = "${task.cron.StockCore.h_buyrule}")
+    public void hBuyrule() {
+        String tradeDate = getTodayTradeDate("H");
+        if (tradeDate!=null) { //当天为股票交易日
+            LOGGER.info(".............开始H股【{}】的买入策略的运行..............", tradeDate);
+            String searchDate = tradeDate.replace("-", "");
+            boolean already = false;
+            Integer time = 0;
+            //判断是否已经生成今天的周线和ema数据，即自动生成，且ema结果为成功生成的周线
+            List<HStockWeeklyLineResult> weeklyList = null;
+            while (!already && time<90) {
+                weeklyList = hStockWeeklyLineResultService.getBeanListByPro(searchDate, 1, 1);
+                if (weeklyList != null && weeklyList.size()>0) {
+                    already = true;
+                } else {
+                    try {
+                        time ++;
+                        LOGGER.info("time:{}", String.valueOf(time));
+                        Thread.sleep(60000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            if (weeklyList!=null && weeklyList.size()>0) {
+                List<HStockWeeklyLineEmaResult> emaList = hStockWeeklyLineEmaResultService.getBeanlistByWeeklyId(weeklyList.get(0).getId());
+                execPython.runPython(new String[]{BaseConstants.PY_API_RUN_H_BUY_RULE, String.valueOf(emaList.get(0).getId())});
+            }
+        } else {
+            LOGGER.debug("今天不是H股股票交易日，不运行买入策略命令");
+        }
+    }
 
     /**
      * 回头草策略运行
@@ -116,10 +168,10 @@ public class StockCoreTask {
     @Async("stockCoreAsync")
     @Scheduled(cron = "${task.cron.StockCore.uturnrule}")
     public void uTurnRule() {
-        StockATradeDate tradeDate = getTodayTradeDate();
+        String tradeDate = getTodayTradeDate("A");
         if (tradeDate!=null) { //当天为股票交易日
-            LOGGER.info(".............开始【{}】的回头草策略的运行..............", tradeDate.getTradeDate());
-            String searchDate = tradeDate.getTradeDate().replace("-", "");
+            LOGGER.info(".............开始A股【{}】的回头草策略的运行..............", tradeDate);
+            String searchDate = tradeDate.replace("-", "");
             boolean already = false;
             Integer time = 0;
             //判断是否已经生成今天的周线和ema数据，即自动生成，且ema结果为成功生成的周线
@@ -146,14 +198,50 @@ public class StockCoreTask {
         }
     }
 
+    /**
+     * 回头草策略运行
+     */
+    @Async("stockCoreAsync")
+    @Scheduled(cron = "${task.cron.StockCore.h_uturnrule}")
+    public void hUTurnRule() {
+        String tradeDate = getTodayTradeDate("H");
+        if (tradeDate!=null) { //当天为股票交易日
+            LOGGER.info(".............开始H股【{}】的回头草策略的运行..............", tradeDate);
+            String searchDate = tradeDate.replace("-", "");
+            boolean already = false;
+            Integer time = 0;
+            //判断是否已经生成今天的周线和ema数据，即自动生成，且ema结果为成功生成的周线
+            List<HStockWeeklyLineResult> weeklyList = null;
+            while (!already && time<90) {
+                weeklyList = hStockWeeklyLineResultService.getBeanListByPro(searchDate, 1, 1);
+                if (weeklyList != null && weeklyList.size()>0) {
+                    already = true;
+                } else {
+                    try {
+                        time ++;
+                        LOGGER.info("time:{}", String.valueOf(time));
+                        Thread.sleep(60000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            if (weeklyList!=null && weeklyList.size()>0) {
+                execPython.runPython(new String[]{BaseConstants.PY_API_RUN_H_UTURN_RULE});
+            }
+        } else {
+            LOGGER.debug("今天不是H股股票交易日，不运行回头草策略命令");
+        }
+    }
+
     @Async("stockCoreAsync")
     @Scheduled(cron = "${task.cron.StockCore.buy}")
     public void buy() {
         DatabaseType vo = databaseTypeService.getByCode("stk_auto_order");
         if (vo.getValue().equals("1")) { //开启自动下单
-            StockATradeDate tradeDate = getTodayTradeDate();
+            String tradeDate = getTodayTradeDate("A");
             if (tradeDate!=null) { //当天为股票交易日
-                LOGGER.info(".............开始【{}】的买入股票的运行..............", tradeDate.getTradeDate());
+                LOGGER.info(".............开始A股【{}】的买入股票的运行..............", tradeDate);
 //            传递stock_hold_id 如果为0，则查询所有的股票池数据
                 execPython.runPython(new String[]{BaseConstants.PY_API_RUN_A_BUY, "0"});
             } else {
@@ -182,19 +270,20 @@ public class StockCoreTask {
     }
 
     private void orderQueryTask() {
-        StockATradeDate tradeDate = getTodayTradeDate();
+        String tradeDate = getTodayTradeDate("A");
         if (tradeDate!=null) { //当天为股票交易日
-            LOGGER.info(".............开始【{}】的股票交易结果查询的运行..............", tradeDate.getTradeDate());
+            LOGGER.info(".............开始A股【{}】的股票交易结果查询的运行..............", tradeDate);
             execPython.runPython(new String[]{BaseConstants.PY_API_RUN_A_ORDER_QUERY});
         } else {
             LOGGER.debug("今天不是A股股票交易日，不运行股票交易结果查询命令");
         }
     }
 
+//    暂停执行A股代码的更新操作
     @Async("stockCoreAsync")
-    @Scheduled(cron = "${task.cron.StockCore.stockCodeUpdate}")
+//    @Scheduled(cron = "${task.cron.StockCore.stockCodeUpdate}")
     public void stockCodeUpdate() {
-        LOGGER.info(".............开始股票代码的更新..............");
+        LOGGER.info(".............开始A股股票代码的更新..............");
         execPython.runPython(new String[]{BaseConstants.PY_API_LOAD_A_STOCK});
     }
 
@@ -207,9 +296,24 @@ public class StockCoreTask {
         ops1.set(BaseConstants.OPE_STOCK_CREATE_A_WEEKLY, "false");
     }
 
-    private StockATradeDate getTodayTradeDate() {
+    private String getTodayTradeDate(String flag) {
         String now = DateUtils.formatDate(new Date(), DateUtils.yyyy_MM_dd);
-        return stockATradeDateService.getByDate(now);
+        if (flag.equals("A")) {
+            StockATradeDate bean = stockATradeDateService.getByDate(now);
+            if (bean==null) {
+                return null;
+            } else {
+                return bean.getTradeDate();
+            }
+        } else {
+            HStockTradeDate bean = hStockTradeDateService.getByDate(now);
+            if (bean==null) {
+                return null;
+            } else {
+                return bean.getTradeDate();
+            }
+        }
+
     }
 
     /**
@@ -232,9 +336,9 @@ public class StockCoreTask {
     }
 
     private void sellTask() {
-        StockATradeDate tradeDate = getTodayTradeDate();
+        String tradeDate = getTodayTradeDate("A");
         if (tradeDate!=null) { //当天为股票交易日
-            LOGGER.info(".............开始【{}】的卖出股票的运行..............", tradeDate.getTradeDate());
+            LOGGER.info(".............开始A股【{}】的卖出股票的运行..............", tradeDate);
             execPython.runPython(new String[]{BaseConstants.PY_API_RUN_A_SELL});
         } else {
             LOGGER.debug("今天不是A股股票交易日，不运行卖出股票命令");
@@ -261,9 +365,9 @@ public class StockCoreTask {
     }
 
     private void revokeQueryTask() {
-        StockATradeDate tradeDate = getTodayTradeDate();
+        String tradeDate = getTodayTradeDate("A");
         if (tradeDate!=null) { //当天为股票交易日
-            LOGGER.info(".............开始【{}】的股票撤销交易查询的运行..............", tradeDate.getTradeDate());
+            LOGGER.info(".............开始A股【{}】的股票撤销交易查询的运行..............", tradeDate);
             execPython.runPython(new String[]{BaseConstants.PY_API_RUN_A_REVOKE_QUERY});
         } else {
             LOGGER.debug("今天不是A股股票交易日，不运行股票撤销交易查询命令");
@@ -275,7 +379,7 @@ public class StockCoreTask {
     @Async("stockCoreAsync")
     @Scheduled(cron = "${task.cron.StockCore.dailyRefresh}")
     public void dailyRefresh() {
-        StockATradeDate tradeDate = getTodayTradeDate();
+        String tradeDate = getTodayTradeDate("A");
         String now = DateUtils.formatDate(new Date(), DateUtils.yyyyMMdd);
         if (tradeDate!=null) { //当天为股票交易日
             boolean already = false;
@@ -284,7 +388,7 @@ public class StockCoreTask {
                 //今天的ema数据是否已经生成
                 List<StockExecuteResult> list = stockExecuteResultService.getBeanlistByCommand(CommandType.WEEKLY_EMA.name(), now);
                 if (list.size()>0) {
-                    LOGGER.info(".............开始【{}】的收盘股票信息更新的运行..............", tradeDate.getTradeDate());
+                    LOGGER.info(".............开始A股【{}】的收盘股票信息更新的运行..............", tradeDate);
                     already = true;
                 } else {
                     try {
@@ -310,10 +414,10 @@ public class StockCoreTask {
     @Async("stockCoreAsync")
     @Scheduled(cron = "${task.cron.StockCore.cjcx}")
     public void cjcx() {
-        StockATradeDate tradeDate = getTodayTradeDate();
+        String tradeDate = getTodayTradeDate("A");
         String now = DateUtils.formatDate(new Date(), DateUtils.yyyyMMdd);
         if (tradeDate!=null) { //当天为股票交易日
-            LOGGER.info(".............开始【{}】的股票成交结果信息查询的运行..............", tradeDate.getTradeDate());
+            LOGGER.info(".............开始A股【{}】的股票成交结果信息查询的运行..............", tradeDate);
             execPython.runPython(new String[]{BaseConstants.PY_API_RUN_A_CJCX, now});
         } else {
             LOGGER.debug("今天不是A股股票交易日，不运行股票成交结果信息查询命令");
@@ -328,57 +432,68 @@ public class StockCoreTask {
     @Async("stockCoreAsync")
     @Scheduled(cron = "${task.cron.StockCore.inspection}")
     public void inspection() {
-        StockATradeDate tradeDate = getTodayTradeDate();
+        inspectionA();
+        inspectionH();
+    }
+
+    /**
+     * A股巡检
+     */
+    public void inspectionA() {
+        String tradeDate = getTodayTradeDate("A");
         String now = DateUtils.formatDate(new Date(), DateUtils.yyyyMMdd);
         if (tradeDate!=null) { //当天为股票交易日
-            LOGGER.info(".............开始【{}】的巡检查询..............", tradeDate.getTradeDate());
+            LOGGER.info(".............开始A股【{}】的巡检查询..............", tradeDate);
             LinkedHashMap<CommandType, Boolean> params = new LinkedHashMap();
             //今天的weekly数据是否已经生成
-            List<StockExecuteResult> weekly_list = stockExecuteResultService.getBeanlistByCommand(CommandType.WEEKLY.name(), now);
-            if (weekly_list.size()>0) {
-                params.put(CommandType.WEEKLY, true);
-            } else {
-                params.put(CommandType.WEEKLY, false);
-            }
+            params.put(CommandType.WEEKLY, getExecuteResult(CommandType.WEEKLY, now));
             //今天的ema数据是否已经生成
-            List<StockExecuteResult> ema_list = stockExecuteResultService.getBeanlistByCommand(CommandType.WEEKLY_EMA.name(), now);
-            if (ema_list.size()>0) {
-                params.put(CommandType.WEEKLY_EMA, true);
-            } else {
-                params.put(CommandType.WEEKLY_EMA, false);
-            }
+            params.put(CommandType.WEEKLY_EMA, getExecuteResult(CommandType.WEEKLY_EMA, now));
             //今天的买入策略的运行结果数据是否已经生成
-            List<StockExecuteResult> buy_rule_run_list = stockExecuteResultService.getBeanlistByCommand(CommandType.BUY_RULE.name(), now);
-            if (buy_rule_run_list.size()>0) {
-                params.put(CommandType.BUY_RULE, true);
-            } else {
-                params.put(CommandType.BUY_RULE, false);
-            }
+            params.put(CommandType.BUY_RULE, getExecuteResult(CommandType.BUY_RULE, now));
             //今天的回头草策略的运行结果数据是否已经生成
-            List<StockExecuteResult> u_return_run_list = stockExecuteResultService.getBeanlistByCommand(CommandType.U_RETURN_RUN.name(), now);
-            if (u_return_run_list.size()>0) {
-                params.put(CommandType.U_RETURN_RUN, true);
-            } else {
-                params.put(CommandType.U_RETURN_RUN, false);
-            }
+            params.put(CommandType.U_RETURN_RUN, getExecuteResult(CommandType.U_RETURN_RUN, now));
             //今天的收盘信息数据是否已经更新
-            List<StockExecuteResult> daily_list = stockExecuteResultService.getBeanlistByCommand(CommandType.DAILY_REFRESH.name(), now);
-            if (daily_list.size()>0) {
-                params.put(CommandType.DAILY_REFRESH, true);
-            } else {
-                params.put(CommandType.DAILY_REFRESH, false);
-            }
+            params.put(CommandType.DAILY_REFRESH, getExecuteResult(CommandType.DAILY_REFRESH, now));
             //今天的成交记录是否已经更新
-            List<StockExecuteResult> cjcx_list = stockExecuteResultService.getBeanlistByCommand(CommandType.CJCX.name(), now);
-            if (cjcx_list.size()>0) {
-                params.put(CommandType.CJCX, true);
-            } else {
-                params.put(CommandType.CJCX, false);
-            }
-
-            stockMessageLogService.insertInspectionMessages(params);
+            params.put(CommandType.CJCX, getExecuteResult(CommandType.CJCX, now));
+            stockMessageLogService.insertInspectionMessages(params, "A");
         } else {
             LOGGER.debug("今天不是A股股票交易日，不运行巡检操作");
+        }
+    }
+
+    /**
+     * H股巡检
+     */
+    public void inspectionH() {
+        String tradeDate = getTodayTradeDate("H");
+        String now = DateUtils.formatDate(new Date(), DateUtils.yyyyMMdd);
+        if (tradeDate!=null) { //当天为股票交易日
+            LOGGER.info(".............开始H股【{}】的巡检查询..............", tradeDate);
+            LinkedHashMap<CommandType, Boolean> params = new LinkedHashMap();
+            //今天的weekly数据是否已经生成
+            params.put(CommandType.H_WEEKLY, getExecuteResult(CommandType.H_WEEKLY, now));
+            //今天的ema数据是否已经生成
+            params.put(CommandType.H_WEEKLY_EMA, getExecuteResult(CommandType.H_WEEKLY_EMA, now));
+            //今天的买入策略的运行结果数据是否已经生成
+            params.put(CommandType.H_BUY_RULE, getExecuteResult(CommandType.H_BUY_RULE, now));
+            //今天的回头草策略的运行结果数据是否已经生成
+            params.put(CommandType.H_U_RETURN_RUN, getExecuteResult(CommandType.H_U_RETURN_RUN, now));
+
+            stockMessageLogService.insertInspectionMessages(params, "H");
+        } else {
+            LOGGER.debug("今天不是H股股票交易日，不运行巡检操作");
+        }
+    }
+
+    private boolean getExecuteResult(CommandType commandType, String now) {
+        //今天的成交记录是否已经更新
+        List<StockExecuteResult> cjcx_list = stockExecuteResultService.getBeanlistByCommand(commandType.name(), now);
+        if (cjcx_list.size()>0) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

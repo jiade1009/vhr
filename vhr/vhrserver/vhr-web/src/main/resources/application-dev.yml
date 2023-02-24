@@ -91,12 +91,15 @@ task:
     StockCore:
       # 每周一到周五的15:30 周线数据生成
       weekly: 0 30 15 ? * MON-FRI
+      h_weekly: 0 30 16 ? * MON-FRI
       # weekly: 0 0/1 * ? * MON-FRI
       # 买入策略运行
       buyrule: 0 0 16 ? * MON-FRI
+      h_buyrule: 0 0 17 ? * MON-FRI
       # buyrule: 0 0/2 * ? * MON-FRI
       # 回头草策略运行
       uturnrule: 0 30 16 ? * MON-FRI
+      h_uturnrule: 0 30 17 ? * MON-FRI
       # 买入操作
       buy: 0 31 9 ? * MON-FRI
       # 卖出操作

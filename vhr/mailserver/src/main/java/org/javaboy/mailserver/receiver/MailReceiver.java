@@ -101,9 +101,13 @@ public class MailReceiver {
         // 根据messageType判断进行不同的内容发送，0信号发现、1买入、2卖出
         MessageType messageType = bean.getMessageType();
         Integer sendType = bean.getSendType();  //（0短信、1邮件、2微信服务通知）
+        String flag = bean.getFlag();
         if (sendType == 1) {
 //            String title = "股票信号发现";
             String title = messageType.getName();
+            if (!(flag == null || flag.trim().equals(""))) {
+                title = flag + "股" + title;
+            }
             String content = bean.getContent();
             if (messageType == MessageType.INSPECTION) {
                 ObjectMapper mapper = new ObjectMapper();
@@ -111,9 +115,9 @@ public class MailReceiver {
                 StringBuilder sbd = new StringBuilder("");
                 for (Object key : map.keySet()) {
                     CommandType type = CommandType.valueOf((String)key);
-                    Boolean flag = (Boolean) map.get(key);
+                    Boolean b = (Boolean) map.get(key);
                     sbd.append("【" + type.getCommandDesc() + "】");
-                    if (flag) {
+                    if (b) {
                         sbd.append("脚本命令已执行<br/>");
                     } else {
                         sbd.append("脚本命令暂未执行<br/>");
