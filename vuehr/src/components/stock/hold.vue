@@ -133,12 +133,14 @@
             :key="column.prop"
             :prop="column.prop"
             :label="column.label"
-            :formatter="columnFormat"
             align="left">
           <template slot-scope="scope">
             <div v-if="column.prop == 'code' && flag == 'stock'">
               <span v-html="xbFormatter(scope.row.code, scope.column.property)"></span>
 <!--              //将表格数据格式化后，再用 template + v-html 展示出来-->
+            </div>
+            <div v-else-if="column.prop == 'generateType'">
+              {{scope.row[scope.column.property]==0?"直接加入":"回头草"}}
             </div>
             <div v-else>
               {{ scope.row[scope.column.property] }}

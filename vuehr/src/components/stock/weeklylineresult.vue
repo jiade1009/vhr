@@ -110,11 +110,16 @@
             :formatter="formatterText"
             align="left">
         </el-table-column>
-        <el-table-column
-            prop="resultDesc"
-            label="备注"
-            min-width="300"
-            align="left">
+        <el-table-column label="备注" prop="resultDesc">
+          <template slot-scope='scope'>
+            <el-popover
+                placement="top-start"
+                width="500"
+                trigger="hover">
+              <span>{{scope.row.resultDesc}}</span>
+              <span slot="reference">{{scope.row.resultDesc.substr(1,20) + '...'}}</span>
+            </el-popover>
+          </template>
         </el-table-column>
         <el-table-column
             prop="generateType"

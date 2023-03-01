@@ -28,12 +28,16 @@ public enum CommandType {
         String desc = "";
         switch (this) {
             case H_WEEKLY:
+                desc = "H股周线数据生成";
+                break;
             case WEEKLY:
-                desc = "周线数据生成";
+                desc = "A股周线数据生成";
                 break;
             case H_WEEKLY_EMA:
+                desc = "H股ema数据生成";
+                break;
             case WEEKLY_EMA:
-                desc = "ema数据生成";
+                desc = "A股ema数据生成";
                 break;
             case DAILY_REFRESH:
                 desc = "收盘数据更新";
@@ -42,8 +46,10 @@ public enum CommandType {
                 desc = "每日开盘买入";
                 break;
             case H_BUY_RULE:
+                desc = "H股买入策略运行";
+                break;
             case BUY_RULE:
-                desc = "买入策略运行";
+                desc = "A股买入策略运行";
                 break;
             case CODE_REFRESH:
                 desc = "股票代码刷新";
@@ -55,8 +61,10 @@ public enum CommandType {
                 desc = "成交信息查询";
                 break;
             case H_U_RETURN_RUN:
+                desc = "H股回头草策略运行";
+                break;
             case U_RETURN_RUN:
-                desc = "回头草策略运行";
+                desc = "A股回头草策略运行";
                 break;
         }
         return desc;
