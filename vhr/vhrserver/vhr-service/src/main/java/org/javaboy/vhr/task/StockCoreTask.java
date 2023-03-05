@@ -457,6 +457,10 @@ public class StockCoreTask {
             params.put(CommandType.DAILY_REFRESH, getExecuteResult(CommandType.DAILY_REFRESH, now));
             //今天的成交记录是否已经更新
             params.put(CommandType.CJCX, getExecuteResult(CommandType.CJCX, now));
+            //今天的盈亏计算是否已经更新
+            params.put(CommandType.PROFIT, getExecuteResult(CommandType.PROFIT, now));
+            //今天的总盈亏计算是否已经更新
+            params.put(CommandType.PROFIT_TOTAL, getExecuteResult(CommandType.PROFIT_TOTAL, now));
             stockMessageLogService.insertInspectionMessages(params, "A");
         } else {
             LOGGER.debug("今天不是A股股票交易日，不运行巡检操作");

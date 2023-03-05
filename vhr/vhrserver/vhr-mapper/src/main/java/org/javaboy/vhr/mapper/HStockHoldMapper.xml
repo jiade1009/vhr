@@ -95,8 +95,11 @@
       <if test="keywords!=null">
         and code like concat('%',#{keywords},'%')
       </if>
+      <if test="status!=null">
+        and status = #{status, jdbcType=INTEGER}
+      </if>
     </where>
-    order by time_create desc, id desc
+    order by status asc, time_create desc, id desc
     <if test="page !=null and size!=null">
       limit #{page},#{size}
     </if>
@@ -106,6 +109,9 @@
     <where>
       <if test="keywords!=null">
         and code like concat('%',#{keywords},'%')
+      </if>
+      <if test="status!=null">
+        and status = #{status, jdbcType=INTEGER}
       </if>
     </where>
   </select>

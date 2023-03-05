@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.StockProfitTotalMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.StockProfitTotal">
+    <!--@mbg.generated-->
+    <!--@Table stock_profit_total-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="date_research" jdbcType="VARCHAR" property="dateResearch" />
+    <result column="total" jdbcType="FLOAT" property="total" />
+    <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
+    <result column="profit" jdbcType="FLOAT" property="profit" />
+    <result column="profit_rate" jdbcType="FLOAT" property="profitRate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, date_research, total, time_create, profit, profit_rate
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from stock_profit_total
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from stock_profit_total
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockProfitTotal" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into stock_profit_total (date_research, total, time_create, 
+      profit, profit_rate)
+    values (#{dateResearch,jdbcType=VARCHAR}, #{total,jdbcType=FLOAT}, #{timeCreate,jdbcType=TIMESTAMP}, 
+      #{profit,jdbcType=FLOAT}, #{profitRate,jdbcType=FLOAT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockProfitTotal">
+    <!--@mbg.generated-->
+    update stock_profit_total
+    set date_research = #{dateResearch,jdbcType=VARCHAR},
+      total = #{total,jdbcType=FLOAT},
+      time_create = #{timeCreate,jdbcType=TIMESTAMP},
+      profit = #{profit,jdbcType=FLOAT},
+      profit_rate = #{profitRate,jdbcType=FLOAT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_profit_total order by date_research desc
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from stock_profit_total
+  </select>
+
+  <select id="getLatest" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_profit_total order by date_research desc limit 1
+  </select>
+
+  <select id="getTotalProfit" resultType="java.lang.Double">
+    select sum(profit)  from stock_profit_total
+  </select>
+</mapper>

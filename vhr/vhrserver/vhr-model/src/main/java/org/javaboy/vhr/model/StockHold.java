@@ -108,6 +108,14 @@ public class StockHold {
      * 加入方式，0直接，1回头草
      */
     private Integer generateType;
+    /**
+     * 买入总金额
+     */
+    private Double buyTotal;
+    /**
+     * 买入手续费
+     */
+    private Double buyFee;
 
     public Integer getId() {
         return id;
@@ -279,5 +287,21 @@ public class StockHold {
 
     public void setGenerateType(Integer generateType) {
         this.generateType = generateType;
+    }
+
+    public Double getBuyTotal() {
+        return buyTotal;
+    }
+
+    public void setBuyTotal(Double buyTotal) {
+        this.buyTotal = buyTotal;
+    }
+
+    public Double getBuyFee() {
+        return buyFee;
+    }
+
+    public void setBuyFee(Double buyFee) {
+        this.buyFee = buyFee;
     }
 }

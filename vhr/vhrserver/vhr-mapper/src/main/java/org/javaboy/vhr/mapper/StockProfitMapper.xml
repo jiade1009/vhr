@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.StockProfitMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.StockProfit">
+    <!--@mbg.generated-->
+    <!--@Table stock_profit-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="hold_id" jdbcType="INTEGER" property="holdId" />
+    <result column="date_research" jdbcType="VARCHAR" property="dateResearch" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="price_close" jdbcType="FLOAT" property="priceClose" />
+    <result column="amount_hold" jdbcType="INTEGER" property="amountHold" />
+    <result column="total" jdbcType="FLOAT" property="total" />
+    <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
+    <result column="profit" jdbcType="FLOAT" property="profit" />
+    <result column="profit_rate" jdbcType="FLOAT" property="profitRate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, hold_id, date_research, code, price_close, amount_hold, total, time_create, profit, 
+    profit_rate
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from stock_profit
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from stock_profit
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockProfit" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into stock_profit (hold_id, date_research, code, 
+      price_close, amount_hold, total, 
+      time_create, profit, profit_rate
+      )
+    values (#{holdId,jdbcType=INTEGER}, #{dateResearch,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      #{priceClose,jdbcType=FLOAT}, #{amountHold,jdbcType=INTEGER}, #{total,jdbcType=FLOAT}, 
+      #{timeCreate,jdbcType=TIMESTAMP}, #{profit,jdbcType=FLOAT}, #{profitRate,jdbcType=FLOAT}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockProfit">
+    <!--@mbg.generated-->
+    update stock_profit
+    set hold_id = #{holdId,jdbcType=INTEGER},
+      date_research = #{dateResearch,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      price_close = #{priceClose,jdbcType=FLOAT},
+      amount_hold = #{amountHold,jdbcType=INTEGER},
+      total = #{total,jdbcType=FLOAT},
+      time_create = #{timeCreate,jdbcType=TIMESTAMP},
+      profit = #{profit,jdbcType=FLOAT},
+      profit_rate = #{profitRate,jdbcType=FLOAT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_profit
+    <where>
+      <if test="keywords!=null">
+        and code like concat('%',#{keywords},'%')
+      </if>
+    </where>
+    order by date_research desc
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from stock_profit
+    <where>
+      <if test="keywords!=null">
+        and code like concat('%',#{keywords},'%')
+      </if>
+    </where>
+  </select>
+</mapper>

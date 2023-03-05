@@ -75,7 +75,6 @@ export default {
       } else if (row["profitLoss"]<0) {
         return 'loss-row';
       }
-      return '';
     },
     tableCellClassName({row, column, rowIndex, columnIndex}) {
       let property = column.property;

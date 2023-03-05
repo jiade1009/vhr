@@ -18,6 +18,8 @@ public enum CommandType {
     TRADE_DATE,  // 交易日数据更新
     CJCX,  // 收盘股票成交信息查询
     U_RETURN_RUN,  //  回头草策略运行
+    PROFIT,  // 股票收益计算
+    PROFIT_TOTAL,  // 股票总收益计算
     //  H股相关指令
     H_WEEKLY, //周线数据下载
     H_WEEKLY_EMA, //ema数据生成
@@ -65,6 +67,12 @@ public enum CommandType {
                 break;
             case U_RETURN_RUN:
                 desc = "A股回头草策略运行";
+                break;
+            case PROFIT:
+                desc = "A股股票盈亏";
+                break;
+            case PROFIT_TOTAL:
+                desc = "A股总盈亏";
                 break;
         }
         return desc;

@@ -2,7 +2,9 @@
     <div>
         <el-container>
             <el-header class="homeHeader">
-                <div class="title">纯阳系统V2.0</div>
+                <div class="title" @click="home">
+                  纯阳系统V2.0
+                </div>
                 <div>
                     <el-button icon="el-icon-bell" type="text" style="margin-right: 8px;color: #000000;" size="normal" @click="goChat"></el-button>
                     <el-dropdown class="userInfo" @command="commandHandler">
@@ -36,8 +38,46 @@
                         <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
                         <el-breadcrumb-item>{{this.$router.currentRoute.name}}</el-breadcrumb-item>
                     </el-breadcrumb>
-                    <div class="homeWelcome" v-if="this.$router.currentRoute.path=='/home'">
-                        欢迎来到成吉思汗基金GHK！
+
+                    <div v-if="this.$router.currentRoute.path=='/home'">
+                      <div>
+                        <p>统计日期：{{ bean.dateResearch }}</p>
+                      </div>
+                      <div class="demo-block">
+                        <el-row :gutter="20">
+                        <el-col :span="6">
+                          <div>
+                            <el-statistic group-separator="," :precision="2" decimal-separator="." :value="bean.total" title="总市值">
+                              <template slot="prefix">
+                                <i class="el-icon-s-flag" style="color: red"></i>
+                              </template>
+                            </el-statistic>
+                          </div>
+                        </el-col>
+                        <el-col :span="6">
+                          <div>
+                            <el-statistic group-separator="," :precision="2" decimal-separator="."
+                                          :value-style="{ color: s_color_totalProfit }" :value="bean.totalProfit" title="总浮动盈亏">
+                            </el-statistic>
+                          </div>
+                        </el-col>
+                        <el-col :span="6">
+                          <div>
+                            <el-statistic group-separator="," :precision="2" decimal-separator="."
+                                          :value-style="{ color: s_color_profit }" :value="bean.profit" title="当日盈亏">
+                            </el-statistic>
+                          </div>
+                        </el-col>
+                        <el-col :span="6">
+                          <div>
+                            <el-statistic group-separator="," :precision="2" decimal-separator="."
+                                          :value-style="{ color: s_color_totalProfit }" :value="bean.profitRate*100" title="当日盈亏率">
+                              <template slot="suffix"> % </template>
+                            </el-statistic>
+                          </div>
+                        </el-col>
+                      </el-row>
+                      </div>
                     </div>
                     <router-view class="homeRouterView"/>
                 </el-main>
@@ -54,6 +94,16 @@
             return {
               userface: this.$ELEMENT.userface,
                 // user: JSON.parse(window.sessionStorage.getItem("user"))
+              bean: {
+                dateResearch: '20200101',
+                profit: 0,
+                profitRate: 0,
+                total: 0,
+                totalProfit: 0
+              },
+              s_color_totalProfit: 'red',
+              s_color_profit: 'red',
+              s_color_profitRate: 'red',
             }
         },
         computed: {
@@ -67,8 +117,30 @@
         beforeMount() {
         },
         mounted() {
+          this.initData();
         },
       methods: {
+            initData() {
+              this.getRequest('/stock/profittotal/latest').then(resp =>{
+                if (resp) {
+                  let o = resp.obj
+                  if (o) { // 存在正在运行的卖出策略
+                    // o.total = o.total.toFixed(2);
+                    // o.totalProfit = o.totalProfit.toFixed(2);
+                    // o.profit = o.profit.toFixed(2);
+                    // o.profitRate = o.profitRate.toFixed(4);
+                    if (o.totalProfit<0) this.s_color_totalProfit='green';
+                    if (o.profit<0) this.s_color_profit='green';
+                    if (o.profitRate<0) this.s_color_profitRate='green';
+                    this.bean = o;
+                    console.log(this.bean);
+                  }
+                }
+              });
+            },
+            home() {
+              this.$router.push("/home");
+            },
             goChat() {
                 this.$router.push("/chat");
             },
@@ -122,7 +194,8 @@
     .homeHeader .title {
         font-size: 30px;
         font-family: 华文行楷;
-        color: #ffffff
+        color: #ffffff;
+        cursor: pointer;
     }
 
     .homeHeader .userInfo {
@@ -139,5 +212,13 @@
     .el-dropdown-link {
         display: flex;
         align-items: center;
+    }
+    .demo-block {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #ebebeb;
+      border-radius: 3px;
+      transition: .2s;
+      padding: 24px;
     }
 </style>

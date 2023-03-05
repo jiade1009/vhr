@@ -25,12 +25,15 @@
     <result column="close_ema_18" jdbcType="FLOAT" property="closeEma18" />
     <result column="price_stop" jdbcType="FLOAT" property="priceStop" />
     <result column="generate_type" jdbcType="INTEGER" property="generateType" />
+    <result column="buy_total" jdbcType="FLOAT" property="buyTotal" />
+    <result column="buy_fee" jdbcType="FLOAT" property="buyFee" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, code, time_create, time_update, `status`, buy_amount, buy_price, hold_amount, 
     sell_stage, weekly_ema_result_id, note, price_close, price_high, price_low, enhance_white_sign, 
-    lose_enhance_white_sign, price_sell_high, price_sell_low, close_ema_18, price_stop, generate_type
+    lose_enhance_white_sign, price_sell_high, price_sell_low, close_ema_18, price_stop, generate_type,
+    buy_total, buy_fee
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -52,14 +55,15 @@
       note, price_close, price_high, 
       price_low, enhance_white_sign, lose_enhance_white_sign, 
       price_sell_high, price_sell_low, close_ema_18, 
-      price_stop, generate_type)
+      price_stop, generate_type, buy_total, buy_fee)
     values (#{code,jdbcType=VARCHAR}, #{timeCreate,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP}, 
       #{status,jdbcType=INTEGER}, #{buyAmount,jdbcType=INTEGER}, #{buyPrice,jdbcType=FLOAT}, 
       #{holdAmount,jdbcType=INTEGER}, #{sellStage,jdbcType=INTEGER}, #{weeklyEmaResultId,jdbcType=INTEGER}, 
       #{note,jdbcType=VARCHAR}, #{priceClose,jdbcType=FLOAT}, #{priceHigh,jdbcType=FLOAT}, 
       #{priceLow,jdbcType=FLOAT}, #{enhanceWhiteSign,jdbcType=BOOLEAN}, #{loseEnhanceWhiteSign,jdbcType=BOOLEAN}, 
       #{priceSellHigh,jdbcType=FLOAT}, #{priceSellLow,jdbcType=FLOAT}, #{closeEma18,jdbcType=FLOAT}, 
-      #{priceStop,jdbcType=FLOAT}, #{generateType, jdbcType=INTEGER})
+      #{priceStop,jdbcType=FLOAT}, #{generateType, jdbcType=INTEGER}, #{buyTotal,jdbcType=FLOAT},
+      #{buyFee,jdbcType=FLOAT},)
   </insert>
   <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockHold">
     <!--@mbg.generated-->
@@ -83,7 +87,9 @@
       price_sell_low = #{priceSellLow,jdbcType=FLOAT},
       close_ema_18 = #{closeEma18,jdbcType=FLOAT},
       price_stop = #{priceStop,jdbcType=FLOAT},
-      generate_type = #{generateType,jdbcType=INTEGER}
+      generate_type = #{generateType,jdbcType=INTEGER},
+      buy_total = #{buyTotal,jdbcType=FLOAT},
+      buy_fee = #{buyFee,jdbcType=FLOAT},
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="getBeanlistByPage" resultMap="BaseResultMap">
@@ -94,8 +100,11 @@
       <if test="keywords!=null">
         and code like concat('%',#{keywords},'%')
       </if>
+      <if test="status!=null">
+        and status = #{status, jdbcType=INTEGER}
+      </if>
     </where>
-    order by time_create desc, id desc
+    order by status asc, time_create desc, id desc
     <if test="page !=null and size!=null">
       limit #{page},#{size}
     </if>
@@ -105,6 +114,9 @@
     <where>
       <if test="keywords!=null">
         and code like concat('%',#{keywords},'%')
+      </if>
+      <if test="status!=null">
+        and status = #{status, jdbcType=INTEGER}
       </if>
     </where>
   </select>

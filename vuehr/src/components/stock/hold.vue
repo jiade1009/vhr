@@ -1,22 +1,58 @@
 <template>
   <div>
     <!--search section begin-->
-    <div style="display: flex;justify-content: space-between">
-      <div>
-        <el-input placeholder="请输入股票代码进行搜索，可以直接回车搜索..." prefix-icon="el-icon-search"
-                  clearable
-                  @clear="initBeanlist"
-                  style="width: 350px;margin-right: 10px" v-model="keyword"
-                  @keydown.enter.native="initBeanlist"></el-input>
-        <el-button icon="el-icon-search" type="primary" @click="initBeanlist">
-          搜索
-        </el-button>
+    <div>
+      <div style="display: flex;justify-content: space-between">
+        <div>
+          <el-input placeholder="请输入股票代码进行搜索，可以直接回车搜索..." prefix-icon="el-icon-search"
+                    clearable
+                    @clear="initBeanlist"
+                    style="width: 350px;margin-right: 10px" v-model="keyword"
+                    :disabled="showAdvanceSearchView"
+                    @keydown.enter.native="initBeanlist"></el-input>
+          <el-button icon="el-icon-search" type="primary" :disabled="showAdvanceSearchView" @click="initBeanlist">
+            搜索
+          </el-button>
+          <el-button type="primary" @click="showAdvanceSearchView = !showAdvanceSearchView">
+            <i :class="showAdvanceSearchView?'fa fa-angle-double-up':'fa fa-angle-double-down'"
+               aria-hidden="true"></i>
+            高级搜索
+          </el-button>
+        </div>
+        <div v-if="flag=='stock'">
+          <el-button type="danger" icon="el-icon-switch-button" @click="changeBuySwitch($event)">
+            {{autoBuy?'暂停股票自动买入':'开启股票自动买入'}}
+          </el-button>
+        </div>
       </div>
-      <div v-if="flag=='stock'">
-        <el-button type="danger" icon="el-icon-switch-button" @click="changeBuySwitch($event)">
-          {{autoBuy?'暂停股票自动买入':'开启股票自动买入'}}
-        </el-button>
+      <transition name="slide-fade">
+        <div v-show="showAdvanceSearchView"
+           style="border: 1px solid #409eff;border-radius: 5px;box-sizing: border-box;padding: 5px;margin: 10px 0px;">
+        <el-row style="margin-top: 10px">
+          <el-col :span="10">
+            状态:
+            <el-select v-model="searchValue.status" placeholder="状态" size="mini"
+                       style="width: 130px;">
+              <el-option
+                  label="------"
+                  value="">
+              </el-option>
+              <el-option
+                  v-for="item in holdstatus"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+              </el-option>
+            </el-select>
+          </el-col>
+
+          <el-col :span="6" :offset="8">
+            <el-button size="mini" @click="cancelSearch()">取消</el-button>
+            <el-button size="mini" icon="el-icon-search" type="primary" @click="initBeanlist('advanced')">搜索</el-button>
+          </el-col>
+        </el-row>
       </div>
+      </transition>
     </div>
     <!--search section end-->
     <!--list section begin-->
@@ -182,7 +218,7 @@
         title="股票交易价格计算"
         :visible.sync="dialogVisible"
         width="60%">
-      <div>
+      <div class="price_cal">
         <p>股票代码：{{bean.code}}</p>
         <el-row :gutter="20">
           <el-col :span="6"><div class="grid-content grid-label">P1阶段：</div></el-col>
@@ -232,6 +268,11 @@ export default {
   data() {
     return {
       autoBuy: false,   // 是否自动买入
+      searchValue: {
+        status: "",
+      },
+      holdstatus: [],
+      showAdvanceSearchView: false,
       //分页参数
       total: 0,
       page: 1,
@@ -296,8 +337,22 @@ export default {
     this.initBeanlist();
     this.getSellRule();
     this.getBuySwitch();
+    this.initData();
   },
   methods: {
+    initData() {
+      if (!window.sessionStorage.getItem("holdstatus")) {
+        this.getRequest('/stock/holdstatus').then(resp => {
+          console.log(resp);
+          if (resp) {
+            this.holdstatus = resp;
+            window.sessionStorage.setItem("holdstatus", JSON.stringify(resp));
+          }
+        })
+      } else {
+        this.holdstatus = JSON.parse(window.sessionStorage.getItem("holdstatus"));
+      }
+    },
     getBuySwitch() {
       // 查询是否关闭买入交易
       this.getRequest("/system/databasetype/getByCode?code="+this.baseCode).then(resp =>{
@@ -386,10 +441,18 @@ export default {
       this.page = currentPage;
       this.initBeanlist();
     },
-    initBeanlist() {
+    cancelSearch() {
+      this.searchValue.status = "";
+      this.initBeanlist('advanced');
+    },
+    initBeanlist(type) {
       this.loading = true;
       let url = '/' + this.flag + '/hold/?page=' + this.page + '&size=' + this.size;
-      url += "&keyword=" + this.keyword;
+      if (type && type == 'advanced') {
+        url += '&status=' + this.searchValue.status;
+      } else {
+        url += "&keyword=" + this.keyword;
+      }
       this.getRequest(url).then(resp => {
         this.loading = false;
         if (resp) {
@@ -534,15 +597,14 @@ export default {
   visibility: hidden!important;
 }
 
-.el-row {
+.price_cal .el-row {
+  border-radius: 4px;
   border-top: 1px solid #E4E7ED;
 }
-.el-row:last-child {
+.price_cal .el-row:last-child {
   margin-bottom: 0;
 }
-.el-col {
-  border-radius: 4px;
-}
+
 .grid-content {
   border-radius: 4px;
   min-height: 36px;
