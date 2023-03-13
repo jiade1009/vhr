@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.StockHoldBonusMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.StockHoldBonus">
+    <!--@mbg.generated-->
+    <!--@Table stock_hold_bonus-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="donate_rate" jdbcType="FLOAT" property="donateRate" />
+    <result column="increase_rate" jdbcType="FLOAT" property="increaseRate" />
+    <result column="bonus_rate" jdbcType="FLOAT" property="bonusRate" />
+    <result column="date_register" jdbcType="VARCHAR" property="dateRegister" />
+    <result column="date_ex_right" jdbcType="VARCHAR" property="dateExRight" />
+    <result column="date_ex_bonus" jdbcType="VARCHAR" property="dateExBonus" />
+    <result column="bonus_note" jdbcType="VARCHAR" property="bonusNote" />
+    <result column="bonus_type" jdbcType="VARCHAR" property="bonusType" />
+    <result column="date_report" jdbcType="VARCHAR" property="dateReport" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, code, donate_rate, increase_rate, bonus_rate, date_register, date_ex_right, date_ex_bonus, 
+    bonus_note, bonus_type, date_report
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from stock_hold_bonus
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from stock_hold_bonus
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockHoldBonus" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into stock_hold_bonus (code, donate_rate, increase_rate, 
+      bonus_rate, date_register, date_ex_right, 
+      date_ex_bonus, bonus_note, bonus_type, 
+      date_report)
+    values (#{code,jdbcType=VARCHAR}, #{donateRate,jdbcType=FLOAT}, #{increaseRate,jdbcType=FLOAT}, 
+      #{bonusRate,jdbcType=FLOAT}, #{dateRegister,jdbcType=VARCHAR}, #{dateExRight,jdbcType=VARCHAR}, 
+      #{dateExBonus,jdbcType=VARCHAR}, #{bonusNote,jdbcType=VARCHAR}, #{bonusType,jdbcType=VARCHAR}, 
+      #{dateReport,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockHoldBonus">
+    <!--@mbg.generated-->
+    update stock_hold_bonus
+    set code = #{code,jdbcType=VARCHAR},
+      donate_rate = #{donateRate,jdbcType=FLOAT},
+      increase_rate = #{increaseRate,jdbcType=FLOAT},
+      bonus_rate = #{bonusRate,jdbcType=FLOAT},
+      date_register = #{dateRegister,jdbcType=VARCHAR},
+      date_ex_right = #{dateExRight,jdbcType=VARCHAR},
+      date_ex_bonus = #{dateExBonus,jdbcType=VARCHAR},
+      bonus_note = #{bonusNote,jdbcType=VARCHAR},
+      bonus_type = #{bonusType,jdbcType=VARCHAR},
+      date_report = #{dateReport,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_hold_bonus order by date_register desc
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from stock_hold_bonus
+  </select>
+</mapper>

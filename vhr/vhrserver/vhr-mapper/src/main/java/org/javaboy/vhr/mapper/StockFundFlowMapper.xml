@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.StockFundFlowMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.StockFundFlow">
+    <!--@mbg.generated-->
+    <!--@Table stock_fund_flow-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="amount" jdbcType="FLOAT" property="amount" />
+    <result column="trade_type" jdbcType="INTEGER" property="tradeType" />
+    <result column="income_expense" jdbcType="INTEGER" property="incomeExpense" />
+    <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, amount, trade_type, income_expense, time_create, note
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from stock_fund_flow
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from stock_fund_flow
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockFundFlow" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into stock_fund_flow (amount, trade_type, income_expense, 
+      time_create, note)
+    values (#{amount,jdbcType=FLOAT}, #{tradeType,jdbcType=INTEGER}, #{incomeExpense,jdbcType=INTEGER}, 
+      #{timeCreate,jdbcType=TIMESTAMP}, #{note,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockFundFlow">
+    <!--@mbg.generated-->
+    update stock_fund_flow
+    set amount = #{amount,jdbcType=FLOAT},
+      trade_type = #{tradeType,jdbcType=INTEGER},
+      income_expense = #{incomeExpense,jdbcType=INTEGER},
+      time_create = #{timeCreate,jdbcType=TIMESTAMP},
+      note = #{note,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_fund_flow order by time_create desc
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from stock_fund_flow
+  </select>
+</mapper>
