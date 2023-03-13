@@ -72,7 +72,10 @@ public class DatabaseTypeService{
 
     @Cacheable
     public DatabaseType getByCode(String code) {
-        System.out.println(".........." + code);
         return databaseTypeMapper.getByCode(code);
+    }
+
+    public DatabaseType getFundUsable() {
+        return databaseTypeMapper.getByCode("stk_fund_usable");
     }
 }

@@ -99,6 +99,15 @@ public class DatabasetypeController {
         }
     }
 
+    @GetMapping("/getFundUsable")
+    public RespBean getFundUsable() {
+        DatabaseType vo = beanService.getFundUsable();
+        if (vo != null) {
+            return RespBean.ok("", vo, false);
+        } else {
+            return RespBean.error("不存在", false);
+        }
+    }
 
     @PostMapping("/updateByCode")
     public RespBean updateByCode(@RequestBody Map<String, Object> map) {

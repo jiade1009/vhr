@@ -13,12 +13,12 @@ export default {
   },
   data () {
     return{
+      test:"ttt"
     }
   },
   mounted() {
   },
   methods: {
-
   }
 }
 </script>

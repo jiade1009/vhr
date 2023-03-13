@@ -44,14 +44,6 @@ public class StockFundFlowController {
         return RespBean.error("添加失败");
     }
 
-    @PutMapping("/stock/fundflow/")
-    public RespBean updateBean(@RequestBody StockFundFlow bean) {
-        if (stockFundFlowService.updateByPrimaryKey(bean) == 1) {
-            return RespBean.ok("更新成功!");
-        }
-        return RespBean.error("更新失败!");
-    }
-
     @GetMapping("/stock/fundtradetype")
     public List<Map> getFundTradeType() {
         List<Map> bean = new ArrayList<>();

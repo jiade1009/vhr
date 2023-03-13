@@ -44,38 +44,44 @@
                         <p>统计日期：{{ bean.dateResearch }}</p>
                       </div>
                       <div class="demo-block">
-                        <el-row :gutter="20">
-                        <el-col :span="6">
-                          <div>
-                            <el-statistic group-separator="," :precision="2" decimal-separator="." :value="bean.total" title="总市值">
-                              <template slot="prefix">
-                                <i class="el-icon-s-flag" style="color: red"></i>
-                              </template>
-                            </el-statistic>
-                          </div>
-                        </el-col>
-                        <el-col :span="6">
-                          <div>
-                            <el-statistic group-separator="," :precision="2" decimal-separator="."
-                                          :value-style="{ color: s_color_totalProfit }" :value="bean.totalProfit" title="总浮动盈亏">
-                            </el-statistic>
-                          </div>
-                        </el-col>
-                        <el-col :span="6">
-                          <div>
-                            <el-statistic group-separator="," :precision="2" decimal-separator="."
-                                          :value-style="{ color: s_color_profit }" :value="bean.profit" title="当日盈亏">
-                            </el-statistic>
-                          </div>
-                        </el-col>
-                        <el-col :span="6">
-                          <div>
-                            <el-statistic group-separator="," :precision="2" decimal-separator="."
-                                          :value-style="{ color: s_color_totalProfit }" :value="bean.profitRate*100" title="当日盈亏率">
-                              <template slot="suffix"> % </template>
-                            </el-statistic>
-                          </div>
-                        </el-col>
+                        <el-row :gutter="10">
+                          <el-col :span="5">
+                            <div>
+                              <el-statistic group-separator="," :precision="2" decimal-separator="." :value="fundUsable" title="可用资金">
+                              </el-statistic>
+                            </div>
+                          </el-col>
+                          <el-col :span="5">
+                            <div>
+                              <el-statistic group-separator="," :precision="2" decimal-separator="." :value="bean.total" title="总市值">
+                                <template slot="prefix">
+                                  <i class="el-icon-s-flag" style="color: red"></i>
+                                </template>
+                              </el-statistic>
+                            </div>
+                          </el-col>
+                          <el-col :span="5">
+                            <div>
+                              <el-statistic group-separator="," :precision="2" decimal-separator="."
+                                            :value-style="{ color: s_color_totalProfit }" :value="bean.totalProfit" title="总浮动盈亏">
+                              </el-statistic>
+                            </div>
+                          </el-col>
+                          <el-col :span="5">
+                            <div>
+                              <el-statistic group-separator="," :precision="2" decimal-separator="."
+                                            :value-style="{ color: s_color_profit }" :value="bean.profit" title="当日盈亏">
+                              </el-statistic>
+                            </div>
+                          </el-col>
+                          <el-col :span="4">
+                            <div>
+                              <el-statistic group-separator="," :precision="2" decimal-separator="."
+                                            :value-style="{ color: s_color_totalProfit }" :value="bean.profitRate*100" title="当日盈亏率">
+                                <template slot="suffix"> % </template>
+                              </el-statistic>
+                            </div>
+                          </el-col>
                       </el-row>
                       </div>
                     </div>
@@ -101,9 +107,12 @@
                 total: 0,
                 totalProfit: 0
               },
+              fundUsable: 0,
+              baseCode: 'stk_fund_usable',
               s_color_totalProfit: 'red',
               s_color_profit: 'red',
               s_color_profitRate: 'red',
+              size: 0,
             }
         },
         computed: {
@@ -117,7 +126,13 @@
         beforeMount() {
         },
         mounted() {
+          // console.log("mounted:"+this.size);
           this.initData();
+          this.updateFundUsable();
+        },
+        updated() {
+          // console.log("update:"+this.size);
+          // this.size += 1;
         },
       methods: {
             initData() {
@@ -137,8 +152,20 @@
                 }
               });
             },
+            updateFundUsable() {
+              // 由于可用资金在ghk_stock系统中会更改，因此不能通过读取缓存的方式获取
+              this.getRequest("/system/databasetype/getFundUsable").then(resp =>{
+                if (resp) {
+                  if (resp.obj) {
+                    let o = resp.obj.value;
+                    this.fundUsable = parseFloat(o);
+                  }
+                }
+              });
+            },
             home() {
               this.$router.push("/home");
+              this.updateFundUsable();
             },
             goChat() {
                 this.$router.push("/chat");
