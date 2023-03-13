@@ -35,7 +35,8 @@ function getEastMoneyUrl(code) {
     let website = "http://quote.eastmoney.com/";
     if (code.indexOf("600")==0 || code.indexOf("601")==0 || code.indexOf("603")==0 || code.indexOf("605")==0) {
         return website + "sh" + code + ".html";
-    } else if (code.indexOf("000")==0 || code.indexOf("001")==0 || code.indexOf("002")==0 || code.indexOf("003")==0 ||code.indexOf("300")==0) {
+    } else if (code.indexOf("000")==0 || code.indexOf("001")==0 || code.indexOf("002")==0
+        || code.indexOf("003")==0 ||code.indexOf("300")==0 ||code.indexOf("301")==0) {
         return website + "sz" + code + ".html";
     } else if (code.indexOf("688")==0) {
         return website + "kcb/" + code + ".html";

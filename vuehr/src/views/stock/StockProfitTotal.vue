@@ -2,7 +2,7 @@
   <div>
     <el-tabs v-model="activeName" type="card">
       <el-tab-pane label="每日总盈亏" name="profittotalmana"><profittotal flag="stock"></profittotal></el-tab-pane>
-      <el-tab-pane label="每日各股盈亏" name="profitmana"><profit flag="stock"></profit></el-tab-pane>
+      <el-tab-pane label="每日个股盈亏" name="profitmana"><profit flag="stock"></profit></el-tab-pane>
     </el-tabs>
   </div>
 </template>

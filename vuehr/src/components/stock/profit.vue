@@ -165,11 +165,4 @@ export default {
 </script>
 
 <style>
-.el-table .profit-row, .profit-cell {
-  color: #F56C6C;
-}
-
-.el-table .loss-row, .loss-cell {
-  color: #67C23A;
-}
 </style>

@@ -20,7 +20,7 @@ public class StockHoldTrade {
     private Integer amount;
 
     /**
-    * 交易类型：0买入，1卖出，2买入撤销，3卖出撤销
+    * 交易类型：0买入，1卖出，2买入撤销，3卖出撤销，4分红配送
     */
     private Integer tradeType;
 

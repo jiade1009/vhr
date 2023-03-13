@@ -381,6 +381,9 @@ public class StockCoreTask {
     public void dailyRefresh() {
         String tradeDate = getTodayTradeDate("A");
         String now = DateUtils.formatDate(new Date(), DateUtils.yyyyMMdd);
+        //判断今天是否已经执行该操作
+        List<StockExecuteResult> dailyList = stockExecuteResultService.getBeanlistByCommand(CommandType.DAILY_REFRESH.name(), now);
+        if (dailyList.size()>0) return ;
         if (tradeDate!=null) { //当天为股票交易日
             boolean already = false;
             Integer time = 0;
@@ -457,6 +460,8 @@ public class StockCoreTask {
             params.put(CommandType.DAILY_REFRESH, getExecuteResult(CommandType.DAILY_REFRESH, now));
             //今天的成交记录是否已经更新
             params.put(CommandType.CJCX, getExecuteResult(CommandType.CJCX, now));
+            //今天的股票的除权除息是否已经更新
+            params.put(CommandType.DIVIDEND, getExecuteResult(CommandType.DIVIDEND, now));
             //今天的盈亏计算是否已经更新
             params.put(CommandType.PROFIT, getExecuteResult(CommandType.PROFIT, now));
             //今天的总盈亏计算是否已经更新

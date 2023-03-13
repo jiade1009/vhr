@@ -18,6 +18,7 @@ public enum CommandType {
     TRADE_DATE,  // 交易日数据更新
     CJCX,  // 收盘股票成交信息查询
     U_RETURN_RUN,  //  回头草策略运行
+    DIVIDEND,  // 股票除权除息
     PROFIT,  // 股票收益计算
     PROFIT_TOTAL,  // 股票总收益计算
     //  H股相关指令
@@ -67,6 +68,9 @@ public enum CommandType {
                 break;
             case U_RETURN_RUN:
                 desc = "A股回头草策略运行";
+                break;
+            case DIVIDEND:
+                desc = "A股除权除息";
                 break;
             case PROFIT:
                 desc = "A股股票盈亏";

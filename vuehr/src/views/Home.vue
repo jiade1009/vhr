@@ -133,7 +133,6 @@
                     if (o.profit<0) this.s_color_profit='green';
                     if (o.profitRate<0) this.s_color_profitRate='green';
                     this.bean = o;
-                    console.log(this.bean);
                   }
                 }
               });

@@ -16,3 +16,11 @@
     margin-top: 50px;
     margin-bottom: 50px;
 }
+/*标注红色*/
+.profit-row, .profit-cell {
+    color: #F56C6C;
+}
+/*标注绿色*/
+.loss-row, .loss-cell {
+    color: #67C23A;
+}

@@ -1,6 +1,12 @@
 <template>
   <div>
     <!--search section begin-->
+    <div style="display: flex;justify-content: space-between">
+      <div>
+      </div>
+      <div>
+      </div>
+    </div>
     <!--search section end-->
     <!--list section begin-->
     <div style="margin-top: 10px">
@@ -12,8 +18,6 @@
           element-loading-text="正在加载..."
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(0, 0, 0, 0.8)"
-          :row-class-name="tableRowClassName"
-          :cell-class-name="tableCellClassName"
           style="width: 100%">
         <el-table-column
             v-for="column in tableColumns"
@@ -30,11 +34,11 @@
             @current-change="currentChange"
             @size-change="sizeChange"
             layout="sizes, prev, pager, next, jumper, ->, total, slot"
-            :page-size="size"
             :total="total">
         </el-pagination>
       </div>
     </div>
+
     <!--list section end-->
 
     <!-- edit dialog begin -->
@@ -44,27 +48,31 @@
 
 <script>
 export default {
-  name: "profittotal",
+  name: "holdbonus",
   props: {
     flag: String,
   },
-  computed: {
-  },
-  data() {
+  data () {
     return {
       //分页参数
       total: 0,
       page: 1,
-      size: 50,
+      size: this.$ELEMENT.pagesize,
       //列表参数
       keyword: '',
       loading: false,
       beanlist: [],
       tableColumns: [
-        {prop: "dateResearch", label: "日期", show: true},
-        {prop: "total", label: "总市值", show: true},
-        {prop: "profit", label: "当日盈亏", show: true},
-        {prop: "profitRate", label: "当日盈亏率", show: true}
+        {prop: "code", label: "代码", show: true},
+        {prop: "donateRate", label: "送股比例", show: true},
+        {prop: "increaseRate", label: "转增比例", show: true},
+        {prop: "bonusRate", label: "派息比例", show: true},
+        {prop: "dateRegister", label: "股权登记日", show: true},
+        {prop: "dateExRight", label: "除权日期", show: true},
+        {prop: "dateExBonus", label: "除息日", show: true},
+        {prop: "bonusNote", label: "分红说明", show: true},
+        {prop: "bonusType", label: "分红类型", show: true},
+        {prop: "dateReport", label: "报告时间", show: true},
       ],
     }
   },
@@ -75,21 +83,7 @@ export default {
     columnFormat(row, column) {
       let property = column.property;
       let data = row[property];
-      if (property == "profitRate") {
-        return (row["profitRate"]*100).toFixed(2) + '%';
-      } else {
-        return data;
-      }
-    },
-    tableRowClassName({row, rowIndex}) {
-      if (row["profit"]>=0) {
-        return 'profit-row';
-      } else {
-        return 'loss-row';
-      }
-    },
-    tableCellClassName({row, column, rowIndex, columnIndex}) {
-
+      return data;
     },
     sizeChange(currentSize) {
       this.size = currentSize;
@@ -101,7 +95,7 @@ export default {
     },
     initBeanlist() {
       this.loading = true;
-      let url = '/' + this.flag + '/profittotal/?page=' + this.page + '&size=' + this.size;
+      let url = '/' + this.flag + '/holdbonus/?page=' + this.page + '&size=' + this.size;
       url += "&keyword=" + this.keyword;
       this.getRequest(url).then(resp => {
         this.loading = false;

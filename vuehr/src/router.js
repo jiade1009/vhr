@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from './views/Login.vue'
 import Home from './views/Home.vue'
+import StockHandHold from './views/stock/StockHandHold'
 import FriendChat from './views/chat/FriendChat.vue'
 import HrInfo from './views/HrInfo.vue'
 
@@ -32,6 +33,11 @@ export default new Router({
                     path: '/hrinfo',
                     name: '个人中心',
                     component: HrInfo,
+                    hidden: true
+                }, {
+                    path: '/stock/handhold',
+                    name: '手动池',
+                    component: StockHandHold,
                     hidden: true
                 }
             ]
