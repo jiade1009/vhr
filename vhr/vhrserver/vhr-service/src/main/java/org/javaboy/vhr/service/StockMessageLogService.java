@@ -101,12 +101,20 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
                     //委托状态、委托信息、任务状态、任务状态信息
                     sbdBuy.append("[").append(trade.getCode()).append("]，买入价格：").append(price);
                     sbdBuy.append("，股票数：").append(trade.getAmount()).append("，委托结果：")
-                            .append(trade.getTaskstatusNote()).append(" <br/>");
+                            .append(trade.getTaskstatusNote());
+                    if (trade.getTaskstatus()==10 || trade.getTaskstatus()==12) {
+                        sbdBuy.append("，原因：").append(trade.getTaskmsg());
+                    }
+                    sbdBuy.append(" <br/>");
                 } else if(trade.getTradeType().equals(1)) {
                     //卖出交易
                     sellBuy.append("[").append(trade.getCode()).append("]，卖出价格：").append(price);
                     sellBuy.append("，股票数：").append(trade.getAmount()).append("，委托结果：")
-                            .append(trade.getTaskstatusNote()).append(" <br/>");
+                            .append(trade.getTaskstatusNote());
+                    if (trade.getTaskstatus()==10 || trade.getTaskstatus()==12) {
+                        sbdBuy.append("，原因：").append(trade.getTaskmsg());
+                    }
+                    sbdBuy.append(" <br/>");
                 }
             }
             if (sbdBuy.length()>0) {

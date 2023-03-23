@@ -14,4 +14,6 @@ import org.javaboy.vhr.model.StockProfit;
 
 @Mapper
 public interface StockProfitMapper extends BaseMapper<StockProfit, Integer> {
+
+
 }

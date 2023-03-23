@@ -48,13 +48,24 @@
   <select id="getBeanlistByPage" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from stock_profit_total order by date_research desc
+    from stock_profit_total
+    <where>
+      <if test="beginDateScope !=null">
+        and date_research between #{beginDateScope[0]} and #{beginDateScope[1]}
+      </if>
+    </where>
+    order by date_research desc
     <if test="page !=null and size!=null">
       limit #{page},#{size}
     </if>
   </select>
   <select id="getTotal" resultType="java.lang.Long">
     select count(*) from stock_profit_total
+    <where>
+      <if test="beginDateScope !=null">
+        and date_research &gt; #{beginDateScope[0]} and date_research &lt; #{beginDateScope[1]}
+      </if>
+    </where>
   </select>
 
   <select id="getLatest" resultMap="BaseResultMap">

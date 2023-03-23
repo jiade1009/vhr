@@ -1,8 +1,11 @@
 package org.javaboy.vhr.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.javaboy.vhr.base.BaseMapper;
 import org.javaboy.vhr.model.StockProfitTotal;
+
+import java.util.List;
 
 /**
  * @ClassName   : StockProfitTotalMapper
@@ -18,4 +21,9 @@ public interface StockProfitTotalMapper extends BaseMapper<StockProfitTotal, Int
     StockProfitTotal getLatest();
 
     Double getTotalProfit();
+
+    List<StockProfitTotal> getBeanlistByPage(@Param("page") Integer page, @Param("size") Integer size,
+                                        @Param("keywords") String keywords, @Param("beginDateScope") String[] beginDateScope);
+
+    Long getTotal(@Param("keywords") String keywords, @Param("beginDateScope") String[] beginDateScope);
 }

@@ -6,6 +6,7 @@ import org.javaboy.vhr.model.StockProfit;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+
 /**
  * @ClassName   : StockProfitService
  * @description : TODO
@@ -19,6 +20,4 @@ public class StockProfitService extends BaseService<StockProfit, Integer> {
 
     @Resource
     private StockProfitMapper stockProfitMapper;
-
-
 }

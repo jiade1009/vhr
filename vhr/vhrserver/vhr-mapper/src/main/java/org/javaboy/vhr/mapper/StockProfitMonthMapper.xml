@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.StockProfitMonthMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.StockProfitMonth">
+    <!--@mbg.generated-->
+    <!--@Table stock_profit_month-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="month_research" jdbcType="VARCHAR" property="monthResearch" />
+    <result column="total_begin" jdbcType="FLOAT" property="totalBegin" />
+    <result column="profit" jdbcType="FLOAT" property="profit" />
+    <result column="profit_rate" jdbcType="FLOAT" property="profitRate" />
+    <result column="time_update" jdbcType="TIMESTAMP" property="timeUpdate" />
+    <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
+    <result column="total_end" jdbcType="FLOAT" property="totalEnd" />
+    <result column="profit_amount" jdbcType="INTEGER" property="profitAmount" />
+    <result column="loss_amount" jdbcType="INTEGER" property="lossAmount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, month_research, total_begin, profit, profit_rate, time_update, time_create, total_end, 
+    profit_amount, loss_amount
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from stock_profit_month
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from stock_profit_month
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockProfitMonth" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into stock_profit_month (month_research, total_begin, profit, 
+      profit_rate, time_update, time_create, 
+      total_end, profit_amount, loss_amount
+      )
+    values (#{monthResearch,jdbcType=VARCHAR}, #{totalBegin,jdbcType=FLOAT}, #{profit,jdbcType=FLOAT}, 
+      #{profitRate,jdbcType=FLOAT}, #{timeUpdate,jdbcType=TIMESTAMP}, #{timeCreate,jdbcType=TIMESTAMP}, 
+      #{totalEnd,jdbcType=FLOAT}, #{profitAmount,jdbcType=INTEGER}, #{lossAmount,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockProfitMonth">
+    <!--@mbg.generated-->
+    update stock_profit_month
+    set month_research = #{monthResearch,jdbcType=VARCHAR},
+      total_begin = #{totalBegin,jdbcType=FLOAT},
+      profit = #{profit,jdbcType=FLOAT},
+      profit_rate = #{profitRate,jdbcType=FLOAT},
+      time_update = #{timeUpdate,jdbcType=TIMESTAMP},
+      time_create = #{timeCreate,jdbcType=TIMESTAMP},
+      total_end = #{totalEnd,jdbcType=FLOAT},
+      profit_amount = #{profitAmount,jdbcType=INTEGER},
+      loss_amount = #{lossAmount,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_profit_month
+    <where>
+      <if test="beginDateScope !=null">
+        and month_research between #{beginDateScope[0]} and #{beginDateScope[1]}
+      </if>
+    </where>
+    order by month_research desc
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from stock_profit_month
+    <where>
+      <if test="beginDateScope !=null">
+        and month_research &gt; #{beginDateScope[0]} and month_research &lt; #{beginDateScope[1]}
+      </if>
+    </where>
+  </select>
+  <select id="getLatest" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_profit_month order by month_research desc limit 1
+  </select>
+</mapper>

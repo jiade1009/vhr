@@ -26,7 +26,6 @@ const store = new Vuex.Store({
         },
         initRoutes(state, data) {
             state.routes = data;
-            console.log("........", data);
         },
         changeCurrentSession(state, currentSession) {
             Vue.set(state.isDot, state.currentHr.username + '#' + currentSession.username, false);

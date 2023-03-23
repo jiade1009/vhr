@@ -3,15 +3,12 @@
     <!--search section begin-->
     <div style="display: flex;justify-content: space-between">
       <div>
-        选择日期:
+        选择年份:
         <el-date-picker
             v-model="searchValue.beginDateScope"
-            type="daterange"
-            unlink-panels
             value-format="yyyy-MM-dd"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期">
+            type="year"
+            placeholder="选择年">
         </el-date-picker>
         <el-button icon="el-icon-search" type="primary" @click="initBeanlist" style="margin-left: 20px">
           搜索
@@ -63,7 +60,7 @@
 
 <script>
 export default {
-  name: "profittotal",
+  name: "profityear",
   props: {
     flag: String,
   },
@@ -83,10 +80,13 @@ export default {
       loading: false,
       beanlist: [],
       tableColumns: [
-        {prop: "dateResearch", label: "日期", show: true},
-        {prop: "total", label: "总市值", show: true},
-        {prop: "profit", label: "当日盈亏", show: true},
-        {prop: "profitRate", label: "当日盈亏率", show: true}
+        {prop: "yearResearch", label: "年份", show: true},
+        {prop: "totalBegin", label: "初始总市值", show: true},
+        {prop: "totalEnd", label: "总市值", show: true},
+        {prop: "profit", label: "当年盈亏", show: true},
+        {prop: "profitRate", label: "当年盈亏率", show: true},
+        {prop: "profitAmount", label: "盈利交易笔数", show: true},
+        {prop: "lossAmount", label: "亏损交易笔数", show: true}
       ],
     }
   },
@@ -123,15 +123,15 @@ export default {
     },
     initBeanlist() {
       this.loading = true;
-      let url = '/' + this.flag + '/profittotal/?page=' + this.page + '&size=' + this.size;
+      let url = '/' + this.flag + '/profityear/?page=' + this.page + '&size=' + this.size;
       url += "&keyword=" + this.keyword;
       if (this.searchValue.beginDateScope) {
         url += '&beginDateScope=' + this.searchValue.beginDateScope;
       }
-      console.log(url);
       this.getRequest(url).then(resp => {
         this.loading = false;
         if (resp) {
+          console.log(resp)
           this.beanlist = resp.data;
           this.total = resp.total;
         }
@@ -159,8 +159,8 @@ export default {
           // 获取股票的最初成本市值，即最初始的盈亏记录的市值+盈亏
           if (data.length>0) {
             let first = data[data.length-1];
-            let total_buy = Number(first["total"]) - Number(first["profit"])
-            sums[index] = (sums[index-1]/total_buy*100).toFixed(2) + '%';
+            let totalBegin = Number(first["totalBegin"])
+            sums[index] = (sums[index-1]/totalBegin*100).toFixed(2) + '%';
           }
         } else {
           sums[index] = '';

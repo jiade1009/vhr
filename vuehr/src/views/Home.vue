@@ -41,7 +41,7 @@
 
                     <div v-if="this.$router.currentRoute.path=='/home'">
                       <div>
-                        <p>统计日期：{{ bean.dateResearch }}</p>
+                        <p>统计日期：{{ bean.profitDay.dateResearch }}</p>
                       </div>
                       <div class="demo-block">
                         <el-row :gutter="10">
@@ -53,7 +53,7 @@
                           </el-col>
                           <el-col :span="5">
                             <div>
-                              <el-statistic group-separator="," :precision="2" decimal-separator="." :value="bean.total" title="总市值">
+                              <el-statistic group-separator="," :precision="2" decimal-separator="." :value="bean.profitDay.total" title="总市值">
                                 <template slot="prefix">
                                   <i class="el-icon-s-flag" style="color: red"></i>
                                 </template>
@@ -63,26 +63,112 @@
                           <el-col :span="5">
                             <div>
                               <el-statistic group-separator="," :precision="2" decimal-separator="."
-                                            :value-style="{ color: s_color_totalProfit }" :value="bean.totalProfit" title="总浮动盈亏">
+                                            :value-style="{ color: s_color_totalProfit }" :value="bean.profitDay.totalProfit" title="总浮动盈亏">
                               </el-statistic>
                             </div>
                           </el-col>
                           <el-col :span="5">
                             <div>
                               <el-statistic group-separator="," :precision="2" decimal-separator="."
-                                            :value-style="{ color: s_color_profit }" :value="bean.profit" title="当日盈亏">
+                                            :value-style="{ color: s_color_profit }" :value="bean.profitDay.profit" title="当日盈亏">
                               </el-statistic>
                             </div>
                           </el-col>
                           <el-col :span="4">
                             <div>
                               <el-statistic group-separator="," :precision="2" decimal-separator="."
-                                            :value-style="{ color: s_color_totalProfit }" :value="bean.profitRate*100" title="当日盈亏率">
+                                            :value-style="{ color: s_color_totalProfit }" :value="bean.profitDay.profitRate*100" title="当日盈亏率">
                                 <template slot="suffix"> % </template>
                               </el-statistic>
                             </div>
                           </el-col>
                       </el-row>
+                      </div>
+                      <!--月统计结果-->
+                      <div class="demo-block">
+                        <div>
+                          <p>当月盈亏</p>
+                        </div>
+                        <el-row :gutter="10">
+                          <el-col :span="5">
+                            <div>
+                              <el-statistic group-separator="," :precision="2" decimal-separator="." :value="bean.profitMonth.totalBegin" title="月初始市值">
+                              </el-statistic>
+                            </div>
+                          </el-col>
+                          <el-col :span="5">
+                            <div>
+                              <el-statistic group-separator="," :precision="2" decimal-separator="."
+                                            :value="bean.profitMonth.totalEnd" title="当前市值">
+                              </el-statistic>
+                            </div>
+                          </el-col>
+                          <el-col :span="5">
+                            <div>
+                              <el-statistic group-separator="," :precision="2" decimal-separator="."
+                                            :value="bean.profitMonth.profit" title="当月盈亏">
+                              </el-statistic>
+                            </div>
+                          </el-col>
+                          <el-col :span="5">
+                            <div>
+                              <el-statistic group-separator="," :precision="2" decimal-separator="."
+                                            :value="bean.profitMonth.profitRate*100" title="当月盈亏率">
+                                <template slot="suffix"> % </template>
+                              </el-statistic>
+                            </div>
+                          </el-col>
+                          <el-col :span="4">
+                            <div>
+                              <el-statistic title="盈亏交易数比">
+                                <template slot="formatter"> {{ bean.profitMonth.profitAmount }} / {{bean.profitMonth.lossAmount}} </template>
+                              </el-statistic>
+                            </div>
+                          </el-col>
+                        </el-row>
+                      </div>
+                      <!--年统计结果-->
+                      <div class="demo-block">
+                        <div>
+                          <p>本年盈亏</p>
+                        </div>
+                        <el-row :gutter="10">
+                          <el-col :span="5">
+                            <div>
+                              <el-statistic group-separator="," :precision="2" decimal-separator="." :value="bean.profitYear.totalBegin" title="年初始市值">
+                              </el-statistic>
+                            </div>
+                          </el-col>
+                          <el-col :span="5">
+                            <div>
+                              <el-statistic group-separator="," :precision="2" decimal-separator="."
+                                            :value="bean.profitYear.totalEnd" title="当前市值">
+                              </el-statistic>
+                            </div>
+                          </el-col>
+                          <el-col :span="5">
+                            <div>
+                              <el-statistic group-separator="," :precision="2" decimal-separator="."
+                                            :value="bean.profitYear.profit" title="本年盈亏">
+                              </el-statistic>
+                            </div>
+                          </el-col>
+                          <el-col :span="5">
+                            <div>
+                              <el-statistic group-separator="," :precision="2" decimal-separator="."
+                                            :value="bean.profitYear.profitRate*100" title="本年盈亏率">
+                                <template slot="suffix"> % </template>
+                              </el-statistic>
+                            </div>
+                          </el-col>
+                          <el-col :span="4">
+                            <div>
+                              <el-statistic title="盈亏交易数比">
+                                <template slot="formatter"> {{ bean.profitYear.profitAmount }} / {{bean.profitYear.lossAmount}} </template>
+                              </el-statistic>
+                            </div>
+                          </el-col>
+                        </el-row>
                       </div>
                     </div>
                     <router-view class="homeRouterView"/>
@@ -101,11 +187,29 @@
               userface: this.$ELEMENT.userface,
                 // user: JSON.parse(window.sessionStorage.getItem("user"))
               bean: {
-                dateResearch: '20200101',
-                profit: 0,
-                profitRate: 0,
-                total: 0,
-                totalProfit: 0
+                profitDay: {
+                  dateResearch: '20200101',
+                  profit: 0,
+                  profitRate: 0,
+                  total: 0,
+                  totalProfit: 0
+                },
+                profitMonth: {
+                  profit: 0,
+                  profitRate: 0,
+                  totalBegin: 0,
+                  totalEnd: 0,
+                  profitAmount: 0,
+                  lossAmount: 0
+                },
+                profitYear: {
+                  profit: 0,
+                  profitRate: 0,
+                  totalBegin: 0,
+                  totalEnd: 0,
+                  profitAmount: 0,
+                  lossAmount: 0
+                }
               },
               fundUsable: 0,
               baseCode: 'stk_fund_usable',
@@ -140,13 +244,14 @@
                 if (resp) {
                   let o = resp.obj
                   if (o) { // 存在正在运行的卖出策略
+                    console.log(o)
                     // o.total = o.total.toFixed(2);
                     // o.totalProfit = o.totalProfit.toFixed(2);
                     // o.profit = o.profit.toFixed(2);
                     // o.profitRate = o.profitRate.toFixed(4);
-                    if (o.totalProfit<0) this.s_color_totalProfit='green';
-                    if (o.profit<0) this.s_color_profit='green';
-                    if (o.profitRate<0) this.s_color_profitRate='green';
+                    if (o.profitDay.totalProfit<0) this.s_color_totalProfit='green';
+                    if (o.profitDay.profit<0) this.s_color_profit='green';
+                    if (o.profitDay.profitRate<0) this.s_color_profitRate='green';
                     this.bean = o;
                   }
                 }
