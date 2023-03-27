@@ -150,7 +150,9 @@ export default {
           sums[index] = values.reduce((prev, curr) => {
             const value = Number(curr);
             if (!isNaN(value)) {
-              return prev + curr;
+              let tmp = prev + curr;
+              tmp = Number(tmp.toFixed(2));
+              return tmp;
             } else {
               return prev;
             }

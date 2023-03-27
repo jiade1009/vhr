@@ -2,4 +2,4 @@
 # 项目通过maven进行打包发行，启动时通过启动参数锁定运行配置文件 java -jar ghk-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
 spring:
   profiles:
-    active: pro
+    active: dev

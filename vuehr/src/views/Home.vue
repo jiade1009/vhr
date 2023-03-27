@@ -249,9 +249,17 @@
                     // o.totalProfit = o.totalProfit.toFixed(2);
                     // o.profit = o.profit.toFixed(2);
                     // o.profitRate = o.profitRate.toFixed(4);
-                    if (o.profitDay.totalProfit<0) this.s_color_totalProfit='green';
-                    if (o.profitDay.profit<0) this.s_color_profit='green';
-                    if (o.profitDay.profitRate<0) this.s_color_profitRate='green';
+                    if (o.profitDay) {
+                      if (o.profitDay.totalProfit<0) this.s_color_totalProfit='green';
+                      if (o.profitDay.profit<0) this.s_color_profit='green';
+                      if (o.profitDay.profitRate<0) this.s_color_profitRate='green';
+                    }
+                    if (!o.profitMonth) {
+                      o.profitMonth = this.bean.profitMonth
+                    }
+                    if (!o.profitYear) {
+                      o.profitYear = this.bean.profitYear
+                    }
                     this.bean = o;
                   }
                 }

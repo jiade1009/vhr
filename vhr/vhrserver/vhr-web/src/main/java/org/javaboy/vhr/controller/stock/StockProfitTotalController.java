@@ -46,22 +46,23 @@ public class StockProfitTotalController {
 
     @GetMapping("/stock/profittotal/latest")
     public RespBean getLatest() {
+        Map result = new HashMap();
         // 获取最新的日盈亏记录
         StockProfitTotal bean = stockProfitTotalService.getLatest();
         StockProfitMonth monthBean = stockProfitMonthService.getLatest();
         StockProfitYear yearBean = stockProfitYearService.getLatest();
-        if (bean == null){
-            return RespBean.error("不存在最新盈亏记录", false);
-        } else {
-            Double totalProfit = stockProfitTotalService.getTotalProfit();
-            bean.setTotalProfit(totalProfit);
-            Map result = new HashMap();
+        if (bean != null){
             result.put("profitDay", bean);
-            result.put("profitMonth", monthBean);
-            result.put("profitYear", yearBean);
-            return RespBean.ok("运行成功!", result, false);
         }
-
+        if (monthBean != null){
+            result.put("profitMonth", monthBean);
+        }
+        if (yearBean != null){
+            result.put("profitYear", yearBean);
+        }
+        Double totalProfit = stockProfitTotalService.getTotalProfit();
+        bean.setTotalProfit(totalProfit);
+        return RespBean.ok("运行成功!", result, false);
     }
 
 }

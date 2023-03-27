@@ -112,9 +112,9 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
                     sellBuy.append("，股票数：").append(trade.getAmount()).append("，委托结果：")
                             .append(trade.getTaskstatusNote());
                     if (trade.getTaskstatus()==10 || trade.getTaskstatus()==12) {
-                        sbdBuy.append("，原因：").append(trade.getTaskmsg());
+                        sellBuy.append("，原因：").append(trade.getTaskmsg());
                     }
-                    sbdBuy.append(" <br/>");
+                    sellBuy.append(" <br/>");
                 }
             }
             if (sbdBuy.length()>0) {

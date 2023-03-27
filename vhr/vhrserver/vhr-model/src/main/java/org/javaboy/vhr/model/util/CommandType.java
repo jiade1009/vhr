@@ -21,6 +21,8 @@ public enum CommandType {
     DIVIDEND,  // 股票除权除息
     PROFIT,  // 股票收益计算
     PROFIT_TOTAL,  // 股票总收益计算
+    PROFIT_TOTAL_MONTH,  // 股票月收益计算
+    PROFIT_TOTAL_YEAR,  // 股票年收益计算
     //  H股相关指令
     H_WEEKLY, //周线数据下载
     H_WEEKLY_EMA, //ema数据生成

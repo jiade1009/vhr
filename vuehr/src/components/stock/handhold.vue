@@ -100,6 +100,7 @@
             @current-change="currentChange"
             @size-change="sizeChange"
             layout="sizes, prev, pager, next, jumper, ->, total, slot"
+            :page-size="size"
             :total="total">
         </el-pagination>
       </div>
@@ -184,7 +185,8 @@ export default {
         {prop: "priceLow", label: "最低价", show: true},
         {prop: "priceHigh", label: "最高价", show: true},
         {prop: "buyTotal", label: "成本", show: true},
-        {prop: "sellStage", label: "交易阶段", show: true}
+        {prop: "sellStage", label: "交易阶段", show: true},
+        {prop: "note", label: "备注", show: true}
       ],
       //下拉明细内容
       expands:[],
