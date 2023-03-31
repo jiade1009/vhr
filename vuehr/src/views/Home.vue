@@ -77,7 +77,7 @@
                           <el-col :span="4">
                             <div>
                               <el-statistic group-separator="," :precision="2" decimal-separator="."
-                                            :value-style="{ color: s_color_totalProfit }" :value="bean.profitDay.profitRate*100" title="当日盈亏率">
+                                            :value-style="{ color: s_color_profit }" :value="bean.profitDay.profitRate*100" title="当日盈亏率">
                                 <template slot="suffix"> % </template>
                               </el-statistic>
                             </div>

@@ -493,6 +493,8 @@ export default {
     },
     cancelSearch() {
       this.searchValue.status = "";
+      this.page = 1;
+      this.size = this.$ELEMENT.pagesize;
       this.initBeanlist('advanced');
     },
     initBeanlist(type) {

@@ -78,7 +78,13 @@ public enum CommandType {
                 desc = "A股股票盈亏";
                 break;
             case PROFIT_TOTAL:
-                desc = "A股总盈亏";
+                desc = "A股每日总盈亏";
+                break;
+            case PROFIT_TOTAL_MONTH:
+                desc = "A股月度总盈亏";
+                break;
+            case PROFIT_TOTAL_YEAR:
+                desc = "A股年度总盈亏";
                 break;
         }
         return desc;
