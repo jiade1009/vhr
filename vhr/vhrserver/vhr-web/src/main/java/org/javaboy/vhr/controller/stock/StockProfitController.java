@@ -2,6 +2,7 @@ package org.javaboy.vhr.controller.stock;
 
 import org.javaboy.vhr.model.RespPageBean;
 import org.javaboy.vhr.service.StockProfitService;
+import org.javaboy.vhr.service.StockQtProfitService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,10 @@ public class StockProfitController {
      */
     @Resource
     private StockProfitService stockProfitService;
+    @Resource
+    private StockQtProfitService stockQtProfitService;
 
+    // --------A股方法定义 begin -----------
     @GetMapping("/stock/profit/")
     public RespPageBean getBeanlistByPage(@RequestParam(defaultValue = "1") Integer page,
                                           @RequestParam(defaultValue = "10") Integer size,
@@ -30,6 +34,18 @@ public class StockProfitController {
             size=null;
         }
         return stockProfitService.getBeanlistByPage(page, size, keyword);
+    }
+
+    // --------QT预测方法定义 begin -----------
+    @GetMapping("/qtstock/profit/")
+    public RespPageBean getQtBeanlistByPage(@RequestParam(defaultValue = "1") Integer page,
+                                          @RequestParam(defaultValue = "10") Integer size,
+                                          String keyword) {
+        if (size==-1){
+            page=null;
+            size=null;
+        }
+        return stockQtProfitService.getBeanlistByPage(page, size, keyword);
     }
 
 }

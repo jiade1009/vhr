@@ -50,6 +50,8 @@ export const formatRoutes = (routes) => {
                     require(['../views/stock/' + component + '.vue'], resolve);
                 } else if (component.startsWith("HStock")) {
                     require(['../views/h_stock/' + component + '.vue'], resolve);
+                } else if (component.startsWith("QtStock")) {
+                    require(['../views/qt_stock/' + component + '.vue'], resolve);
                 }
             }
         }

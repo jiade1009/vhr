@@ -1,10 +1,8 @@
 package org.javaboy.vhr.controller.stock;
 
-import org.javaboy.vhr.model.HStockSellRule;
-import org.javaboy.vhr.model.RespBean;
-import org.javaboy.vhr.model.RespPageBean;
-import org.javaboy.vhr.model.StockSellRule;
+import org.javaboy.vhr.model.*;
 import org.javaboy.vhr.service.HStockSellRuleService;
+import org.javaboy.vhr.service.StockQtSellRuleService;
 import org.javaboy.vhr.service.StockSellRuleService;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +26,8 @@ public class StockSellRuleController {
     private StockSellRuleService stockSellRuleService;
     @Resource
     private HStockSellRuleService hStockSellRuleService;
+    @Resource
+    private StockQtSellRuleService stockQtSellRuleService;
 
     @GetMapping("/stock/sellrule/")
     public RespPageBean getBeanlistByPage(@RequestParam(defaultValue = "1") Integer page,
@@ -99,6 +99,75 @@ public class StockSellRuleController {
     @GetMapping("/hstock/sellrule/getRunning")
     public RespBean getHRunning() {
         List<HStockSellRule> list = hStockSellRuleService.getBeanlistByStatus(1);
+        if (list.isEmpty()){
+            return RespBean.ok("运行成功!", false);
+        } else {
+            return RespBean.ok("运行成功!", list.get(0), false);
+        }
+    }
+
+
+
+    // --------Qt 预测 方法定义 begin -----------
+    @GetMapping("/qtstock/sellrule/")
+    public RespPageBean getQtBeanlistByPage(@RequestParam(defaultValue = "1") Integer page,
+                                          @RequestParam(defaultValue = "10") Integer size) {
+        return stockQtSellRuleService.getBeanlistByPage(page, size, "");
+    }
+
+    @PostMapping("/qtstock/sellrule/")
+    public RespBean addQtBean(@RequestBody StockQtSellRule bean) {
+        Date now = new Date();
+        bean.setTimeCreate(now);
+        bean.setTimeUpdate(now);
+        int result = stockQtSellRuleService.insert(bean);
+        if (result == 1) {
+            return RespBean.ok("添加成功", bean);
+        }
+        return RespBean.error("添加失败");
+    }
+
+    @PutMapping("/qtstock/sellrule/")
+    public RespBean updateQtBean(@RequestBody StockQtSellRule bean) {
+        bean.setTimeUpdate(new Date());
+        if (stockQtSellRuleService.updateByPrimaryKey(bean) == 1) {
+            return RespBean.ok("更新成功!");
+        }
+        return RespBean.error("更新失败!");
+    }
+
+    /**
+     * 运行该卖出规则策略，更改该策略状态为运行，且将当前运行的策略状态更改为过期
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/qtstock/sellrule/run/{id}")
+    public RespBean runQtBeanById(@PathVariable Integer id) {
+        if (stockQtSellRuleService.runRuleById(id) == 1) {
+            return RespBean.ok("运行成功!");
+        }
+        return RespBean.error("运行失败!");
+    }
+
+    /**
+     * 判断是否存在草稿类型的卖出规则，如果存在，返回OK，否则返回ERROR
+     *
+     * @return
+     */
+    @GetMapping("/qtstock/sellrule/getDraft")
+    public RespBean getQtDraft() {
+        List<StockQtSellRule> list = stockQtSellRuleService.getBeanlistByStatus(0);
+        if (list.isEmpty()) {
+            return RespBean.ok("运行成功!", false);
+        } else {
+            return RespBean.ok("运行成功!", list.get(0), false);
+        }
+    }
+
+    @GetMapping("/qtstock/sellrule/getRunning")
+    public RespBean getQtRunning() {
+        List<StockQtSellRule> list = stockQtSellRuleService.getBeanlistByStatus(1);
         if (list.isEmpty()){
             return RespBean.ok("运行成功!", false);
         } else {

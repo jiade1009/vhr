@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.javaboy.vhr.mapper.StockHoldMapper">
-  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.StockHold">
+<mapper namespace="org.javaboy.vhr.mapper.StockQtHoldMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.StockQtHold">
     <!--@mbg.generated-->
-    <!--@Table stock_hold-->
+    <!--@Table stock_qt_hold-->
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="code" jdbcType="VARCHAR" property="code" />
     <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
@@ -27,47 +27,53 @@
     <result column="generate_type" jdbcType="INTEGER" property="generateType" />
     <result column="buy_total" jdbcType="FLOAT" property="buyTotal" />
     <result column="buy_fee" jdbcType="FLOAT" property="buyFee" />
+    <result column="time_buy" jdbcType="TIMESTAMP" property="timeBuy" />
+    <result column="time_sell" jdbcType="TIMESTAMP" property="timeSell" />
+    <result column="buy_rule_id" jdbcType="INTEGER" property="buyRuleId" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, code, time_create, time_update, `status`, buy_amount, buy_price, hold_amount, 
     sell_stage, weekly_ema_result_id, note, price_close, price_high, price_low, enhance_white_sign, 
-    lose_enhance_white_sign, price_sell_high, price_sell_low, close_ema_18, price_stop, generate_type,
-    buy_total, buy_fee
+    lose_enhance_white_sign, price_sell_high, price_sell_low, close_ema_18, price_stop, 
+    generate_type, buy_total, buy_fee, time_buy, time_sell, buy_rule_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
     select 
     <include refid="Base_Column_List" />
-    from stock_hold
+    from stock_qt_hold
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--@mbg.generated-->
-    delete from stock_hold
+    delete from stock_qt_hold
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockHold" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockQtHold" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into stock_hold (code, time_create, time_update, 
+    insert into stock_qt_hold (code, time_create, time_update, 
       `status`, buy_amount, buy_price, 
       hold_amount, sell_stage, weekly_ema_result_id, 
       note, price_close, price_high, 
       price_low, enhance_white_sign, lose_enhance_white_sign, 
       price_sell_high, price_sell_low, close_ema_18, 
-      price_stop, generate_type, buy_total, buy_fee)
+      price_stop, generate_type, buy_total, 
+      buy_fee, time_buy, time_sell, 
+      buy_rule_id)
     values (#{code,jdbcType=VARCHAR}, #{timeCreate,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP}, 
       #{status,jdbcType=INTEGER}, #{buyAmount,jdbcType=INTEGER}, #{buyPrice,jdbcType=FLOAT}, 
       #{holdAmount,jdbcType=INTEGER}, #{sellStage,jdbcType=INTEGER}, #{weeklyEmaResultId,jdbcType=INTEGER}, 
       #{note,jdbcType=VARCHAR}, #{priceClose,jdbcType=FLOAT}, #{priceHigh,jdbcType=FLOAT}, 
       #{priceLow,jdbcType=FLOAT}, #{enhanceWhiteSign,jdbcType=BOOLEAN}, #{loseEnhanceWhiteSign,jdbcType=BOOLEAN}, 
       #{priceSellHigh,jdbcType=FLOAT}, #{priceSellLow,jdbcType=FLOAT}, #{closeEma18,jdbcType=FLOAT}, 
-      #{priceStop,jdbcType=FLOAT}, #{generateType, jdbcType=INTEGER}, #{buyTotal,jdbcType=FLOAT},
-      #{buyFee,jdbcType=FLOAT},)
+      #{priceStop,jdbcType=FLOAT}, #{generateType,jdbcType=INTEGER}, #{buyTotal,jdbcType=FLOAT}, 
+      #{buyFee,jdbcType=FLOAT}, #{timeBuy,jdbcType=TIMESTAMP}, #{timeSell,jdbcType=TIMESTAMP}, 
+      #{buyRuleId,jdbcType=INTEGER})
   </insert>
-  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockHold">
+  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockQtHold">
     <!--@mbg.generated-->
-    update stock_hold
+    update stock_qt_hold
     set code = #{code,jdbcType=VARCHAR},
       time_create = #{timeCreate,jdbcType=TIMESTAMP},
       time_update = #{timeUpdate,jdbcType=TIMESTAMP},
@@ -90,12 +96,15 @@
       generate_type = #{generateType,jdbcType=INTEGER},
       buy_total = #{buyTotal,jdbcType=FLOAT},
       buy_fee = #{buyFee,jdbcType=FLOAT},
+      time_buy = #{timeBuy,jdbcType=TIMESTAMP},
+      time_sell = #{timeSell,jdbcType=TIMESTAMP},
+      buy_rule_id = #{buyRuleId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="getBeanlistByPage" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from stock_hold
+    from stock_qt_hold
     <where>
       <if test="keywords!=null">
         and code like concat('%',#{keywords},'%')
@@ -110,7 +119,7 @@
     </if>
   </select>
   <select id="getTotal" resultType="java.lang.Long">
-    select count(*) from stock_hold
+    select count(*) from stock_qt_hold
     <where>
       <if test="keywords!=null">
         and code like concat('%',#{keywords},'%')

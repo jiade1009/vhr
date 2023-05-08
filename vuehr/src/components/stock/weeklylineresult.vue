@@ -5,7 +5,8 @@
       <div>
       </div>
       <div>
-        <el-button type="primary" icon="el-icon-plus" :disabled="disabled" @click="reloadWeekly($event)">
+        <el-button type="primary" icon="el-icon-plus" :disabled="disabled" @click="reloadWeekly($event)"
+                   v-if="flag!='qtstock'">
           生成周线
         </el-button>
       </div>
@@ -144,7 +145,7 @@
           <template slot-scope="scope">
             <el-button @click.stop="viewEma(scope.row)" style="padding: 3px"size="mini">查看EMA
             </el-button>
-            <el-button type="success" @click.stop="generateEma(scope.row)" style="padding: 3px"size="mini">生成EMA
+            <el-button type="success" @click.stop="generateEma(scope.row)" style="padding: 3px"size="mini" v-if="flag!='qtstock'">生成EMA
             </el-button>
           </template>
         </el-table-column>
@@ -243,7 +244,7 @@ export default {
     reloadWeekly(e) {
       let o = e.currentTarget;
       let msg = "";
-      if (this.flag=='stock') {
+      if (this.flag=='stock' || this.flag=='qtstock') {
         msg = "如果时间未超过下午15点，则生成上一个交易日的周线；此操作将需要时间生成A股周线历史数据和EMA数据，是否继续?"
       } else if (this.flag == 'hstock'){
         msg = "如果时间未超过下午16点，则生成上一个交易日的周线；此操作将需要时间生成H股周线历史数据和EMA数据，是否继续?"

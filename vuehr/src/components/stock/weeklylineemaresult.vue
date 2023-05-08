@@ -54,7 +54,7 @@
         <el-table-column
             fixed="right"
             width="200"
-            label="操作">
+            label="操作" v-if="flag!='qtstock'">
           <template slot-scope="scope">
             <el-button v-if="scope.row.runStatus==0" type="danger" @click="runBuyRule(scope.row)" style="padding: 3px"size="mini">运行策略
             </el-button>

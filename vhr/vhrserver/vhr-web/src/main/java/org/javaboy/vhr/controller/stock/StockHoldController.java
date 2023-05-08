@@ -9,6 +9,7 @@ import org.javaboy.vhr.model.util.StockHoldStatus;
 import org.javaboy.vhr.pythonutil.ExecPython;
 import org.javaboy.vhr.service.HStockHoldService;
 import org.javaboy.vhr.service.StockHoldService;
+import org.javaboy.vhr.service.StockQtHoldService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,6 +36,8 @@ public class StockHoldController {
     private StockHoldService stockHoldService;
     @Resource
     private HStockHoldService hStockHoldService;
+    @Resource
+    private StockQtHoldService stockQtHoldService;
     @Resource
     private ExecPython execPython;
 
@@ -108,5 +111,15 @@ public class StockHoldController {
         } else {
             return RespBean.error("股票状态不正确，无法关闭买入交易");
         }
+    }
+
+    // --------Qt预测方法定义 begin -----------
+    @GetMapping("/qtstock/hold/")
+    public RespPageBean getQtBeanlistByPage(@RequestParam(defaultValue = "1") Integer page,
+                                           @RequestParam(defaultValue = "10") Integer size,
+                                           String keyword,
+                                           Integer status) {
+        RespPageBean bean = stockQtHoldService.getBeanlistByPage(page, size, keyword, status);
+        return bean;
     }
 }

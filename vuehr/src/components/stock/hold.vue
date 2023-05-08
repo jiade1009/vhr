@@ -172,7 +172,7 @@
             :label="column.label"
             align="left">
           <template slot-scope="scope">
-            <div v-if="column.prop == 'code' && flag == 'stock'">
+            <div v-if="column.prop == 'code' && (flag == 'stock' || flag == 'qtstock')">
               <span v-html="xbFormatter(scope.row.code, scope.column.property)"></span>
 <!--              //将表格数据格式化后，再用 template + v-html 展示出来-->
             </div>
@@ -188,7 +188,7 @@
         <el-table-column
             fixed="right"
             width="200"
-            label="操作" v-if="flag=='stock'" >
+            label="操作" v-if="flag=='stock' || flag=='qtstock'" >
           <template slot-scope="scope">
             <el-button type="info" @click.stop="viewDetail(scope.row)" style="padding: 3px" size="mini">查看交易</el-button>
             <el-button type="success" @click.stop="viewProfit(scope.row)" style="padding: 3px" size="mini">查看盈亏</el-button>
@@ -295,7 +295,13 @@ export default {
   },
   computed: {
     baseCode: function () {
-      return this.flag == 'stock'?'stk_auto_order':'stk_h_auto_order'
+      if (this.flag == 'stock') {
+        return 'stk_auto_order';
+      } else if (this.flag == 'hstock') {
+        return 'stk_h_auto_order'
+      } else if (this.flag == 'qtstock') {
+        return 'stk_auto_order'
+      }
     }
   },
   data() {
@@ -514,7 +520,7 @@ export default {
       });
     },
     viewDetail(row) {
-      if (this.flag != 'stock') return false;
+      if (this.flag == 'hstock') return false;
       if (!!!row.detaillist) {
         this.getDetailList(row);
       } else {
@@ -540,6 +546,7 @@ export default {
     },
     getDetailList(row) {
       // 根据weekly_result_id，获取对应的ema结果
+      console.log(row)
       let url = '/' + this.flag + '/holdtrade/byholdid?hid='+row.id
       this.getRequest(url).then(resp => {
         this.loading = false;

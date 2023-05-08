@@ -5,6 +5,7 @@ import org.javaboy.vhr.model.RespBean;
 import org.javaboy.vhr.model.RespPageBean;
 import org.javaboy.vhr.pythonutil.ExecPython;
 import org.javaboy.vhr.service.HStockWeeklyLineResultService;
+import org.javaboy.vhr.service.StockQtWeeklyLineResultService;
 import org.javaboy.vhr.service.StockWeeklyLineResultService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,8 @@ public class StockWeeklyLineResultController {
     private StockWeeklyLineResultService stockWeeklyLineResultService;
     @Resource
     private HStockWeeklyLineResultService hStockWeeklyLineResultService;
+    @Resource
+    private StockQtWeeklyLineResultService stockQtWeeklyLineResultService;
     @Resource
     private ExecPython execPython;
 
@@ -59,5 +62,13 @@ public class StockWeeklyLineResultController {
         // 传递2个参数{"操作指令:生成周线", "操作方式：0手动，1自动"}
         execPython.runPython(new String[]{BaseConstants.PY_API_CREATE_H_WEEKLY, "0"});
         return RespBean.ok("正在生成Weekly数据线，请耐心等待!");
+    }
+
+    // ----------- Qt配置 begin---------
+    @GetMapping("/qtstock/weeklylineresult/")
+    public RespPageBean getQtBeanlistByPage(@RequestParam(defaultValue = "1") Integer page,
+                                           @RequestParam(defaultValue = "10") Integer size) {
+        RespPageBean bean = stockQtWeeklyLineResultService.getBeanlistByPage(page, size, "");
+        return bean;
     }
 }

@@ -1,9 +1,10 @@
 package org.javaboy.vhr.controller.stock;
 
 import org.javaboy.vhr.model.StockHoldTrade;
+import org.javaboy.vhr.model.StockQtHoldTrade;
 import org.javaboy.vhr.service.StockHoldTradeService;
+import org.javaboy.vhr.service.StockQtHoldTradeService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +17,6 @@ import java.util.List;
  * @author xxxxx
  */
 @RestController
-@RequestMapping("/stock/holdtrade")
 public class StockHoldTradeController {
     /**
      * 服务对象
@@ -24,8 +24,16 @@ public class StockHoldTradeController {
     @Resource
     private StockHoldTradeService stockHoldTradeService;
 
-    @GetMapping("/byholdid")
+    @Resource
+    private StockQtHoldTradeService stockQtHoldTradeService;
+
+    @GetMapping("/stock/holdtrade/byholdid")
     public List<StockHoldTrade> getBeanlistByWeeklyId(@RequestParam Integer hid) {
         return stockHoldTradeService.getBeanlistByHoldId(hid);
+    }
+
+    @GetMapping("/qtstock/holdtrade/byholdid")
+    public List<StockQtHoldTrade> getQtBeanlistByWeeklyId(@RequestParam Integer hid) {
+        return stockQtHoldTradeService.getBeanlistByHoldId(hid);
     }
 }

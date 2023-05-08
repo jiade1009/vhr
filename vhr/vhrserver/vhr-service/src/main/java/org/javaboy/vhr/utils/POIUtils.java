@@ -6,12 +6,10 @@ import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.javaboy.vhr.model.*;
-import org.springframework.context.support.BeanDefinitionDslKt;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
@@ -346,5 +344,128 @@ public class POIUtils {
             e.printStackTrace();
         }
         return list;
+    }
+
+
+    public static ResponseEntity<byte[]> stockQtProfitHold2Excel(List<StockQtProfitHold> list) {
+        //1. 创建一个 Excel 文档
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        //2. 创建文档摘要
+        workbook.createInformationProperties();
+        //3. 获取并配置文档信息
+        DocumentSummaryInformation docInfo = workbook.getDocumentSummaryInformation();
+        //文档类别
+        docInfo.setCategory("股票盈亏");
+        //文档管理员
+        docInfo.setManager("ghk");
+        //设置公司信息
+        docInfo.setCompany("www.ghk.com");
+        //4. 获取文档摘要信息
+        SummaryInformation summInfo = workbook.getSummaryInformation();
+        //文档标题
+        summInfo.setTitle("股票盈亏表");
+        //文档作者
+        summInfo.setAuthor("ghk");
+        // 文档备注
+        summInfo.setComments("本文档由 ghk 提供");
+        //5. 创建样式
+        //创建标题行的样式
+        HSSFCellStyle headerStyle = workbook.createCellStyle();
+        headerStyle.setFillForegroundColor(IndexedColors.YELLOW.index);
+        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        HSSFCellStyle dateCellStyle = workbook.createCellStyle();
+        dateCellStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("m/d/yy"));
+        HSSFSheet sheet = workbook.createSheet("股票盈亏表");
+        //设置列的宽度
+        sheet.setColumnWidth(0, 5 * 256);
+        sheet.setColumnWidth(1, 12 * 256);
+        sheet.setColumnWidth(2, 10 * 256);
+        sheet.setColumnWidth(3, 10 * 256);
+        sheet.setColumnWidth(4, 12 * 256);
+        sheet.setColumnWidth(5, 10 * 256);
+        sheet.setColumnWidth(6, 10 * 256);
+        sheet.setColumnWidth(7, 10 * 256);
+        sheet.setColumnWidth(8, 8 * 256);
+        //6. 创建标题行
+        HSSFRow r0 = sheet.createRow(0);
+        HSSFCell c0 = r0.createCell(0);
+        c0.setCellValue("编号");
+        c0.setCellStyle(headerStyle);
+        HSSFCell c1 = r0.createCell(1);
+        c1.setCellStyle(headerStyle);
+        c1.setCellValue("代码");
+        HSSFCell c2 = r0.createCell(2);
+        c2.setCellStyle(headerStyle);
+        c2.setCellValue("名称");
+        HSSFCell c3 = r0.createCell(3);
+        c3.setCellStyle(headerStyle);
+        c3.setCellValue("成本");
+        HSSFCell c4 = r0.createCell(4);
+        c4.setCellStyle(headerStyle);
+        c4.setCellValue("盈亏值");
+        HSSFCell c5 = r0.createCell(5);
+        c5.setCellStyle(headerStyle);
+        c5.setCellValue("盈亏率");
+        HSSFCell c6 = r0.createCell(6);
+        c6.setCellStyle(headerStyle);
+        c6.setCellValue("购买时间");
+        HSSFCell c7 = r0.createCell(7);
+        c7.setCellStyle(headerStyle);
+        c7.setCellValue("清仓时间");
+        HSSFCell c8 = r0.createCell(8);
+        c8.setCellStyle(headerStyle);
+        c8.setCellValue("持股天数");
+        for (int i = 0; i < list.size(); i++) {
+            StockQtProfitHold profitHold = list.get(i);
+            HSSFRow row = sheet.createRow(i + 1);
+            row.createCell(0).setCellValue(profitHold.getId());
+            row.createCell(1).setCellValue(profitHold.getCode());
+            row.createCell(2).setCellValue(profitHold.getStockBasicInfo().getName());
+            row.createCell(3).setCellValue(profitHold.getTotalBegin());
+            row.createCell(4).setCellValue(profitHold.getProfit());
+
+            row.createCell(5).setCellValue(String.format("%.2f", profitHold.getProfitRate()*100) + "%");
+            HSSFCell cell6 = row.createCell(6);
+            cell6.setCellStyle(dateCellStyle);
+            cell6.setCellValue(profitHold.getTimeBuy());
+            HSSFCell cell7 = row.createCell(7);
+            cell7.setCellStyle(dateCellStyle);
+            cell7.setCellValue(profitHold.getTimeSell());
+            row.createCell(8).setCellValue(profitHold.getHoldDays());
+        }
+
+        // 加入对应的买入和卖出策略参数
+        HSSFSheet rule_sheet = workbook.createSheet("买卖策略表");
+        HSSFRow rule_r0 = rule_sheet.createRow(0);
+        HSSFCell rule_c0 = rule_r0.createCell(0);
+        rule_c0.setCellValue("买入策略规则");
+        rule_c0.setCellStyle(headerStyle);
+
+        HSSFRow rule_r1 = rule_sheet.createRow(0);
+        HSSFCell rule_r1_c0 = rule_r1.createCell(0);
+        rule_r1_c0.setCellValue("上市时长");
+        HSSFCell rule_r1_c1 = rule_r1.createCell(1);
+        rule_r1_c1.setCellValue("开启");
+        HSSFCell rule_r1_c2 = rule_r1.createCell(2);
+        rule_r1_c2.setCellValue("策略周期");
+
+//        id	time_market	time_market_option	rule_period	turnover_limit	turnover_limit_option	conver_limit	conver_limit_option	shock_limit	shock_limit_option	time_create	time_update	status	buy_price_limit	buy_price_limit_option
+//        15	3	1	52	20	1	1.15	1	0.45	1	2023-02-22 10:40:44	2023-02-22 10:40:53	1	1.03	1
+
+        HSSFCell rule_c1 = rule_r0.createCell(1);
+        c1.setCellStyle(headerStyle);
+        c1.setCellValue("代码");
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        HttpHeaders headers = new HttpHeaders();
+        try {
+            headers.setContentDispositionFormData("attachment",
+                    new String("盈亏表.xls".getBytes("UTF-8"), "ISO-8859-1"));
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            workbook.write(baos);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<byte[]>(baos.toByteArray(), headers, HttpStatus.CREATED);
     }
 }
