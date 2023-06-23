@@ -4,6 +4,7 @@ import org.javaboy.vhr.model.RespPageBean;
 import org.javaboy.vhr.service.StockProfitService;
 import org.javaboy.vhr.service.StockQtProfitService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,6 +37,11 @@ public class StockProfitController {
         return stockProfitService.getBeanlistByPage(page, size, keyword);
     }
 
+    @GetMapping("/stock/profit/{holdId}")
+    public RespPageBean getBeanlistByHoldId(@PathVariable Integer holdId) {
+        return stockProfitService.getBeanlistByHoldId(holdId);
+    }
+
     // --------QT预测方法定义 begin -----------
     @GetMapping("/qtstock/profit/")
     public RespPageBean getQtBeanlistByPage(@RequestParam(defaultValue = "1") Integer page,
@@ -46,6 +52,11 @@ public class StockProfitController {
             size=null;
         }
         return stockQtProfitService.getBeanlistByPage(page, size, keyword);
+    }
+
+    @GetMapping("/qtstock/profit/{holdId}")
+    public RespPageBean getQtBeanlistByHoldId(@PathVariable String holdId) {
+        return stockQtProfitService.getBeanlistByHoldId(Integer.valueOf(holdId));
     }
 
 }

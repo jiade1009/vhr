@@ -1,15 +1,13 @@
 package org.javaboy.vhr.controller.stock;
 
 import org.javaboy.vhr.config.BaseConstants;
-import org.javaboy.vhr.model.HStockHold;
-import org.javaboy.vhr.model.RespBean;
-import org.javaboy.vhr.model.RespPageBean;
-import org.javaboy.vhr.model.StockHold;
+import org.javaboy.vhr.model.*;
 import org.javaboy.vhr.model.util.StockHoldStatus;
 import org.javaboy.vhr.pythonutil.ExecPython;
 import org.javaboy.vhr.service.HStockHoldService;
 import org.javaboy.vhr.service.StockHoldService;
 import org.javaboy.vhr.service.StockQtHoldService;
+import org.javaboy.vhr.service.UStockHoldService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,6 +34,8 @@ public class StockHoldController {
     private StockHoldService stockHoldService;
     @Resource
     private HStockHoldService hStockHoldService;
+    @Resource
+    private UStockHoldService uStockHoldService;
     @Resource
     private StockQtHoldService stockQtHoldService;
     @Resource
@@ -107,6 +107,33 @@ public class StockHoldController {
         if (hold.getStatus()==0) {
             hold.setStatus(StockHoldStatus.FINISH.getIndex());
             hStockHoldService.updateByPrimaryKey(hold);
+            return RespBean.ok("操作成功");
+        } else {
+            return RespBean.error("股票状态不正确，无法关闭买入交易");
+        }
+    }
+
+    // --------H股方法定义 begin -----------
+    @GetMapping("/ustock/hold/")
+    public RespPageBean getUBeanlistByPage(@RequestParam(defaultValue = "1") Integer page,
+                                           @RequestParam(defaultValue = "10") Integer size,
+                                           String keyword,
+                                           Integer status) {
+        RespPageBean bean = uStockHoldService.getBeanlistByPage(page, size, keyword, status);
+        return bean;
+    }
+
+    /**
+     * 关闭交易
+     * @param holdId
+     * @return
+     */
+    @PutMapping("/ustock/hold/close")
+    public RespBean closeUStock(@RequestParam Integer holdId) {
+        UStockHold hold = uStockHoldService.selectByPrimaryKey(holdId);
+        if (hold.getStatus()==0) {
+            hold.setStatus(StockHoldStatus.FINISH.getIndex());
+            uStockHoldService.updateByPrimaryKey(hold);
             return RespBean.ok("操作成功");
         } else {
             return RespBean.error("股票状态不正确，无法关闭买入交易");

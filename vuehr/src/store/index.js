@@ -12,6 +12,7 @@ const now = new Date();
 const store = new Vuex.Store({
     state: {
         routes: [],
+        routeMap: {},
         sessions: {},
         hrs: [],
         currentSession: null,
@@ -25,7 +26,8 @@ const store = new Vuex.Store({
             state.currentHr = hr;
         },
         initRoutes(state, data) {
-            state.routes = data;
+            state.routes = data[0];
+            state.routeMap = data[1];
         },
         changeCurrentSession(state, currentSession) {
             Vue.set(state.isDot, state.currentHr.username + '#' + currentSession.username, false);

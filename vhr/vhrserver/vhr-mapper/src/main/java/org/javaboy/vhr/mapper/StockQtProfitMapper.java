@@ -1,8 +1,11 @@
 package org.javaboy.vhr.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.javaboy.vhr.base.BaseMapper;
 import org.javaboy.vhr.model.StockQtProfit;
+
+import java.util.List;
 
 /**
  * @ClassName   : StockQtProfitMapper
@@ -14,4 +17,5 @@ import org.javaboy.vhr.model.StockQtProfit;
 
 @Mapper
 public interface StockQtProfitMapper extends BaseMapper<StockQtProfit, Integer> {
+    List<StockQtProfit> getBeanlistByHoldId(@Param("holdId") Integer holdId);
 }

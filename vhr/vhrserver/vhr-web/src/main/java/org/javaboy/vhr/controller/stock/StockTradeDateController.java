@@ -4,6 +4,7 @@ package org.javaboy.vhr.controller.stock;
 import org.javaboy.vhr.model.RespPageBean;
 import org.javaboy.vhr.service.HStockTradeDateService;
 import org.javaboy.vhr.service.StockATradeDateService;
+import org.javaboy.vhr.service.UStockTradeDateService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,8 @@ public class StockTradeDateController {
     private StockATradeDateService stockATradeDateService;
     @Resource
     private HStockTradeDateService hStockTradeDateService;
+    @Resource
+    private UStockTradeDateService uStockTradeDateService;
 
     @GetMapping("/stock/tradedate/")
     public RespPageBean getBeanlistByPage(@RequestParam(defaultValue = "1") Integer page,
@@ -36,5 +39,10 @@ public class StockTradeDateController {
     public RespPageBean getHBeanlistByPage(@RequestParam(defaultValue = "1") Integer page,
                                           @RequestParam(defaultValue = "10") Integer size, @RequestParam String keyword) {
         return hStockTradeDateService.getBeanlistByPage(page, size, keyword);
+    }
+    @GetMapping("/ustock/tradedate/")
+    public RespPageBean getUBeanlistByPage(@RequestParam(defaultValue = "1") Integer page,
+                                           @RequestParam(defaultValue = "10") Integer size, @RequestParam String keyword) {
+        return uStockTradeDateService.getBeanlistByPage(page, size, keyword);
     }
 }

@@ -7,6 +7,7 @@ import org.javaboy.vhr.pythonutil.ExecPython;
 import org.javaboy.vhr.service.HStockWeeklyLineResultService;
 import org.javaboy.vhr.service.StockQtWeeklyLineResultService;
 import org.javaboy.vhr.service.StockWeeklyLineResultService;
+import org.javaboy.vhr.service.UStockWeeklyLineResultService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +31,8 @@ public class StockWeeklyLineResultController {
     private StockWeeklyLineResultService stockWeeklyLineResultService;
     @Resource
     private HStockWeeklyLineResultService hStockWeeklyLineResultService;
+    @Resource
+    private UStockWeeklyLineResultService uStockWeeklyLineResultService;
     @Resource
     private StockQtWeeklyLineResultService stockQtWeeklyLineResultService;
     @Resource
@@ -61,6 +64,20 @@ public class StockWeeklyLineResultController {
     public RespBean newHWeekly() {
         // 传递2个参数{"操作指令:生成周线", "操作方式：0手动，1自动"}
         execPython.runPython(new String[]{BaseConstants.PY_API_CREATE_H_WEEKLY, "0"});
+        return RespBean.ok("正在生成Weekly数据线，请耐心等待!");
+    }
+    // ----------- U股配置 begin---------
+    @GetMapping("/ustock/weeklylineresult/")
+    public RespPageBean getUBeanlistByPage(@RequestParam(defaultValue = "1") Integer page,
+                                           @RequestParam(defaultValue = "10") Integer size) {
+        RespPageBean bean = uStockWeeklyLineResultService.getBeanlistByPage(page, size, "");
+        return bean;
+    }
+
+    @PostMapping("/ustock/weeklylineresult/")
+    public RespBean newUWeekly() {
+        // 传递2个参数{"操作指令:生成周线", "操作方式：0手动，1自动"}
+        execPython.runPython(new String[]{BaseConstants.PY_API_CREATE_U_WEEKLY, "0"});
         return RespBean.ok("正在生成Weekly数据线，请耐心等待!");
     }
 

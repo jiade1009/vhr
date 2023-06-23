@@ -38,4 +38,10 @@ public class BaseConstants {
     public static final String PY_API_RUN_H_BUY_RULE = "run_h_buy_rule";  //  运行H股购买策略
     public static final String PY_API_RUN_H_UTURN_RULE = "run_h_uturn_rule";  //  运行H股回头草策略
 
+    // -----------U股指令 begin--------------
+    public static final String PY_API_CREATE_U_WEEKLY = "create_u_weekly";
+    public static final String PY_API_CREATE_U_EMA = "create_u_ema";   // 生成ema数据线
+    public static final String PY_API_RUN_U_BUY_RULE = "run_u_buy_rule";  //  运行购买策略
+    public static final String PY_API_RUN_U_UTURN_RULE = "run_u_uturn_rule";  //  运行回头草策略
+
 }

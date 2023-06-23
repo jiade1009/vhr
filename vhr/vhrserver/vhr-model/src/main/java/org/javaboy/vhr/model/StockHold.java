@@ -116,6 +116,15 @@ public class StockHold {
      * 买入手续费
      */
     private Double buyFee;
+    /**
+     * 购买时间
+     */
+    private Date timeBuy;
+
+    /**
+     * 卖出时间
+     */
+    private Date timeSell;
 
     public Integer getId() {
         return id;
@@ -303,5 +312,21 @@ public class StockHold {
 
     public void setBuyFee(Double buyFee) {
         this.buyFee = buyFee;
+    }
+
+    public Date getTimeBuy() {
+        return timeBuy;
+    }
+
+    public void setTimeBuy(Date timeBuy) {
+        this.timeBuy = timeBuy;
+    }
+
+    public Date getTimeSell() {
+        return timeSell;
+    }
+
+    public void setTimeSell(Date timeSell) {
+        this.timeSell = timeSell;
     }
 }

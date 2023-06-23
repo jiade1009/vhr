@@ -2,10 +2,13 @@ package org.javaboy.vhr.service;
 
 import org.javaboy.vhr.base.BaseService;
 import org.javaboy.vhr.mapper.StockQtProfitMapper;
+import org.javaboy.vhr.model.RespPageBean;
 import org.javaboy.vhr.model.StockQtProfit;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
+
 /**
  * @ClassName   : StockQtProfitService
  * @description : TODO
@@ -19,5 +22,12 @@ public class StockQtProfitService extends BaseService<StockQtProfit, Integer> {
 
     @Resource
     private StockQtProfitMapper stockQtProfitMapper;
+
+    public RespPageBean getBeanlistByHoldId(Integer holdId) {
+        List<StockQtProfit> data = stockQtProfitMapper.getBeanlistByHoldId(holdId);
+        RespPageBean bean = new RespPageBean();
+        bean.setData(data);
+        return bean;
+    }
 
 }

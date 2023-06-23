@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.UStockReturnResultMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.UStockReturnResult">
+    <!--@mbg.generated-->
+    <!--@Table u_stock_return_result-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
+    <result column="date_research" jdbcType="VARCHAR" property="dateResearch" />
+    <result column="result_desc" jdbcType="VARCHAR" property="resultDesc" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, time_create, date_research, result_desc
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from u_stock_return_result
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from u_stock_return_result
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.UStockReturnResult" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into u_stock_return_result (time_create, date_research, result_desc
+      )
+    values (#{timeCreate,jdbcType=TIMESTAMP}, #{dateResearch,jdbcType=VARCHAR}, #{resultDesc,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.UStockReturnResult">
+    <!--@mbg.generated-->
+    update u_stock_return_result
+    set time_create = #{timeCreate,jdbcType=TIMESTAMP},
+      date_research = #{dateResearch,jdbcType=VARCHAR},
+      result_desc = #{resultDesc,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from u_stock_return_result order by date_research desc
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from u_stock_return_result
+  </select>
+</mapper>

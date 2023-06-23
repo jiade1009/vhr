@@ -295,6 +295,9 @@ public class StockQtHold {
     }
 
     public String getStatusNote() {
+        if (this.status == null) {
+            return "";
+        }
         return StockHoldStatus.getName(this.status);
     }
 

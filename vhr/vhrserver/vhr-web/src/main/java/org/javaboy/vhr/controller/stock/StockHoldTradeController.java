@@ -1,5 +1,6 @@
 package org.javaboy.vhr.controller.stock;
 
+import org.javaboy.vhr.model.RespPageBean;
 import org.javaboy.vhr.model.StockHoldTrade;
 import org.javaboy.vhr.model.StockQtHoldTrade;
 import org.javaboy.vhr.service.StockHoldTradeService;
@@ -32,8 +33,17 @@ public class StockHoldTradeController {
         return stockHoldTradeService.getBeanlistByHoldId(hid);
     }
 
+    @GetMapping("/stock/holdtrade/")
+    public RespPageBean getBeanlistByPage(@RequestParam(defaultValue = "1") Integer page,
+                                          @RequestParam(defaultValue = "10") Integer size,
+                                          String keyword) {
+        RespPageBean bean = stockHoldTradeService.getBeanlistByPage(page, size, keyword);
+        return bean;
+    }
+
     @GetMapping("/qtstock/holdtrade/byholdid")
     public List<StockQtHoldTrade> getQtBeanlistByWeeklyId(@RequestParam Integer hid) {
         return stockQtHoldTradeService.getBeanlistByHoldId(hid);
     }
+
 }

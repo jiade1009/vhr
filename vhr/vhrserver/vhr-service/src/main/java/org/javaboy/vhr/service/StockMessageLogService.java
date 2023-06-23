@@ -69,12 +69,21 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
         insertMessage(content, MessageType.SIGN.getIndex(), flag);
     }
 
-    public void insertUreturnSignalMessages(List<String> ureturn_stocks, String flag) {
-        if (ureturn_stocks.size()>0) {
+    public void insertUreturnSignalMessages(List<String> ureturn_stocks, List<String> enhance_uturn_stocks, String flag) {
+        StringBuilder sbd = new StringBuilder("");
+        if (ureturn_stocks != null && ureturn_stocks.size()>0) {
             String codes = String.join(",", ureturn_stocks);
-            StringBuilder sbd = new StringBuilder("[").append(codes).append("]满足回头草策略，加入股票池中待购买");
-            insertMessage(sbd.toString(), MessageType.URETURNSIGN.getIndex(), flag);
+            sbd.append("【回头草：").append(codes).append("】，");
+        } else {
+            sbd.append("【回头草：无】，");
         }
+        if (enhance_uturn_stocks != null && enhance_uturn_stocks.size()>0) {
+            String codes = String.join(",", enhance_uturn_stocks);
+            sbd.append("【加强回头草：").append(codes).append("】，");
+        }else {
+            sbd.append("【加强回头草：无】");
+        }
+        insertMessage(sbd.toString(), MessageType.URETURNSIGN.getIndex(), flag);
     }
 
     public void insertBuyHoldMessages(List<String> hold_trade_ids, String flag) {

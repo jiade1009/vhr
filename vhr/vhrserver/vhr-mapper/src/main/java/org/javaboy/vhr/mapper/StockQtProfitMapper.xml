@@ -80,4 +80,14 @@
       </if>
     </where>
   </select>
+
+  <select id="getBeanlistByHoldId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_qt_profit
+    <where>
+      hold_id = #{holdId,jdbcType=INTEGER}
+    </where>
+    order by date_research desc
+  </select>
 </mapper>

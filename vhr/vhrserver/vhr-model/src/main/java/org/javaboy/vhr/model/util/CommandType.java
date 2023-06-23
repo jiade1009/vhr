@@ -27,19 +27,26 @@ public enum CommandType {
     H_WEEKLY, //周线数据下载
     H_WEEKLY_EMA, //ema数据生成
     H_BUY_RULE, //每日买入策略运行
-    H_U_RETURN_RUN; //每日回头草策略运行
+    H_U_RETURN_RUN, //每日回头草策略运行
+    //  U股相关指令
+    U_WEEKLY, //周线数据下载
+    U_WEEKLY_EMA, //ema数据生成
+    U_BUY_RULE, //每日买入策略运行
+    U_U_RETURN_RUN; //每日回头草策略运行
 
     public String getCommandDesc() {
         String desc = "";
         switch (this) {
             case H_WEEKLY:
-                desc = "H股周线数据生成";
+            case U_WEEKLY:
+                desc = this.name().substring(0, 1) + "股周线数据生成";
                 break;
             case WEEKLY:
                 desc = "A股周线数据生成";
                 break;
             case H_WEEKLY_EMA:
-                desc = "H股ema数据生成";
+            case U_WEEKLY_EMA:
+                desc = this.name().substring(0, 1) + "股ema数据生成";
                 break;
             case WEEKLY_EMA:
                 desc = "A股ema数据生成";
@@ -51,7 +58,8 @@ public enum CommandType {
                 desc = "每日开盘买入";
                 break;
             case H_BUY_RULE:
-                desc = "H股买入策略运行";
+            case U_BUY_RULE:
+                desc = this.name().substring(0, 1) + "股买入策略运行";
                 break;
             case BUY_RULE:
                 desc = "A股买入策略运行";
@@ -66,7 +74,8 @@ public enum CommandType {
                 desc = "成交信息查询";
                 break;
             case H_U_RETURN_RUN:
-                desc = "H股回头草策略运行";
+            case U_U_RETURN_RUN:
+                desc = this.name().substring(0, 1) + "股回头草策略运行";
                 break;
             case U_RETURN_RUN:
                 desc = "A股回头草策略运行";

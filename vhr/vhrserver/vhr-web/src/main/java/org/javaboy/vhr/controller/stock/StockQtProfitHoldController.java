@@ -1,8 +1,12 @@
 package org.javaboy.vhr.controller.stock;
 
 import org.javaboy.vhr.model.RespPageBean;
+import org.javaboy.vhr.model.StockQtBuyRule;
 import org.javaboy.vhr.model.StockQtProfitHold;
+import org.javaboy.vhr.model.StockQtSellRule;
+import org.javaboy.vhr.service.StockQtBuyRuleService;
 import org.javaboy.vhr.service.StockQtProfitHoldService;
+import org.javaboy.vhr.service.StockQtSellRuleService;
 import org.javaboy.vhr.utils.POIUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +28,10 @@ public class StockQtProfitHoldController {
      */
     @Resource
     private StockQtProfitHoldService stockQtProfitHoldService;
+    @Resource
+    private StockQtBuyRuleService stockQtBuyRuleService;
+    @Resource
+    private StockQtSellRuleService stockQtSellRuleService;
 
 
     // --------QT预测方法定义 begin -----------
@@ -35,12 +43,26 @@ public class StockQtProfitHoldController {
             page=null;
             size=null;
         }
-        return stockQtProfitHoldService.getBeanlistByPage(page, size, keyword);
+        return stockQtProfitHoldService.getExtendBeanlistByPage(page, size, keyword);
     }
 
     @GetMapping("/qtstock/profithold/export")
     public ResponseEntity<byte[]> exportData() {
-        List<StockQtProfitHold> list = (List<StockQtProfitHold>) stockQtProfitHoldService.getBeanlistByPage(null, null, "").getData();
-        return POIUtils.stockQtProfitHold2Excel(list);
+        List<StockQtProfitHold> list = (List<StockQtProfitHold>) stockQtProfitHoldService.
+                getExtendBeanlistByPage(null, null, "").getData();
+
+        StockQtBuyRule buyRule = null;
+        List<StockQtBuyRule> buyList = stockQtBuyRuleService.getBeanlistByStatus(1);
+        if (!buyList.isEmpty()){
+            buyRule = buyList.get(0);
+        }
+
+        StockQtSellRule sellRule = null;
+        List<StockQtSellRule> sellList = stockQtSellRuleService.getBeanlistByStatus(1);
+        if (!sellList.isEmpty()){
+            sellRule = sellList.get(0);
+        }
+
+        return POIUtils.stockQtProfitHold2Excel(list, buyRule, sellRule);
     }
 }

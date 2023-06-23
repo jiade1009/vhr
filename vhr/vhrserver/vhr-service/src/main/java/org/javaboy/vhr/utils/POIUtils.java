@@ -347,7 +347,8 @@ public class POIUtils {
     }
 
 
-    public static ResponseEntity<byte[]> stockQtProfitHold2Excel(List<StockQtProfitHold> list) {
+    public static ResponseEntity<byte[]> stockQtProfitHold2Excel(List<StockQtProfitHold> list, StockQtBuyRule buyRule,
+                                                                 StockQtSellRule sellRule) {
         //1. 创建一个 Excel 文档
         HSSFWorkbook workbook = new HSSFWorkbook();
         //2. 创建文档摘要
@@ -415,6 +416,9 @@ public class POIUtils {
         HSSFCell c8 = r0.createCell(8);
         c8.setCellStyle(headerStyle);
         c8.setCellValue("持股天数");
+        HSSFCell c9 = r0.createCell(9);
+        c9.setCellStyle(headerStyle);
+        c9.setCellValue("加入方式");
         for (int i = 0; i < list.size(); i++) {
             StockQtProfitHold profitHold = list.get(i);
             HSSFRow row = sheet.createRow(i + 1);
@@ -432,29 +436,140 @@ public class POIUtils {
             cell7.setCellStyle(dateCellStyle);
             cell7.setCellValue(profitHold.getTimeSell());
             row.createCell(8).setCellValue(profitHold.getHoldDays());
+            row.createCell(9).setCellValue(profitHold.getStockQtHold().getGenerateType()==0?"直接":"回头草");
         }
 
         // 加入对应的买入和卖出策略参数
+        // (第一行："买入策略规则"，第二行："买入策略标题"，第三行："买入策略参数值）
+        // (第四行："卖出策略规则"，第五行："卖出策略标题"，第六行："卖出策略参数值）
         HSSFSheet rule_sheet = workbook.createSheet("买卖策略表");
+        rule_sheet.setDefaultColumnWidth(15*256);
+//        rule_sheet.setColumnWidth(0, 15 * 256);
+//        rule_sheet.setColumnWidth(1, 15 * 256);
+//        rule_sheet.setColumnWidth(2, 15 * 256);
+//        rule_sheet.setColumnWidth(3, 15 * 256);
+//        rule_sheet.setColumnWidth(4, 15 * 256);
+//        rule_sheet.setColumnWidth(5, 15 * 256);
+//        rule_sheet.setColumnWidth(6, 15 * 256);
+//        rule_sheet.setColumnWidth(7, 15 * 256);
+//        rule_sheet.setColumnWidth(8, 15 * 256);
+//        rule_sheet.setColumnWidth(9, 15 * 256);
+//        rule_sheet.setColumnWidth(10,15 * 256);
+
         HSSFRow rule_r0 = rule_sheet.createRow(0);
         HSSFCell rule_c0 = rule_r0.createCell(0);
         rule_c0.setCellValue("买入策略规则");
         rule_c0.setCellStyle(headerStyle);
 
-        HSSFRow rule_r1 = rule_sheet.createRow(0);
+        HSSFRow rule_r3 = rule_sheet.createRow(3);
+        HSSFCell rule_c3 = rule_r3.createCell(0);
+        rule_c3.setCellValue("卖出策略规则");
+        rule_c3.setCellStyle(headerStyle);
+
+        // 买入策略标题栏
+        HSSFRow rule_r1 = rule_sheet.createRow(1);
         HSSFCell rule_r1_c0 = rule_r1.createCell(0);
-        rule_r1_c0.setCellValue("上市时长");
-        HSSFCell rule_r1_c1 = rule_r1.createCell(1);
-        rule_r1_c1.setCellValue("开启");
-        HSSFCell rule_r1_c2 = rule_r1.createCell(2);
-        rule_r1_c2.setCellValue("策略周期");
+        //卖出策略标题栏
+        HSSFRow rule_r4 = rule_sheet.createRow(4);
+        HSSFCell rule_r4_c0 = rule_r4.createCell(0);
 
-//        id	time_market	time_market_option	rule_period	turnover_limit	turnover_limit_option	conver_limit	conver_limit_option	shock_limit	shock_limit_option	time_create	time_update	status	buy_price_limit	buy_price_limit_option
-//        15	3	1	52	20	1	1.15	1	0.45	1	2023-02-22 10:40:44	2023-02-22 10:40:53	1	1.03	1
+        if (buyRule != null) { //添加买入策略内容
+            rule_r1_c0.setCellValue("上市时长");
+            HSSFCell rule_r1_c1 = rule_r1.createCell(1);
+            rule_r1_c1.setCellValue("开启");
+            HSSFCell rule_r1_c2 = rule_r1.createCell(2);
+            rule_r1_c2.setCellValue("策略周期");
+            HSSFCell rule_r1_c3 = rule_r1.createCell(3);
+            rule_r1_c3.setCellValue("成交金额比例");
+            HSSFCell rule_r1_c4 = rule_r1.createCell(4);
+            rule_r1_c4.setCellValue("开启");
+            HSSFCell rule_r1_c5 = rule_r1.createCell(5);
+            rule_r1_c5.setCellValue("收敛度");
+            HSSFCell rule_r1_c6 = rule_r1.createCell(6);
+            rule_r1_c6.setCellValue("开启");
+            HSSFCell rule_r1_c7 = rule_r1.createCell(7);
+            rule_r1_c7.setCellValue("下跌幅度");
+            HSSFCell rule_r1_c8 = rule_r1.createCell(8);
+            rule_r1_c8.setCellValue("开启");
+            HSSFCell rule_r1_c9 = rule_r1.createCell(9);
+            rule_r1_c9.setCellValue("买入价限价");
+            HSSFCell rule_r1_c10 = rule_r1.createCell(10);
+            rule_r1_c10.setCellValue("开启");
 
-        HSSFCell rule_c1 = rule_r0.createCell(1);
-        c1.setCellStyle(headerStyle);
-        c1.setCellValue("代码");
+            //填充内容
+            HSSFRow rule_r2 = rule_sheet.createRow(2);
+            HSSFCell rule_r2_c0 = rule_r2.createCell(0);
+            rule_r2_c0.setCellValue(buyRule.getTimeMarket());
+            HSSFCell rule_r2_c1 = rule_r2.createCell(1);
+            rule_r2_c1.setCellValue(buyRule.getTimeMarketOption()?"是":"否");
+            HSSFCell rule_r2_c2 = rule_r2.createCell(2);
+            rule_r2_c2.setCellValue(buyRule.getRulePeriod());
+            HSSFCell rule_r2_c3 = rule_r2.createCell(3);
+            rule_r2_c3.setCellValue(buyRule.getTurnoverLimit());
+            HSSFCell rule_r2_c4 = rule_r2.createCell(4);
+            rule_r2_c4.setCellValue(buyRule.getTurnoverLimitOption()?"是":"否");
+            HSSFCell rule_r2_c5 = rule_r2.createCell(5);
+            rule_r2_c5.setCellValue(buyRule.getConverLimit());
+            HSSFCell rule_r2_c6 = rule_r2.createCell(6);
+            rule_r2_c6.setCellValue(buyRule.getConverLimitOption()?"是":"否");
+            HSSFCell rule_r2_c7 = rule_r2.createCell(7);
+            rule_r2_c7.setCellValue(buyRule.getShockLimit());
+            HSSFCell rule_r2_c8 = rule_r2.createCell(8);
+            rule_r2_c8.setCellValue(buyRule.getShockLimitOption()?"是":"否");
+            HSSFCell rule_r2_c9 = rule_r2.createCell(9);
+            rule_r2_c9.setCellValue(buyRule.getBuyPriceLimit());
+            HSSFCell rule_r2_c10 = rule_r2.createCell(10);
+            rule_r2_c10.setCellValue(buyRule.getBuyPriceLimitOption()?"是":"否");
+        } else {
+            rule_r1_c0.setCellValue("暂无");
+        }
+
+        if (sellRule != null) {
+            rule_r4_c0.setCellValue("第一次止盈卖出比例");
+            HSSFCell rule_r4_c1 = rule_r4.createCell(1);
+            rule_r4_c1.setCellValue("止盈1比例");
+            HSSFCell rule_r4_c2 = rule_r4.createCell(2);
+            rule_r4_c2.setCellValue("止盈2比例");
+            HSSFCell rule_r4_c3 = rule_r4.createCell(3);
+            rule_r4_c3.setCellValue("止盈3比例");
+            HSSFCell rule_r4_c4 = rule_r4.createCell(4);
+            rule_r4_c4.setCellValue("止盈4比例");
+            HSSFCell rule_r4_c5 = rule_r4.createCell(5);
+            rule_r4_c5.setCellValue("止盈5比例");
+            HSSFCell rule_r4_c6 = rule_r4.createCell(6);
+            rule_r4_c6.setCellValue("止盈卖出1比例");
+            HSSFCell rule_r4_c7 = rule_r4.createCell(7);
+            rule_r4_c7.setCellValue("止盈卖出2比例");
+            HSSFCell rule_r4_c8 = rule_r4.createCell(8);
+            rule_r4_c8.setCellValue("止盈卖出3比例");
+            HSSFCell rule_r4_c9 = rule_r4.createCell(9);
+            rule_r4_c9.setCellValue("止盈卖出4比例");
+
+            //填充内容
+            HSSFRow rule_r5 = rule_sheet.createRow(5);
+            HSSFCell rule_r5_c0 = rule_r5.createCell(0);
+            rule_r5_c0.setCellValue(sellRule.getSellRatio());
+            HSSFCell rule_r5_c1 = rule_r5.createCell(1);
+            rule_r5_c1.setCellValue(sellRule.getP1Ratio());
+            HSSFCell rule_r5_c2 = rule_r5.createCell(2);
+            rule_r5_c2.setCellValue(sellRule.getP2Ratio());
+            HSSFCell rule_r5_c3 = rule_r5.createCell(3);
+            rule_r5_c3.setCellValue(sellRule.getP3Ratio());
+            HSSFCell rule_r5_c4 = rule_r5.createCell(4);
+            rule_r5_c4.setCellValue(sellRule.getP4Ratio());
+            HSSFCell rule_r5_c5 = rule_r5.createCell(5);
+            rule_r5_c5.setCellValue(sellRule.getP5Ratio());
+            HSSFCell rule_r5_c6 = rule_r5.createCell(6);
+            rule_r5_c6.setCellValue(sellRule.getSp1Ratio());
+            HSSFCell rule_r5_c7 = rule_r5.createCell(7);
+            rule_r5_c7.setCellValue(sellRule.getSp2Ratio());
+            HSSFCell rule_r5_c8 = rule_r5.createCell(8);
+            rule_r5_c8.setCellValue(sellRule.getSp3Ratio());
+            HSSFCell rule_r5_c9 = rule_r5.createCell(9);
+            rule_r5_c9.setCellValue(sellRule.getSp4Ratio());
+        } else {
+            rule_r4_c0.setCellValue("暂无");
+        }
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         HttpHeaders headers = new HttpHeaders();

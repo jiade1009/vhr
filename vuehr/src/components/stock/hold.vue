@@ -170,6 +170,7 @@
             :key="column.prop"
             :prop="column.prop"
             :label="column.label"
+            :sortable="column.sortable"
             align="left">
           <template slot-scope="scope">
             <div v-if="column.prop == 'code' && (flag == 'stock' || flag == 'qtstock')">
@@ -187,7 +188,7 @@
 
         <el-table-column
             fixed="right"
-            width="200"
+            width="100"
             label="操作" v-if="flag=='stock' || flag=='qtstock'" >
           <template slot-scope="scope">
             <el-button type="info" @click.stop="viewDetail(scope.row)" style="padding: 3px" size="mini">查看交易</el-button>
@@ -301,6 +302,8 @@ export default {
         return 'stk_h_auto_order'
       } else if (this.flag == 'qtstock') {
         return 'stk_auto_order'
+      } else if (this.flag == 'ustock') {
+        return 'stk_u_auto_order'
       }
     }
   },
@@ -323,7 +326,8 @@ export default {
       tableColumns: [
         {prop: "code", label: "代码", show: true},
         {prop: "timeCreate", label: "创建时间", show: true},
-        {prop: "timeUpdate", label: "更新时间", show: true},
+        {prop: "timeBuy", label: "买入时间", show: true, sortable: true},
+        {prop: "timeSell", label: "卖出时间", show: true, sortable: true},
         {prop: "statusNote", label: "状态", show: true},
         {prop: "buyPrice", label: "买入价", show: true},
         {prop: "buyAmount", label: "买入数量", show: true},
@@ -385,6 +389,9 @@ export default {
     }
   },
   mounted() {
+    if(!!this.$route.params.code) {
+      this.keyword = this.$route.params.code;
+    }
     this.initBeanlist();
     this.getSellRule();
     this.getBuySwitch();
@@ -392,6 +399,7 @@ export default {
   },
   methods: {
     initData() {
+      // 加载股票池状态集合
       if (!window.sessionStorage.getItem("holdstatus")) {
         this.getRequest('/stock/holdstatus').then(resp => {
           if (resp) {
@@ -448,7 +456,7 @@ export default {
         // return data;
         return row["statusNote"];
       } else if (property == "generateType"){
-        return data == "0"?"直接加入":"回头草";
+        return data == "0"?"直接加入":data == "1"?"回头草":"加强回头草";
       } else {
         return data;
       }
@@ -535,8 +543,16 @@ export default {
     },
     viewProfit(row) {
       this.profitDialogVisible = true;
-      let code = row["code"];
-      let url = '/' + this.flag + '/profit/?page=-1&size=-1' + "&keyword=" + code;
+      // let code = row["code"];
+      // let url = '/' + this.flag + '/profit/?page=-1&size=-1' + "&keyword=" + code;
+      // this.getRequest(url).then(resp => {
+      //   this.loading = false;
+      //   if (resp) {
+      //     this.profitBeanlist = resp.data;
+      //   }
+      // });
+      let holdId = row["id"];
+      let url = '/' + this.flag + '/profit/' + holdId;
       this.getRequest(url).then(resp => {
         this.loading = false;
         if (resp) {
@@ -546,7 +562,6 @@ export default {
     },
     getDetailList(row) {
       // 根据weekly_result_id，获取对应的ema结果
-      console.log(row)
       let url = '/' + this.flag + '/holdtrade/byholdid?hid='+row.id
       this.getRequest(url).then(resp => {
         this.loading = false;

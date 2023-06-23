@@ -10,7 +10,7 @@ import org.javaboy.vhr.pythonutil.ExecPython;
 import org.javaboy.vhr.service.DatabaseTypeService;
 import org.javaboy.vhr.service.MenuService;
 import org.javaboy.vhr.service.StockMessageConfService;
-import org.javaboy.vhr.task.StockCoreTask;
+import org.javaboy.vhr.task.AStockCoreTask;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,7 +30,7 @@ public class VhrApplicationTests {
     @Autowired
     ExecPython execPython;
     @Autowired
-    StockCoreTask stockCoreTask;
+    AStockCoreTask stockCoreTask;
 
     @Test
     public void contextLoads() {
@@ -49,9 +49,9 @@ public class VhrApplicationTests {
         List<DatabaseType> beanlist2 =  databaseTypeService.getAllBeanlist("");
     }
 
-//    @Test
+    @Test
     public void runPython() {
-        execPython.runPython(new String[]{"load_a_stock"});
+        execPython.runPython(new String[]{"create_u_weekly", "1"});
     }
 
 //    @Test

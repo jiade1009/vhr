@@ -6,14 +6,15 @@ export const initMenu = (router, store) => {
     }
     getRequest("/system/config/menu").then(data => {
         if (data) {
-            let fmtRoutes = formatRoutes(data);
+            let routeMap = {};
+            let fmtRoutes = formatRoutes(data, routeMap);
             router.addRoutes(fmtRoutes);
-            store.commit('initRoutes', fmtRoutes);
+            store.commit('initRoutes', [fmtRoutes, routeMap]);
             store.dispatch('connect');
         }
     })
 }
-export const formatRoutes = (routes) => {
+export const formatRoutes = (routes, routeMap) => {
     let fmRoutes = [];
     routes.forEach(router => {
         let {
@@ -24,12 +25,15 @@ export const formatRoutes = (routes) => {
             iconCls,
             children
         } = router;
+        let title = name;
+        name = component;
         if (children && children instanceof Array) {
-            children = formatRoutes(children);
+            children = formatRoutes(children, routeMap);
         }
         let fmRouter = {
             path: path,
             name: name,
+            title: title,
             iconCls: iconCls,
             meta: meta,
             children: children,
@@ -52,9 +56,12 @@ export const formatRoutes = (routes) => {
                     require(['../views/h_stock/' + component + '.vue'], resolve);
                 } else if (component.startsWith("QtStock")) {
                     require(['../views/qt_stock/' + component + '.vue'], resolve);
+                } else if (component.startsWith("UStock")) {
+                    require(['../views/u_stock/' + component + '.vue'], resolve);
                 }
             }
         }
+        routeMap[name] = fmRouter;
         fmRoutes.push(fmRouter);
     })
     return fmRoutes;

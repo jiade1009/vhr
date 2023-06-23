@@ -21,6 +21,15 @@
       <result column="sname" property="name"/>
     </association>
   </resultMap>
+  <resultMap id="ExtendBeanInfo" type="org.javaboy.vhr.model.StockQtProfitHold" extends="BaseResultMap">
+    <association property="stockBasicInfo" javaType="org.javaboy.vhr.model.StockBasicInfo">
+      <id column="scode" property="code"/>
+      <result column="sname" property="name"/>
+    </association>
+    <association property="stockQtHold" javaType="org.javaboy.vhr.model.StockQtHold">
+      <result column="generateType" property="generateType"/>
+    </association>
+  </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, hold_id, code, total_begin, time_create, profit, profit_rate, time_buy, time_sell, 
@@ -71,6 +80,18 @@
       and ph.code like concat('%',#{keywords},'%')
     </if>
     order by ph.time_buy desc
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getExtendBeanlistByPage" resultMap="ExtendBeanInfo">
+    select ph_hold.*, bi.`code` as scode, bi.`name` as sname from
+    (select ph.*, hold.`generate_type` as generateType from stock_qt_profit_hold ph left join stock_qt_hold hold
+    on ph.hold_id=hold.id) ph_hold, stock_basic_info bi where ph_hold.code=bi.code
+    <if test="keywords!=null">
+      and ph_hold.code like concat('%',#{keywords},'%')
+    </if>
+    order by ph_hold.time_buy desc
     <if test="page !=null and size!=null">
       limit #{page},#{size}
     </if>

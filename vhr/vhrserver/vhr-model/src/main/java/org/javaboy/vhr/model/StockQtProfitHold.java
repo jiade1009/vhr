@@ -59,6 +59,7 @@ public class StockQtProfitHold {
     private Integer holdDays;
 
     private StockBasicInfo stockBasicInfo;
+    private StockQtHold stockQtHold;  //仅获取generateType属性
 
     public Integer getId() {
         return id;
@@ -146,5 +147,13 @@ public class StockQtProfitHold {
 
     public void setStockBasicInfo(StockBasicInfo stockBasicInfo) {
         this.stockBasicInfo = stockBasicInfo;
+    }
+
+    public StockQtHold getStockQtHold() {
+        return stockQtHold;
+    }
+
+    public void setStockQtHold(StockQtHold stockQtHold) {
+        this.stockQtHold = stockQtHold;
     }
 }

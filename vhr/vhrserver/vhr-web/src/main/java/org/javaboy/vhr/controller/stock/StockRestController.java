@@ -55,10 +55,9 @@ public class StockRestController {
                         break;
                     case "uturn_sign":
                         List<String> uturn_stocks = (List<String>) data.get("list");
+                        List<String> enhance_uturn_stocks = (List<String>) data.get("enlist");  //加强回头草
                         flag = (String) data.get("flag");
-                        if (uturn_stocks!=null && uturn_stocks.size()>0) {
-                            stockMessageLogService.insertUreturnSignalMessages(uturn_stocks, flag);
-                        }
+                        stockMessageLogService.insertUreturnSignalMessages(uturn_stocks, enhance_uturn_stocks, flag);
                         break;
                     case "buy":
                         hold_trade_id_list = (List<String>) data.get("hold_trade_id_list");
@@ -80,7 +79,6 @@ public class StockRestController {
                         stockMessageLogService.insertSellHoldMessages(holdTradeId, flag);
                         break;
                     case "sell_result":
-                        break;
                     case "revoke":
                         break;
 

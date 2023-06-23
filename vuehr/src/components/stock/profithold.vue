@@ -50,6 +50,9 @@
             <div v-else-if="column.prop == 'stockBasicInfo'">
               {{ scope.row['stockBasicInfo'].name }}
             </div>
+            <div v-else-if="column.prop == 'stockQtHold'">
+              {{ scope.row['stockQtHold'].generateType==0?"直接":"回头草" }}
+            </div>
             <div v-else>
               {{ scope.row[scope.column.property] }}
             </div>
@@ -100,7 +103,8 @@ export default {
         {prop: "profitRate", label: "盈亏率", show: true},
         {prop: "holdDays", label: "持股天数", show: true},
         {prop: "timeBuy", label: "买入时间", show: true},
-        {prop: "timeSell", label: "卖出时间", show: true, sortable: true}
+        {prop: "timeSell", label: "卖出时间", show: true, sortable: true},
+        {prop: "stockQtHold", label: "加入方式", show: true, sortable: true}
       ],
     }
   },

@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import {
+    Alert,
     Button,
     Input,
     Table,
@@ -62,6 +63,7 @@ Vue.prototype.$ELEMENT = {
     userface: require('@/assets/img/userface.jpg'),
     pagesize: 10, //分页
 };
+Vue.use(Alert);
 Vue.use(Switch);
 Vue.use(CollapseItem);
 Vue.use(Radio);

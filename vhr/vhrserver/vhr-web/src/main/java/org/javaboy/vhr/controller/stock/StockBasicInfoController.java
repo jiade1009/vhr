@@ -5,8 +5,9 @@ import org.javaboy.vhr.config.BaseConstants;
 import org.javaboy.vhr.model.RespBean;
 import org.javaboy.vhr.model.RespPageBean;
 import org.javaboy.vhr.pythonutil.ExecPython;
-import org.javaboy.vhr.service.StockBasicInfoService;
 import org.javaboy.vhr.service.HStockBasicInfoService;
+import org.javaboy.vhr.service.StockBasicInfoService;
+import org.javaboy.vhr.service.UStockBasicInfoService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -26,6 +27,8 @@ public class StockBasicInfoController {
     private StockBasicInfoService stockBasicInfoService;
     @Resource
     private HStockBasicInfoService hStockBasicInfoService;
+    @Resource
+    private UStockBasicInfoService uStockBasicInfoService;
     @Resource
     private ExecPython execPython;
 
@@ -57,4 +60,10 @@ public class StockBasicInfoController {
         return hStockBasicInfoService.getBeanlistByPage(page, size, keyword);
     }
 
+    // --------U股方法定义 begin -----------
+    @GetMapping("/ustock/basicinfo/")
+    public RespPageBean getUBeanlistByPage(@RequestParam(defaultValue = "1") Integer page,
+                                           @RequestParam(defaultValue = "10") Integer size, @RequestParam String keyword) {
+        return uStockBasicInfoService.getBeanlistByPage(page, size, keyword);
+    }
 }

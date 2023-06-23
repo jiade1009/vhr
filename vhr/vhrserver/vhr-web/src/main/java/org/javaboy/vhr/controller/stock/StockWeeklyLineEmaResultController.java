@@ -6,6 +6,7 @@ import org.javaboy.vhr.pythonutil.ExecPython;
 import org.javaboy.vhr.service.HStockWeeklyLineEmaResultService;
 import org.javaboy.vhr.service.StockQtWeeklyLineEmaResultService;
 import org.javaboy.vhr.service.StockWeeklyLineEmaResultService;
+import org.javaboy.vhr.service.UStockWeeklyLineEmaResultService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,6 +29,8 @@ public class StockWeeklyLineEmaResultController {
     private StockWeeklyLineEmaResultService stockWeeklyLineEmaResultService;
     @Resource
     private HStockWeeklyLineEmaResultService hStockWeeklyLineEmaResultService;
+    @Resource
+    private UStockWeeklyLineEmaResultService uStockWeeklyLineEmaResultService;
     @Resource
     private StockQtWeeklyLineEmaResultService stockQtWeeklyLineEmaResultService;
     @Resource
@@ -79,6 +82,31 @@ public class StockWeeklyLineEmaResultController {
     @PutMapping("/hstock/weeklylineemaresult/newema")
     public RespBean newHEma(@RequestParam Integer wid) {
         execPython.runPython(new String[]{BaseConstants.PY_API_CREATE_H_EMA, String.valueOf(wid)});
+        return RespBean.ok("正在生成EMA数据线，请耐心等待!");
+    }
+
+    // ----------- U股配置 begin---------
+    @GetMapping("/ustock/weeklylineemaresult/")
+    public RespPageBean getUBeanlistByPage(@RequestParam(defaultValue = "1") Integer page,
+                                           @RequestParam(defaultValue = "10") Integer size) {
+        RespPageBean bean = uStockWeeklyLineEmaResultService.getBeanlistByPage(page, size, "");
+        return bean;
+    }
+
+    @GetMapping("/ustock/weeklylineemaresult/byweekly")
+    public List<UStockWeeklyLineEmaResult> getUBeanlistByWeeklyId(@RequestParam Integer wid) {
+        return uStockWeeklyLineEmaResultService.getBeanlistByWeeklyId(wid);
+    }
+
+    @PutMapping("/ustock/weeklylineemaresult/runBuyRule")
+    public RespBean runUBuyRule(@RequestParam Integer emaid) {
+        execPython.runPython(new String[]{BaseConstants.PY_API_RUN_U_BUY_RULE, String.valueOf(emaid)});
+        return RespBean.ok("正在执行买入策略，请耐心等待!");
+    }
+
+    @PutMapping("/ustock/weeklylineemaresult/newema")
+    public RespBean newUEma(@RequestParam Integer wid) {
+        execPython.runPython(new String[]{BaseConstants.PY_API_CREATE_U_EMA, String.valueOf(wid)});
         return RespBean.ok("正在生成EMA数据线，请耐心等待!");
     }
 

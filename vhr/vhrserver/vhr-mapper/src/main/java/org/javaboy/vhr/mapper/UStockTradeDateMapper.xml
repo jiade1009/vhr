@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.UStockTradeDateMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.UStockTradeDate">
+    <!--@mbg.generated-->
+    <!--@Table u_stock_trade_date-->
+    <id column="trade_date" jdbcType="VARCHAR" property="tradeDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    trade_date
+  </sql>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <!--@mbg.generated-->
+    delete from u_stock_trade_date
+    where trade_date = #{tradeDate,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="org.javaboy.vhr.model.UStockTradeDate">
+    <!--@mbg.generated-->
+    insert into u_stock_trade_date (trade_date)
+    values (#{tradeDate,jdbcType=VARCHAR})
+  </insert>
+
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from u_stock_trade_date
+    <where>
+      <if test="keywords!=null">
+        and trade_date like concat('%',#{keywords},'%')
+      </if>
+    </where>
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from u_stock_trade_date
+    <where>
+      <if test="keywords!=null">
+        and trade_date like concat('%',#{keywords},'%')
+      </if>
+    </where>
+  </select>
+  <select id="getByDate" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from u_stock_trade_date
+    where trade_date = #{tradeDate,jdbcType=VARCHAR}
+  </select>
+</mapper>

@@ -176,6 +176,20 @@ public class DateUtils {
     }
 
     /**
+     * 返回日期加X小时后的日期
+     *
+     * @param date
+     * @param i
+     * @return
+     */
+    public static Date addHour(Date date, int i) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(GregorianCalendar.HOUR_OF_DAY, i);
+        return calendar.getTime();
+    }
+
+    /**
      * 返回日期加X分钟后后的日期
      *
      * @param date
@@ -351,4 +365,9 @@ public class DateUtils {
     }
 
 
+    public static void main(String[] args) {
+        Date now = new Date();
+        Date before = addHour(now, -20);
+        System.out.println(before);
+    }
 }

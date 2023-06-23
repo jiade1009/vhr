@@ -21,14 +21,14 @@
             </el-header>
             <el-container>
                 <el-aside width="200px">
-                    <el-menu router unique-opened>
+                    <el-menu router unique-opened :default-active="$route.path">
                         <el-submenu :index="index+''" v-for="(item,index) in routes" v-if="!item.hidden" :key="index">
                             <template slot="title">
                                 <i style="color: #409eff;margin-right: 5px" :class="item.iconCls"></i>
-                                <span>{{item.name}}</span>
+                                <span>{{item.title}}</span>
                             </template>
                             <el-menu-item :index="child.path" v-for="(child,indexj) in item.children" :key="indexj">
-                                {{child.name}}
+                                {{child.title}}
                             </el-menu-item>
                         </el-submenu>
                     </el-menu>
@@ -36,7 +36,7 @@
                 <el-main>
                     <el-breadcrumb separator-class="el-icon-arrow-right" v-if="this.$router.currentRoute.path!='/home'">
                         <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-                        <el-breadcrumb-item>{{this.$router.currentRoute.name}}</el-breadcrumb-item>
+                        <el-breadcrumb-item>{{this.$store.state.routeMap[this.$router.currentRoute.name].title}}</el-breadcrumb-item>
                     </el-breadcrumb>
 
                     <div v-if="this.$router.currentRoute.path=='/home'">
@@ -230,7 +230,6 @@
         beforeMount() {
         },
         mounted() {
-          // console.log("mounted:"+this.size);
           this.initData();
           this.updateFundUsable();
         },
@@ -244,7 +243,7 @@
                 if (resp) {
                   let o = resp.obj
                   if (o) { // 存在正在运行的卖出策略
-                    console.log(o)
+                    // console.log(o)
                     // o.total = o.total.toFixed(2);
                     // o.totalProfit = o.totalProfit.toFixed(2);
                     // o.profit = o.profit.toFixed(2);
