@@ -249,4 +249,15 @@ public class AStockCoreTask extends BaseStockTask{
         String[] params = new String[]{BaseConstants.PY_API_RUN_A_CJCX, now};
         runPython(flag, params, "股票成交结果信息查询");
     }
+
+    /**
+     * 检查今日的股票卖出交易结果（如果交易失败，需要复原股票持有数）
+     */
+    @Async("stockCoreAsync")
+    @Scheduled(cron = "${task.cron.StockCore.check_sell}")
+    public void checkSell() {
+        String now = DateUtils.formatDate(new Date(), DateUtils.yyyyMMdd);
+        String[] params = new String[]{BaseConstants.PY_API_RUN_A_CHECK_SELL, now};
+        runPython(flag, params, "收盘股票卖出交易结果检查");
+    }
 }

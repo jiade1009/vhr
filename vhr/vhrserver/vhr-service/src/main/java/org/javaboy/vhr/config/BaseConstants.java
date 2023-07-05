@@ -27,6 +27,7 @@ public class BaseConstants {
     public static final String PY_API_RUN_A_REVOKE_QUERY = "run_a_revoke_query";  //  运行A股股票撤销交易查询
     public static final String PY_API_RUN_A_DAILY_REFRESH = "run_a_daily_refresh";  //  收盘股票信息更新
     public static final String PY_API_RUN_A_CJCX = "run_a_cjcx";  //  收盘股票成交结果更新
+    public static final String PY_API_RUN_A_CHECK_SELL = "run_a_check_sell";  //  收盘股票卖出交易结果检查
     public static final String PY_API_RUN_A_CCTJ = "run_a_cctj";  //  调用qmt客户端查询股票账户持仓结果
     // 标记现在开始进行周线数据下载 true/false
     public static final String OPE_STOCK_CREATE_A_WEEKLY = "OPE_STOCK_CREATE_A_WEEKLY";

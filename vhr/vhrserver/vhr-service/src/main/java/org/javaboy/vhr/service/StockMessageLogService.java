@@ -10,6 +10,8 @@ import org.javaboy.vhr.model.StockMessageConf;
 import org.javaboy.vhr.model.StockMessageLog;
 import org.javaboy.vhr.model.util.CommandType;
 import org.javaboy.vhr.model.util.MessageType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -36,6 +38,8 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
     private StockMessageConfService stockMessageConfService;
     @Resource
     private StockHoldTradeService stockHoldTradeService;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(StockMessageLogService.class);
 
     public int insert(StockMessageLog record) {
         return stockMessageLogMapper.insert(record);
@@ -172,6 +176,7 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
      * @param content
      */
     public void insertMessage(String content, Integer messageType, String flag) {
+        LOGGER.info("新增消息内容：{} - {} - {}", flag, MessageType.getName(messageType), content);
         List<StockMessageConf> confList = stockMessageConfService.getListByStatus(true);
         for (StockMessageConf conf : confList) {
             String send_type = conf.getSendType();

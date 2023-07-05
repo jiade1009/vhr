@@ -17,6 +17,7 @@ public enum CommandType {
     CODE_REFRESH,  // 每周股票代码刷新
     TRADE_DATE,  // 交易日数据更新
     CJCX,  // 收盘股票成交信息查询
+    CHECK_SELL,  // 收盘股票卖出交易结果检查
     U_RETURN_RUN,  //  回头草策略运行
     DIVIDEND,  // 股票除权除息
     PROFIT,  // 股票收益计算
@@ -72,6 +73,9 @@ public enum CommandType {
                 break;
             case CJCX:
                 desc = "成交信息查询";
+                break;
+            case CHECK_SELL:
+                desc = "收盘股票卖出交易结果检查";
                 break;
             case H_U_RETURN_RUN:
             case U_U_RETURN_RUN:
