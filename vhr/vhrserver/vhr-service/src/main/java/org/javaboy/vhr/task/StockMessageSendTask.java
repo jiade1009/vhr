@@ -43,7 +43,7 @@ public class StockMessageSendTask {
                 stockMessageLogService.updateStockMessageLogStatus(log.getMsgid(), 2);//直接设置该条消息发送失败
             } else {
                 Employee emp = employeeService.getEmployeeById(log.getEmpid());
-                RabbitBean bean = new RabbitBean(emp, log.getContent(),
+                RabbitBean bean = new RabbitBean(emp, log.getContent(), log.getTitle(),
                         MessageType.getMessageType(log.getMessageType()), log.getSendType(), log.getFlag());
                 stockRabbitTemplate.convertAndSend(log.getExchange(), log.getRoutekey(), bean, new CorrelationData(log.getMsgid()));
                 stockMessageLogService.updateCount(log.getMsgid(), new Date());

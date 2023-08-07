@@ -79,4 +79,10 @@
   <select id="getTotal" resultType="java.lang.Long">
     select count(*) from h_stock_weekly_line_ema_result
   </select>
+
+  <select id="getBeanlistByDateResearch" resultMap="BaseResultMap">
+    select ema.* from h_stock_weekly_line_ema_result ema, h_stock_weekly_line_result weekly
+    where ema.weekly_line_id = weekly.id and weekly.generate_type = 1 and
+    weekly.date_weekly_research = #{dateResearch,jdbcType=VARCHAR}
+  </select>
 </mapper>

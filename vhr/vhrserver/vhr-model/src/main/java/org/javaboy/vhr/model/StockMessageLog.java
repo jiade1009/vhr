@@ -53,7 +53,7 @@ public class StockMessageLog {
     private Date timeUpdate;
 
     /**
-    * 消息分类（信号发现、买入、卖出、巡检结果）
+    * 消息分类（信号发现、买入、卖出、巡检结果、回头草）
     */
     private Integer messageType;
     private String messageTypeNote;
@@ -65,6 +65,8 @@ public class StockMessageLog {
     private String sendTypeNote;
     // 消息内容
     private String content;
+    // 消息标题
+    private String title;
 
     private String flag;
 
@@ -200,5 +202,13 @@ public class StockMessageLog {
 
     public void setFlag(String flag) {
         this.flag = flag;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

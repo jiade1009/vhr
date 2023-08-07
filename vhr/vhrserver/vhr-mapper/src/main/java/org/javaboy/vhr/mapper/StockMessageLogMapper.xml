@@ -17,6 +17,7 @@
     <result column="send_type" jdbcType="INTEGER" property="sendType" />
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
     <result column="flag" jdbcType="VARCHAR" property="flag" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
   </resultMap>
 
   <resultMap id="AllBeanInfo" type="org.javaboy.vhr.model.StockMessageLog" extends="BaseResultMap">
@@ -28,19 +29,19 @@
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     msgId, empId, `status`, routeKey, exchange, `count`, time_try, time_create, time_update, 
-    message_type, send_type, content, flag
+    message_type, send_type, content, flag, title
   </sql>
   <insert id="insert" parameterType="org.javaboy.vhr.model.StockMessageLog">
     <!--@mbg.generated-->
     insert into stock_message_log (msgId, empId, `status`, 
       routeKey, exchange, `count`, 
       time_try, time_create, time_update, 
-      message_type, send_type, content, flag)
+      message_type, send_type, content, flag, title)
     values (#{msgid,jdbcType=VARCHAR}, #{empid,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
       #{routekey,jdbcType=VARCHAR}, #{exchange,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER}, 
       #{timeTry,jdbcType=TIMESTAMP}, #{timeCreate,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP}, 
       #{messageType,jdbcType=INTEGER}, #{sendType,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR},
-      #{flag,jdbcType=VARCHAR})
+      #{flag,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR})
   </insert>
 
   <update id="updateStockMessageLogStatus">
@@ -72,6 +73,22 @@
     select count(*) from stock_message_log s, employee e where  s.`empId` = e.`id`
     <if test="bean.employee.name !=null and bean.employee.name!=''">
       and e.name like concat('%',#{bean.employee.name},'%')
+    </if>
+  </select>
+
+  <select id="getMessageLogByDateResearch" resultMap="BaseResultMap">
+    select * from stock_message_log where status = 1
+    <if test="messageType!=null">
+      and message_type=#{messageType, jdbcType=INTEGER}
+    </if>
+    <if test="sendType!=null">
+      and send_type=#{sendType, jdbcType=INTEGER}
+    </if>
+    <if test="flag!=null">
+      and flag=#{flag, jdbcType=VARCHAR}
+    </if>
+    <if test="dateResearch!=null">
+      and title like like concat('%-',#{dateResearch})
     </if>
   </select>
 </mapper>

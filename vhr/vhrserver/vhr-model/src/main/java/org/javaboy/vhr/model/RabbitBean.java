@@ -37,18 +37,21 @@ public class RabbitBean implements Serializable {
     private String flag;
 
     private String content; //消息内容
+    private String title; //消息标题
 
     public RabbitBean(Employee employee) {
-        this(employee, "", null, null, null, "");
+        this(employee, "", "", null, null, null, "");
     }
 
-    public RabbitBean(Employee employee, String content, MessageType messageType, Integer sendType, String flag) {
-        this(employee, content, messageType, sendType, null, flag);
+    public RabbitBean(Employee employee, String content, String title, MessageType messageType, Integer sendType, String flag) {
+        this(employee, content, title, messageType, sendType, null, flag);
     }
 
-    public RabbitBean(Employee employee, String content, MessageType messageType, Integer sendType, Map dataMap, String flag) {
+    public RabbitBean(Employee employee, String content, String title, MessageType messageType,
+                      Integer sendType, Map dataMap, String flag) {
         this.employee = employee;
         this.content = content;
+        this.title = title;
         this.dataMap = dataMap;
         this.messageType = messageType;
         this.sendType = sendType;
@@ -61,6 +64,7 @@ public class RabbitBean implements Serializable {
                 "messageType=" + messageType +
                 ", sendType=" + sendType +
                 ", flag=" + flag +
+                ", title='" + title + '\'' +
                 ", content='" + content + '\'';
         if (this.employee != null) {
             json += ", employee=" + employee.toString();
@@ -140,5 +144,13 @@ public class RabbitBean implements Serializable {
 
     public void setFlag(String flag) {
         this.flag = flag;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

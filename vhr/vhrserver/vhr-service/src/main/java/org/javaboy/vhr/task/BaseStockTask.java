@@ -1,10 +1,9 @@
 package org.javaboy.vhr.task;
 
-import org.javaboy.vhr.model.HStockTradeDate;
-import org.javaboy.vhr.model.StockATradeDate;
-import org.javaboy.vhr.model.StockExecuteResult;
-import org.javaboy.vhr.model.UStockTradeDate;
+import org.javaboy.vhr.model.*;
 import org.javaboy.vhr.model.util.CommandType;
+import org.javaboy.vhr.model.util.MessageType;
+import org.javaboy.vhr.model.util.SendType;
 import org.javaboy.vhr.pythonutil.ExecPython;
 import org.javaboy.vhr.service.*;
 import org.javaboy.vhr.utils.DateUtils;
@@ -17,6 +16,8 @@ import javax.annotation.Resource;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @description : 股票定时任务基类
@@ -27,6 +28,8 @@ import java.util.List;
 
 public class BaseStockTask {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseStockTask.class);
+    private static Pattern sign_p1 = Pattern.compile("ema18突破ema25股票：【(.*?)】");  //白色信号正则
+    private static Pattern sign_p2 = Pattern.compile("满足购买策略股票：【(.*?)】");  //蓝色信号正则
     @Resource
     protected StringRedisTemplate stringRedisTemplate;
     @Resource
@@ -43,6 +46,17 @@ public class BaseStockTask {
     private StockExecuteResultService stockExecuteResultService;
     @Resource
     protected StockMessageLogService stockMessageLogService;
+
+    @Resource
+    private StockWeeklyLineEmaResultService stockWeeklyLineEmaResultService;
+    @Resource
+    private HStockWeeklyLineEmaResultService hStockWeeklyLineEmaResultService;
+    @Resource
+    private UStockWeeklyLineEmaResultService uStockWeeklyLineEmaResultService;
+
+    @Resource
+    private StockReturnResultService stockReturnResultService;
+
     @Value("${task.cron.StockCore.weekly}")
     protected String weekly;
 
@@ -81,13 +95,12 @@ public class BaseStockTask {
                 tradeDate = hBean==null?null:hBean.getTradeDate();
                 break;
             case "U":
-                // 针对美股，由于它收盘时间是北京时间的第二天凌晨4点（或冬令5点），因此，我们判断其交易时间需要相减12小时
-                Date usaTradeDate = DateUtils.addHour(nowDate, -12);
+                // 针对美股，由于它收盘时间是北京时间的第二天凌晨4点（或冬令5点），但是目前我们运行的周线，买入策略，回头草策略
+                // 均是在第二天晚上22：00开始，我们判断其交易时间需要相减24小时
+                Date usaTradeDate = DateUtils.addHour(nowDate, -24);
                 String usaNow = DateUtils.formatDate(usaTradeDate, DateUtils.yyyy_MM_dd);
                 UStockTradeDate uBean = uStockTradeDateService.getByDate(usaNow);
-                System.out.println(usaNow);
                 tradeDate = uBean==null?null:uBean.getTradeDate();
-                System.out.println(tradeDate);
                 break;
         }
         return tradeDate;
@@ -100,17 +113,81 @@ public class BaseStockTask {
      */
     protected void doInspection(String flag, CommandType[] cmdArray) {
         String tradeDate = getTodayTradeDate(flag);
-        String now = DateUtils.formatDate(new Date(), DateUtils.yyyyMMdd);
         if (tradeDate!=null) { //当天为股票交易日
+            tradeDate = tradeDate.replace("-", "");
             LOGGER.info(".............开始{}股【{}】的巡检查询..............", flag, tradeDate);
             LinkedHashMap<CommandType, Boolean> params = new LinkedHashMap();
             for (CommandType cmd: cmdArray) {
-                params.put(cmd, getExecuteResult(cmd, now));
+                params.put(cmd, getExecuteResult(cmd, tradeDate));
             }
-            stockMessageLogService.insertInspectionMessages(params, flag);
+            stockMessageLogService.insertInspectionMessages(params, tradeDate, flag);
         } else {
             LOGGER.debug("今天不是{}股股票交易日，不运行巡检操作", flag);
         }
+    }
+
+    protected void checkSignalMail(String flag) {
+        String tradeDate = getTodayTradeDate(flag);
+        if (tradeDate!=null) { //当天为股票交易日
+            LOGGER.info(".............开始{}股【{}】的信号发现邮件检查..............", flag, tradeDate);
+            tradeDate = tradeDate.replace("-", "");
+            List messageList = stockMessageLogService.getMessageLogByDateResearch(tradeDate, MessageType.SIGN,
+                    SendType.EMAIL, flag);
+            if (messageList.size() == 0) { //未成功发送信号发现邮件
+                String white_stocks = "";
+                String buy_stocks = "";
+                String desc = getRunStatusDesc(tradeDate, flag);
+                Matcher m = sign_p1.matcher(desc);  // 白色信号
+                while (m.find()) {
+                    white_stocks = m.group(1);
+                }
+                Matcher m2 = sign_p2.matcher(desc);  // 蓝色信号
+                while (m2.find()) {
+                    buy_stocks = m2.group(1);
+                }
+                stockMessageLogService.insertSignalMessages(white_stocks, buy_stocks, tradeDate, flag);
+            }
+
+            // 回头草信号
+            messageList = stockMessageLogService.getMessageLogByDateResearch(tradeDate, MessageType.URETURNSIGN,
+                    SendType.EMAIL, flag);
+            if (messageList.size() == 0) {
+
+            }
+        } else {
+            LOGGER.debug("今天不是{}股股票交易日，不运行信号发现邮件检查", flag);
+        }
+    }
+
+    private String getRunStatusDesc(String tradeDate, String flag) {
+        if (flag == "A") {
+            List<StockWeeklyLineEmaResult> list = stockWeeklyLineEmaResultService.getBeanlistByDateResearch(tradeDate);
+            if (list.size()>0) {
+                return list.get(0).getRunStatusDesc();
+            } else {
+                return "";
+            }
+        } else if (flag == "H") {
+            List<HStockWeeklyLineEmaResult> list = hStockWeeklyLineEmaResultService.getBeanlistByDateResearch(tradeDate);
+            if (list.size()>0) {
+                return list.get(0).getRunStatusDesc();
+            } else {
+                return "";
+            }
+        } else if (flag == "U") {
+            List<UStockWeeklyLineEmaResult> list = uStockWeeklyLineEmaResultService.getBeanlistByDateResearch(tradeDate);
+            if (list.size()>0) {
+                return list.get(0).getRunStatusDesc();
+            } else {
+                return "";
+            }
+        }
+        return "";
+    }
+
+    private String getReturnResult(String tradeDate, String flag) {
+
+        return "";
     }
 
     /**

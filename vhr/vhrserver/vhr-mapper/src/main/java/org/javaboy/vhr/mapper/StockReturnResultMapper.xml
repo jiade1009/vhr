@@ -52,4 +52,11 @@
   <select id="getTotal" resultType="java.lang.Long">
     select count(*) from stock_return_result
   </select>
+
+  <select id="getBeanlistByDateResearch" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_return_result where date_research = #{dateResearch,jdbcType=VARCHAR}
+  </select>
+
 </mapper>

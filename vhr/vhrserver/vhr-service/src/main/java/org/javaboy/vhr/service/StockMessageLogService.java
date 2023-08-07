@@ -10,6 +10,7 @@ import org.javaboy.vhr.model.StockMessageConf;
 import org.javaboy.vhr.model.StockMessageLog;
 import org.javaboy.vhr.model.util.CommandType;
 import org.javaboy.vhr.model.util.MessageType;
+import org.javaboy.vhr.model.util.SendType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -62,18 +63,34 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
     }
 
     /**
+     * 查找指定日期是否生成对应消息类型的日志
+     * @param dateResearch  指定日期 格式：yyyyMMdd
+     * @param messageType 消息类型
+     * @param sendType
+     * @param flag 股票交易市场
+     * @return
+     */
+    public List<StockMessageLog> getMessageLogByDateResearch(String dateResearch, MessageType messageType,
+                                                             SendType sendType, String flag) {
+        return stockMessageLogMapper.getMessageLogByDateResearch(dateResearch, messageType.getIndex(),
+                sendType.getIndex(), flag);
+    }
+    /**
      * 批量新增股票白色信号和蓝色信号通知
      * @param white_stocks
      * @param buy_stocks
      */
-    public void insertSignalMessages(String white_stocks, String buy_stocks, String flag) {
+    public void insertSignalMessages(String white_stocks, String buy_stocks, String date_research, String flag) {
         white_stocks = StringUtils.hasLength(white_stocks)?white_stocks:"暂无数据";
         buy_stocks = StringUtils.hasLength(buy_stocks)?buy_stocks:"暂无数据";
         String content = "白色信号：" + white_stocks+"； <br/>蓝色信号：" + buy_stocks;
-        insertMessage(content, MessageType.SIGN.getIndex(), flag);
+        String title = flag + "股" + MessageType.SIGN.getName() +
+                (StringUtils.hasLength(date_research) ? ("-" + date_research):"");
+        insertMessage(content, title, MessageType.SIGN.getIndex(), flag);
     }
 
-    public void insertUreturnSignalMessages(List<String> ureturn_stocks, List<String> enhance_uturn_stocks, String flag) {
+    public void insertUreturnSignalMessages(List<String> ureturn_stocks, List<String> enhance_uturn_stocks,
+                                            String date_research, String flag) {
         StringBuilder sbd = new StringBuilder("");
         if (ureturn_stocks != null && ureturn_stocks.size()>0) {
             String codes = String.join(",", ureturn_stocks);
@@ -87,10 +104,12 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
         }else {
             sbd.append("【加强回头草：无】");
         }
-        insertMessage(sbd.toString(), MessageType.URETURNSIGN.getIndex(), flag);
+        String title = flag + "股" + MessageType.URETURNSIGN.getName() +
+                (StringUtils.hasLength(date_research) ? ("-" + date_research):"");
+        insertMessage(sbd.toString(), title, MessageType.URETURNSIGN.getIndex(), flag);
     }
 
-    public void insertBuyHoldMessages(List<String> hold_trade_ids, String flag) {
+    public void insertBuyHoldMessages(List<String> hold_trade_ids, String date_research, String flag) {
         if (hold_trade_ids.size()>0) {
             StringBuilder sbd = new StringBuilder("");
             for (String id: hold_trade_ids) {
@@ -98,11 +117,13 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
                 sbd.append("[").append(trade.getCode()).append("]，买入价：").append(String.format("%.2f",trade.getPrice()));
                 sbd.append("，股票数：").append(trade.getAmount()).append(" <br/> ");
             }
-            insertMessage(sbd.toString(), MessageType.BUY.getIndex(), flag);
+            String title = flag + "股" + MessageType.BUY.getName() +
+                    (StringUtils.hasLength(date_research) ? ("-" + date_research):"");
+            insertMessage(sbd.toString(), title, MessageType.BUY.getIndex(), flag);
         }
     }
 
-    public void insertBuyHoldResultMessages(List<String> hold_trade_ids, String flag) {
+    public void insertBuyHoldResultMessages(List<String> hold_trade_ids, String date_research, String flag) {
         if (hold_trade_ids.size()>0) {
             StringBuilder sbdBuy = new StringBuilder("");
             StringBuilder sellBuy = new StringBuilder("");
@@ -131,10 +152,14 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
                 }
             }
             if (sbdBuy.length()>0) {
-                insertMessage(sbdBuy.toString(), MessageType.BUY.getIndex(), flag);
+                String title = flag + "股" + MessageType.BUY.getName() +
+                        (StringUtils.hasLength(date_research) ? ("-" + date_research):"");
+                insertMessage(sbdBuy.toString(), title, MessageType.BUY.getIndex(), flag);
             }
             if (sellBuy.length()>0) {
-                insertMessage(sellBuy.toString(), MessageType.SELL.getIndex(), flag);
+                String title = flag + "股" + MessageType.SELL.getName() +
+                        (StringUtils.hasLength(date_research) ? ("-" + date_research):"");
+                insertMessage(sellBuy.toString(), title, MessageType.SELL.getIndex(), flag);
             }
         }
     }
@@ -150,22 +175,25 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
         }
     }
 
-    public void insertSellHoldMessages(Integer holdTradeId, String flag) {
+    public void insertSellHoldMessages(Integer holdTradeId, String date_research, String flag) {
         StringBuilder sbd = new StringBuilder("");
         StockHoldTrade trade = stockHoldTradeService.selectByPrimaryKey(holdTradeId);
         sbd.append("[").append(trade.getCode()).append("]，卖出价：").append(String.format("%.2f",trade.getPrice()));
         sbd.append("，股票数：").append(trade.getAmount());
-        insertMessage(sbd.toString(), MessageType.SELL.getIndex(), flag);
+        String title = flag + "股" + MessageType.SELL.getName() +
+                (StringUtils.hasLength(date_research) ? ("-" + date_research):"");
+        insertMessage(sbd.toString(), title, MessageType.SELL.getIndex(), flag);
     }
 
     /**
      * 插入巡检结果信息
      */
-    public void insertInspectionMessages(LinkedHashMap<CommandType, Boolean> params, String flag) {
+    public void insertInspectionMessages(LinkedHashMap<CommandType, Boolean> params, String tradeDate, String flag) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             String json_str = mapper.writeValueAsString(params);
-            insertMessage(json_str, MessageType.INSPECTION.getIndex(), flag);
+            String title = flag + "股" + MessageType.INSPECTION.getName() + "-" + tradeDate ;
+            insertMessage(json_str, title, MessageType.INSPECTION.getIndex(), flag);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -175,14 +203,13 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
      * 读取所有待接收信息的消息发送配置
      * @param content
      */
-    public void insertMessage(String content, Integer messageType, String flag) {
+    public void insertMessage(String content, String title, Integer messageType, String flag) {
         LOGGER.info("新增消息内容：{} - {} - {}", flag, MessageType.getName(messageType), content);
         List<StockMessageConf> confList = stockMessageConfService.getListByStatus(true);
         for (StockMessageConf conf : confList) {
             String send_type = conf.getSendType();
             String[] send_type_arr = send_type.split("");
             for (int i = 0; i < send_type_arr.length; i++) {
-
                 if (send_type_arr[i].equals("1")) {
                     String tag = String.valueOf(conf.getMessageType().charAt(messageType));
                     if (tag.equals("1")) {
@@ -199,6 +226,7 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
                         log.setTimeCreate(new Date());
                         log.setTimeTry(new Date(System.currentTimeMillis() + 1000 * 60 * MailConstants.MSG_TIMEOUT));
                         log.setContent(content);
+                        log.setTitle(title);
                         stockMessageLogMapper.insert(log);
                     }
                 }

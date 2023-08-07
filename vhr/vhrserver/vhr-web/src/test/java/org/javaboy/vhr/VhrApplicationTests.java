@@ -6,10 +6,12 @@ package org.javaboy.vhr;
 import org.javaboy.vhr.model.DatabaseType;
 import org.javaboy.vhr.model.Menu;
 import org.javaboy.vhr.model.StockMessageConf;
+import org.javaboy.vhr.model.StockWeeklyLineEmaResult;
 import org.javaboy.vhr.pythonutil.ExecPython;
 import org.javaboy.vhr.service.DatabaseTypeService;
 import org.javaboy.vhr.service.MenuService;
 import org.javaboy.vhr.service.StockMessageConfService;
+import org.javaboy.vhr.service.StockWeeklyLineEmaResultService;
 import org.javaboy.vhr.task.AStockCoreTask;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,10 @@ public class VhrApplicationTests {
     DatabaseTypeService databaseTypeService;
     @Autowired
     StockMessageConfService stockMessageConfService;
+
+    @Autowired
+    StockWeeklyLineEmaResultService stockWeeklyLineEmaResultService;
+
     @Autowired
     ExecPython execPython;
     @Autowired
@@ -42,6 +48,14 @@ public class VhrApplicationTests {
         System.out.println(menus.size());
     }
 
+    @Test
+    public void getBeanlistByDateResearch() {
+        List<StockWeeklyLineEmaResult> list = stockWeeklyLineEmaResultService.getBeanlistByDateResearch("20230627");
+        System.out.println(list.size());
+        if (list.size()>0) {
+            System.out.println(list.get(0).getRunStatusDesc());
+        }
+    }
 //    @Test
     public void getAllDatabasetypes() {
         List<DatabaseType> beanlist =  databaseTypeService.getAllBeanlist("");
@@ -59,7 +73,7 @@ public class VhrApplicationTests {
         execPython.runPython(new String[]{"load_a_weekly_line", "20220930", "20220915"});
     }
 
-//    @Test
+    @Test
     public void test_cache() {
         List<StockMessageConf> list = stockMessageConfService.getListByStatus(true);
         for (StockMessageConf conf: list) {

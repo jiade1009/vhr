@@ -46,11 +46,11 @@ logging:
     org.mybatis: info
     org.javaboy.mailserver: info
     org.javaboy.vhr: info
-    org.javaboy.vhr.service: error
+    org.javaboy.vhr.service: info
     org.javaboy.vhr.task: info
     org.javaboy.vhr.utils: info
     org.javaboy.vhr.config: info
-    org.javaboy.vhr.controller: error
+    org.javaboy.vhr.controller: info
   charset:
     # 输出控制台编码
     console: UTF-8
@@ -92,18 +92,18 @@ task:
       # 每周一到周五的15:30 周线数据生成
       weekly: 0 30 15 ? * MON-FRI
       h_weekly: 0 30 16 ? * MON-FRI
-      # 美股收盘时间按照北京时间，则是周二到周六的凌晨4点(冬令5点）,统一按照22点30生成
-      u_weekly: 0 30 22 ? * TUE-SAT
+      # 美股收盘时间按照北京时间，则是周二到周六的凌晨4点(冬令5点）,统一按照22点00生成
+      u_weekly: 0 0 22 ? * TUE-SAT
 #      u_weekly: 0 0/5 * ? * TUE-SAT
       # 买入策略运行
       buyrule: 0 0 16 ? * MON-FRI
       h_buyrule: 0 0 17 ? * MON-FRI
-      u_buyrule: 0 0 23 ? * TUE-SAT
+      u_buyrule: 0 40 22 ? * TUE-SAT
       # buyrule: 0 0/2 * ? * MON-FRI
       # 回头草策略运行
       uturnrule: 0 30 16 ? * MON-FRI
       h_uturnrule: 0 30 17 ? * MON-FRI
-      u_uturnrule: 0 30 23 ? * TUE-SAT
+      u_uturnrule: 0 10 23 ? * TUE-SAT
       # 买入操作
       buy: 0 31 9 ? * MON-FRI
       # 卖出操作
@@ -130,7 +130,7 @@ task:
       # 每日巡检（A、H)
       inspection: 0 0 21 ? * MON-FRI
       # 每日巡检（U)
-      u_inspection: 0 0 11 ? * TUE-SAT
+      u_inspection: 0 40 23 ? * TUE-SAT
 
 # 与python客户端通信签名配置
 encrypt:

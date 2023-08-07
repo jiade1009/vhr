@@ -95,7 +95,7 @@ public class EncryptUtils {
         String sign = (String) params.get("sign");
         String idx = (String) params.get("idx");
         String tm = (String) params.get("tm");
-        LOGGER.debug("请求的参数：{}", params.toString());
+        LOGGER.info("请求的参数：{}", params.toString());
         // 2.时间戳的校验
         Date now = new Date();
         Date time = DateUtils.parseDate(tm, DateUtils.yyyyMMddHHmmss);

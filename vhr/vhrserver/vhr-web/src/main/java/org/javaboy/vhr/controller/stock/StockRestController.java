@@ -4,7 +4,8 @@ package org.javaboy.vhr.controller.stock;
 import org.javaboy.vhr.model.RespBean;
 import org.javaboy.vhr.service.StockMessageLogService;
 import org.javaboy.vhr.utils.EncryptUtils;
-import org.springframework.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -25,7 +26,7 @@ public class StockRestController {
     /**
      * 服务对象
      */
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(StockRestController.class);
     @Resource
     private StockMessageLogService stockMessageLogService;
     @Resource
@@ -44,39 +45,44 @@ public class StockRestController {
                 HashMap<String, Object> data = (HashMap<String, Object>) maps.get("data");
                 List<String> hold_trade_id_list;
                 String flag = "";
+                String date_research = "";
+                LOGGER.info("开始调用{}消息处理", method);
                 switch (method) {
                     case "sign":
                         String white_stocks = (String) data.get("white_stock_list");
                         String buy_stocks = (String) data.get("buy_stock_list");
                         flag = (String) data.get("flag");
-                        if (StringUtils.hasLength(white_stocks)) {
-                            stockMessageLogService.insertSignalMessages(white_stocks, buy_stocks, flag);
-                        }
+                        date_research = (String) data.get("date_research");
+                        stockMessageLogService.insertSignalMessages(white_stocks, buy_stocks, date_research, flag);
                         break;
                     case "uturn_sign":
                         List<String> uturn_stocks = (List<String>) data.get("list");
                         List<String> enhance_uturn_stocks = (List<String>) data.get("enlist");  //加强回头草
                         flag = (String) data.get("flag");
-                        stockMessageLogService.insertUreturnSignalMessages(uturn_stocks, enhance_uturn_stocks, flag);
+                        date_research = (String) data.get("date_research");
+                        stockMessageLogService.insertUreturnSignalMessages(uturn_stocks, enhance_uturn_stocks, date_research, flag);
                         break;
                     case "buy":
                         hold_trade_id_list = (List<String>) data.get("hold_trade_id_list");
                         flag = (String) data.get("flag");
+                        date_research = (String) data.get("date_research");
                         if (hold_trade_id_list!=null && hold_trade_id_list.size()>0) {
-                            stockMessageLogService.insertBuyHoldMessages(hold_trade_id_list, flag);
+                            stockMessageLogService.insertBuyHoldMessages(hold_trade_id_list, date_research, flag);
                         }
                         break;
                     case "buy_result":
                         hold_trade_id_list = (List<String>) data.get("hold_trade_id_list");
                         flag = (String) data.get("flag");
+                        date_research = (String) data.get("date_research");
                         if (hold_trade_id_list!=null && hold_trade_id_list.size()>0) {
-                            stockMessageLogService.insertBuyHoldResultMessages(hold_trade_id_list, flag);
+                            stockMessageLogService.insertBuyHoldResultMessages(hold_trade_id_list, date_research, flag);
                         }
                         break;
                     case "sell":
                         Integer holdTradeId = Integer.valueOf((String) data.get("hold_trade_id"));
                         flag = (String) data.get("flag");
-                        stockMessageLogService.insertSellHoldMessages(holdTradeId, flag);
+                        date_research = (String) data.get("date_research");
+                        stockMessageLogService.insertSellHoldMessages(holdTradeId, date_research, flag);
                         break;
                     case "sell_result":
                     case "revoke":

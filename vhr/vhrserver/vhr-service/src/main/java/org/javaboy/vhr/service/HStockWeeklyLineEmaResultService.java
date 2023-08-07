@@ -27,4 +27,13 @@ public class HStockWeeklyLineEmaResultService extends BaseService<HStockWeeklyLi
         return hStockWeeklyLineEmaResultMapper.getBeanlistByWeeklyId(weeklyId);
     }
 
+    /**
+     * 获取指定调研日期自动生成的EMA数据结果
+     * @param dateResearch
+     * @return
+     */
+    public List<HStockWeeklyLineEmaResult> getBeanlistByDateResearch(String dateResearch) {
+        return hStockWeeklyLineEmaResultMapper.getBeanlistByDateResearch(dateResearch);
+    }
+
 }

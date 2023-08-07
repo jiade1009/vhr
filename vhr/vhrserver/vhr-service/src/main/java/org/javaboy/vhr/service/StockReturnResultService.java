@@ -6,6 +6,8 @@ import org.javaboy.vhr.model.StockReturnResult;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
+
 /**
  * @ClassName   : StockReturnResultService
  * @description : TODO
@@ -20,4 +22,7 @@ public class StockReturnResultService extends BaseService<StockReturnResult, Int
     @Resource
     private StockReturnResultMapper stockReturnResultMapper;
 
+    public List<StockReturnResult> getBeanlistByDateResearch(String dateResearch) {
+        return stockReturnResultMapper.getBeanlistByDateResearch(dateResearch);
+    }
 }

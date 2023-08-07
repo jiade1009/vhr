@@ -2,7 +2,6 @@ package org.javaboy.mailserver.receiver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
-import org.javaboy.mailserver.utils.DateUtils;
 import org.javaboy.vhr.model.Employee;
 import org.javaboy.vhr.model.MailConstants;
 import org.javaboy.vhr.model.RabbitBean;
@@ -103,11 +102,11 @@ public class MailReceiver {
         Integer sendType = bean.getSendType();  //（0短信、1邮件、2微信服务通知）
         String flag = bean.getFlag();
         if (sendType == 1) {
-//            String title = "股票信号发现";
-            String title = messageType.getName();
-            if (!(flag == null || flag.trim().equals(""))) {
-                title = flag + "股" + title;
-            }
+            String title = bean.getTitle();
+//            String title = messageType.getName();
+//            if (!(flag == null || flag.trim().equals(""))) {
+//                title = flag + "股" + title;
+//            }
             String content = bean.getContent();
             if (messageType == MessageType.INSPECTION) {
                 ObjectMapper mapper = new ObjectMapper();
@@ -153,7 +152,7 @@ public class MailReceiver {
             Date now = new Date();
             helper.setTo(employee.getEmail());
             helper.setFrom(mailProperties.getUsername());
-            helper.setSubject(title + " - " + DateUtils.formatDate(now, DateUtils.yyyyMMdd));
+            helper.setSubject(title);
             helper.setSentDate(now);
             Context context = new Context();
             context.setVariable("name", employee.getName());

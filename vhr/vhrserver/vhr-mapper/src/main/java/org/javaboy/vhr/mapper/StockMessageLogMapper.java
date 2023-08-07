@@ -26,4 +26,9 @@ public interface StockMessageLogMapper extends BaseMapper<StockMessageLog, Integ
 
     Integer updateCount(@Param("msgId") String msgId, @Param("date") Date date);
 
+    List<StockMessageLog> getMessageLogByDateResearch(@Param("dateResearch") String dateResearch,
+                                                      @Param("messageType") Integer messageType,
+                                                      @Param("sendType") Integer sendType,
+                                                      @Param("flag") String flag);
+
 }
