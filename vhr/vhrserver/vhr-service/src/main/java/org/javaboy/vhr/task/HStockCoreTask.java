@@ -69,7 +69,7 @@ public class HStockCoreTask extends BaseStockTask{
             LOGGER.info(".............开始{}股【{}】的回头草策略的运行..............", flag, tradeDate);
             List<HStockWeeklyLineResult> weeklyList = getStockWeeklyLineResults(tradeDate);
             if (weeklyList!=null && weeklyList.size()>0) {
-                execPython.runPython(new String[]{BaseConstants.PY_API_RUN_H_UTURN_RULE});
+                execPython.runPython(new String[]{BaseConstants.PY_API_RUN_H_UTURN_RULE_V2});
             }
         } else {
             LOGGER.debug("今天不是{}股股票交易日，不运行回头草策略命令", flag);

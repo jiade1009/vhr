@@ -193,7 +193,8 @@
           <template slot-scope="scope">
             <el-button type="info" @click.stop="viewDetail(scope.row)" style="padding: 3px" size="mini">查看交易</el-button>
             <el-button type="success" @click.stop="viewProfit(scope.row)" style="padding: 3px" size="mini">查看盈亏</el-button>
-            <el-button type="warning" @click.stop="doCalculator(scope.row)" style="padding: 3px" size="mini">价格计算器</el-button>
+<!--            <el-button type="warning" @click.stop="doCalculator(scope.row)" style="padding: 3px" size="mini">价格计算器</el-button>-->
+            <el-button type="warning" @click.stop="priceTrade(scope.row)" style="padding: 3px" size="mini">交易价格</el-button>
             <el-button type="danger" @click.stop="closeStock(scope.row)" style="padding: 3px" size="mini" v-if="scope.row.status==0 && flag=='stock'">关闭交易</el-button>
             <!--
             <el-button type="success" @click.stop="runBuy(scope.row)" style="padding: 3px" size="mini" v-if="scope.row.status==0">购买</el-button>
@@ -250,6 +251,47 @@
           <el-col :span="6"><div class="grid-content">{{bean.sellPrice}}</div></el-col>
           <el-col :span="6"><div class="grid-content grid-label">止损价格：</div></el-col>
           <el-col :span="6"><div class="grid-content">{{bean.priceStop}}</div></el-col>
+        </el-row>
+      </div>
+    </el-dialog>
+    <!-- edit dialog end -->
+
+    <!-- edit price Trade dialog begin -->
+    <el-dialog
+        title="股票交易价格"
+        :visible.sync="priceDialogVisible"
+        width="60%">
+      <div class="price_cal">
+        <p>股票代码：{{bean.code}}</p>
+        <el-row :gutter="20">
+          <el-col :span="6"><div class="grid-content grid-label">买入价格：</div></el-col>
+          <el-col :span="6"><div class="grid-content">{{bean.buyPrice}}</div></el-col>
+          <el-col :span="6"><div class="grid-content grid-label">峰顶价格：</div></el-col>
+          <el-col :span="6"><div class="grid-content">{{bean.pricePeakTop}}</div></el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6"><div class="grid-content grid-label">白色信号日期：</div></el-col>
+          <el-col :span="6"><div class="grid-content">{{bean.timeWhiteSign}}</div></el-col>
+          <el-col :span="6"><div class="grid-content grid-label">持股有效起始日期：</div></el-col>
+          <el-col :span="6"><div class="grid-content">{{bean.timeHoldBegin?bean.timeHoldBegin:"无"}}</div></el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6"><div class="grid-content grid-label">涨幅比率1：</div></el-col>
+          <el-col :span="6"><div class="grid-content">{{bean.priceUpRate1 | toFixed}}</div></el-col>
+          <el-col :span="6"><div class="grid-content grid-label">涨幅价格1：</div></el-col>
+          <el-col :span="6"><div class="grid-content">{{bean.priceUpRate1*bean.buyPrice | toFixed}}</div></el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6"><div class="grid-content grid-label">涨幅比率2：</div></el-col>
+          <el-col :span="6"><div class="grid-content">{{bean.priceUpRate2 | toFixed}}</div></el-col>
+          <el-col :span="6"><div class="grid-content grid-label">涨幅价格2：</div></el-col>
+          <el-col :span="6"><div class="grid-content">{{bean.priceUpRate2*bean.buyPrice | toFixed}}</div></el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="6"><div class="grid-content grid-label">涨幅比率3：</div></el-col>
+          <el-col :span="6"><div class="grid-content">{{bean.priceUpRate3 | toFixed}}</div></el-col>
+          <el-col :span="6"><div class="grid-content grid-label">涨幅价格3：</div></el-col>
+          <el-col :span="6"><div class="grid-content">{{bean.priceUpRate3*bean.buyPrice | toFixed}}</div></el-col>
         </el-row>
       </div>
     </el-dialog>
@@ -352,6 +394,7 @@ export default {
       expandRow: [],
       dialogVisible: false,
       profitDialogVisible: false,
+      priceDialogVisible: false,
       sellRule: {
         sellRatio: 0.5,
         p1Ratio: 1.15,
@@ -384,6 +427,13 @@ export default {
         "p4Price": null,
         "p4SellPrice": null,
         "p5Price": null,
+        "timeWhiteSign": "",
+        "timeHoldBegin": "",
+        "priceUpRate1": 0,
+        "priceUpRate2": 0,
+        "priceUpRate3": 0,
+        "pricePeakTop": 0,
+
       },
 
     }
@@ -701,6 +751,11 @@ export default {
         sellPrice: sellPrice,
       });
       this.bean = result;
+    },
+    priceTrade(row) {
+      // 查看股票对应的交易价格
+      this.priceDialogVisible = true;
+      this.bean = row;
     },
   }
 }

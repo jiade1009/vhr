@@ -1,8 +1,11 @@
 package org.javaboy.vhr.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.javaboy.vhr.base.BaseMapper;
 import org.javaboy.vhr.model.UStockReturnResult;
+
+import java.util.List;
 
 /**
  * @ClassName   : UStockReturnResultMapper
@@ -14,4 +17,6 @@ import org.javaboy.vhr.model.UStockReturnResult;
 
 @Mapper
 public interface UStockReturnResultMapper extends BaseMapper<UStockReturnResult, Integer> {
+
+    List<UStockReturnResult> getBeanlistByDateResearch(@Param("dateResearch") String dateResearch);
 }

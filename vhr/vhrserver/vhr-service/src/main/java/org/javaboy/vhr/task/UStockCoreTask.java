@@ -72,7 +72,7 @@ public class UStockCoreTask extends BaseStockTask{
             LOGGER.info(".............开始{}股【{}】的回头草策略的运行..............", flag, tradeDate);
             List<UStockWeeklyLineResult> weeklyList = getStockWeeklyLineResults(tradeDate);
             if (weeklyList!=null && weeklyList.size()>0) {
-                execPython.runPython(new String[]{BaseConstants.PY_API_RUN_U_UTURN_RULE});
+                execPython.runPython(new String[]{BaseConstants.PY_API_RUN_U_UTURN_RULE_V2});
             }
         } else {
             LOGGER.debug("今天不是{}股股票交易日，不运行回头草策略命令", flag);
@@ -86,6 +86,8 @@ public class UStockCoreTask extends BaseStockTask{
         CommandType[] cmdArray = new CommandType[]{CommandType.U_WEEKLY, CommandType.U_WEEKLY_EMA, CommandType.U_BUY_RULE,
                 CommandType.U_U_RETURN_RUN};
         doInspection("U", cmdArray);
+        // 查看是否发送了信号邮件
+        checkSignalMail("U");
     }
 
     private List<UStockWeeklyLineResult> getStockWeeklyLineResults(String tradeDate) {

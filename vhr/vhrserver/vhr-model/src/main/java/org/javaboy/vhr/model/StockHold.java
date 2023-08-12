@@ -1,5 +1,6 @@
 package org.javaboy.vhr.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.javaboy.vhr.model.util.StockHoldStatus;
 
 import java.util.Date;
@@ -7,8 +8,8 @@ import java.util.Date;
 /**
  * @author : sam
  * @ClassName : StockHold
- * @description : 股票池数据
- * @datetime : 2023年 02月 15日 09:59
+ * @description : TODO
+ * @datetime : 2023年 08月 08日 23:12
  * @version: : 1.0
  */
 
@@ -108,14 +109,17 @@ public class StockHold {
      * 加入方式，0直接，1回头草
      */
     private Integer generateType;
+
     /**
      * 买入总金额
      */
     private Double buyTotal;
+
     /**
      * 买入手续费
      */
     private Double buyFee;
+
     /**
      * 购买时间
      */
@@ -125,6 +129,37 @@ public class StockHold {
      * 卖出时间
      */
     private Date timeSell;
+
+    /**
+     * 股票白色信号发起日期
+     */
+    private String timeWhiteSign;
+
+    /**
+     * 股票持股有效起始日期
+     */
+    @JsonFormat(pattern = "yyyyMMdd")
+    private Date timeHoldBegin;
+
+    /**
+     * 第一次峰顶价格
+     */
+    private Double pricePeakTop;
+
+    /**
+     * 第一次涨幅比率
+     */
+    private Double priceUpRate1;
+
+    /**
+     * 第二次涨幅比率
+     */
+    private Double priceUpRate2;
+
+    /**
+     * 第三次涨幅比率，如果第三次涨幅比例为0，那么意味着第二次涨幅进行清仓操作
+     */
+    private Double priceUpRate3;
 
     public Integer getId() {
         return id;
@@ -328,5 +363,53 @@ public class StockHold {
 
     public void setTimeSell(Date timeSell) {
         this.timeSell = timeSell;
+    }
+
+    public String getTimeWhiteSign() {
+        return timeWhiteSign;
+    }
+
+    public void setTimeWhiteSign(String timeWhiteSign) {
+        this.timeWhiteSign = timeWhiteSign;
+    }
+
+    public Date getTimeHoldBegin() {
+        return timeHoldBegin;
+    }
+
+    public void setTimeHoldBegin(Date timeHoldBegin) {
+        this.timeHoldBegin = timeHoldBegin;
+    }
+
+    public Double getPricePeakTop() {
+        return pricePeakTop;
+    }
+
+    public void setPricePeakTop(Double pricePeakTop) {
+        this.pricePeakTop = pricePeakTop;
+    }
+
+    public Double getPriceUpRate1() {
+        return priceUpRate1;
+    }
+
+    public void setPriceUpRate1(Double priceUpRate1) {
+        this.priceUpRate1 = priceUpRate1;
+    }
+
+    public Double getPriceUpRate2() {
+        return priceUpRate2;
+    }
+
+    public void setPriceUpRate2(Double priceUpRate2) {
+        this.priceUpRate2 = priceUpRate2;
+    }
+
+    public Double getPriceUpRate3() {
+        return priceUpRate3;
+    }
+
+    public void setPriceUpRate3(Double priceUpRate3) {
+        this.priceUpRate3 = priceUpRate3;
     }
 }

@@ -38,12 +38,14 @@ public class BaseConstants {
     public static final String PY_API_CREATE_H_WEEKLY = "create_h_weekly";
     public static final String PY_API_CREATE_H_EMA = "create_h_ema";   // 生成ema数据线
     public static final String PY_API_RUN_H_BUY_RULE = "run_h_buy_rule";  //  运行H股购买策略
-    public static final String PY_API_RUN_H_UTURN_RULE = "run_h_uturn_rule";  //  运行H股回头草策略
+    public static final String PY_API_RUN_H_UTURN_RULE = "run_h_uturn_rule";  //  运行H股回头草策略V1
+    public static final String PY_API_RUN_H_UTURN_RULE_V2 = "run_h_uturn_rule_v2";  //  运行H股回头草策略V2
 
     // -----------U股指令 begin--------------
     public static final String PY_API_CREATE_U_WEEKLY = "create_u_weekly";
     public static final String PY_API_CREATE_U_EMA = "create_u_ema";   // 生成ema数据线
     public static final String PY_API_RUN_U_BUY_RULE = "run_u_buy_rule";  //  运行购买策略
-    public static final String PY_API_RUN_U_UTURN_RULE = "run_u_uturn_rule";  //  运行回头草策略
+    public static final String PY_API_RUN_U_UTURN_RULE = "run_u_uturn_rule";  //  运行回头草策略V1
+    public static final String PY_API_RUN_U_UTURN_RULE_V2 = "run_u_uturn_rule_v2";  //  运行回头草策略V2
 
 }

@@ -140,6 +140,11 @@ Vue.prototype.$utils = utils;
 
 Vue.config.productionTip = false
 
+Vue.filter('toFixed', function(value) {
+    if (!value) return '0.00';
+    return value.toFixed(2);
+});
+
 router.beforeEach((to, from, next) => {
     if (to.path == '/') {
         next();

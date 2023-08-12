@@ -1,15 +1,9 @@
 package org.javaboy.vhr.task;
 
 import org.javaboy.vhr.model.util.CommandType;
-import org.javaboy.vhr.service.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
 
 /**
  * @description : 用于定义股票统一的定时任务
@@ -20,29 +14,6 @@ import javax.annotation.Resource;
 
 @Component
 public class StockCommonTask extends BaseStockTask{
-    private static final Logger LOGGER = LoggerFactory.getLogger(AStockCoreTask.class);
-    @Resource
-    private DatabaseTypeService databaseTypeService;
-    @Resource
-    private StockATradeDateService stockATradeDateService;
-    @Resource
-    private StockWeeklyLineResultService stockWeeklyLineResultService;
-    @Resource
-    private StockWeeklyLineEmaResultService stockWeeklyLineEmaResultService;
-    @Resource
-    private HStockTradeDateService hStockTradeDateService;
-    @Resource
-    private HStockWeeklyLineResultService hStockWeeklyLineResultService;
-    @Resource
-    private HStockWeeklyLineEmaResultService hStockWeeklyLineEmaResultService;
-    @Resource
-    private StockExecuteResultService stockExecuteResultService;
-    @Resource
-    private StockMessageLogService stockMessageLogService;
-    @Value("${task.cron.StockCore.weekly}")
-    private String weekly;
-    private String flag = "H";
-
     /**
      * 针对每天的定时任务的运行结果进行巡检
      * 每日的21：00点开始巡检
@@ -61,6 +32,7 @@ public class StockCommonTask extends BaseStockTask{
         doInspection("H", cmdArray);
 
         // 增加对信号发现邮件是否漏发的检查
-
+        checkSignalMail("A");
+        checkSignalMail("H");
     }
 }

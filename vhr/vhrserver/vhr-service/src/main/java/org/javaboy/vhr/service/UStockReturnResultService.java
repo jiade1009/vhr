@@ -6,6 +6,8 @@ import org.javaboy.vhr.model.UStockReturnResult;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
+
 /**
  * @ClassName   : UStockReturnResultService
  * @description : TODO
@@ -19,5 +21,9 @@ public class UStockReturnResultService extends BaseService<UStockReturnResult, I
 
     @Resource
     private UStockReturnResultMapper uStockReturnResultMapper;
+
+    public List<UStockReturnResult> getBeanlistByDateResearch(String dateResearch) {
+        return uStockReturnResultMapper.getBeanlistByDateResearch(dateResearch);
+    }
 
 }

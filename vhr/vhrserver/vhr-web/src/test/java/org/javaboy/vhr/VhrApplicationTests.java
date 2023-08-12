@@ -3,16 +3,11 @@ package org.javaboy.vhr;
 //import org.junit.Test;
 //import org.junit.runner.RunWith;
 
-import org.javaboy.vhr.model.DatabaseType;
-import org.javaboy.vhr.model.Menu;
-import org.javaboy.vhr.model.StockMessageConf;
-import org.javaboy.vhr.model.StockWeeklyLineEmaResult;
+import org.javaboy.vhr.model.*;
 import org.javaboy.vhr.pythonutil.ExecPython;
-import org.javaboy.vhr.service.DatabaseTypeService;
-import org.javaboy.vhr.service.MenuService;
-import org.javaboy.vhr.service.StockMessageConfService;
-import org.javaboy.vhr.service.StockWeeklyLineEmaResultService;
+import org.javaboy.vhr.service.*;
 import org.javaboy.vhr.task.AStockCoreTask;
+import org.javaboy.vhr.task.StockCommonTask;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,6 +33,13 @@ public class VhrApplicationTests {
     @Autowired
     AStockCoreTask stockCoreTask;
 
+    @Autowired
+    StockCommonTask stockCommonTask;
+    @Autowired
+    StockATradeDateService stockATradeDateService;
+    @Autowired
+    StockExecuteResultService stockExecuteResultService;
+
     @Test
     public void contextLoads() {
     }
@@ -48,7 +50,7 @@ public class VhrApplicationTests {
         System.out.println(menus.size());
     }
 
-    @Test
+//    @Test
     public void getBeanlistByDateResearch() {
         List<StockWeeklyLineEmaResult> list = stockWeeklyLineEmaResultService.getBeanlistByDateResearch("20230627");
         System.out.println(list.size());
@@ -63,7 +65,7 @@ public class VhrApplicationTests {
         List<DatabaseType> beanlist2 =  databaseTypeService.getAllBeanlist("");
     }
 
-    @Test
+//    @Test
     public void runPython() {
         execPython.runPython(new String[]{"create_u_weekly", "1"});
     }
@@ -73,7 +75,7 @@ public class VhrApplicationTests {
         execPython.runPython(new String[]{"load_a_weekly_line", "20220930", "20220915"});
     }
 
-    @Test
+//    @Test
     public void test_cache() {
         List<StockMessageConf> list = stockMessageConfService.getListByStatus(true);
         for (StockMessageConf conf: list) {
@@ -99,8 +101,13 @@ public class VhrApplicationTests {
         }
     }
 
-//    @Test
+    @Test
     public void test_configuration() {
-        stockCoreTask.weekly();
+//        stockCoreTask.weekly();
+        StockATradeDate aBean = stockATradeDateService.getByDate("2023-08-09");
+        System.out.println(aBean.getTradeDate());
+        stockCommonTask.inspection();
     }
+
+
 }

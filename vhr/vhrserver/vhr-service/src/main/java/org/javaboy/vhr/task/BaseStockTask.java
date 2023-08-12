@@ -11,11 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,11 +24,15 @@ import java.util.regex.Pattern;
  * @datetime    : 2022-11-13 10:19:20
  * @version:    : 1.0
  */
-
+@Component
 public class BaseStockTask {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseStockTask.class);
     private static Pattern sign_p1 = Pattern.compile("ema18突破ema25股票：【(.*?)】");  //白色信号正则
     private static Pattern sign_p2 = Pattern.compile("满足购买策略股票：【(.*?)】");  //蓝色信号正则
+
+    private static Pattern ureturn_sign_p1 = Pattern.compile("【回头草：(.*?)】");  //回头草信号正则
+    private static Pattern ureturn_sign_p2 = Pattern.compile("【加强回头草：(.*?)】");  //加强回头草信号正则
+
     @Resource
     protected StringRedisTemplate stringRedisTemplate;
     @Resource
@@ -56,6 +59,10 @@ public class BaseStockTask {
 
     @Resource
     private StockReturnResultService stockReturnResultService;
+    @Resource
+    private HStockReturnResultService hStockReturnResultService;
+    @Resource
+    private UStockReturnResultService uStockReturnResultService;
 
     @Value("${task.cron.StockCore.weekly}")
     protected String weekly;
@@ -151,30 +158,75 @@ public class BaseStockTask {
             // 回头草信号
             messageList = stockMessageLogService.getMessageLogByDateResearch(tradeDate, MessageType.URETURNSIGN,
                     SendType.EMAIL, flag);
-            if (messageList.size() == 0) {
+            if (messageList.size() == 0) { //未成功发送回头草发现邮件
+                List<String> uturn_stocks = new ArrayList<String>();
+                List<String> enhance_uturn_stocks = new ArrayList<String>();
 
+                if (flag.equals("A")) {
+                    List<StockReturnResult> returnResultList = stockReturnResultService.getBeanlistByDateResearch(tradeDate);
+                    if (returnResultList.size()>0) {
+                        StockReturnResult returnResult = returnResultList.get(0);
+                        String desc = returnResult.getResultDesc();
+                        composeUturnStock(uturn_stocks, enhance_uturn_stocks, desc);
+                    }
+                } else if (flag.equals("H")) {
+                    List<HStockReturnResult> returnResultList = hStockReturnResultService.getBeanlistByDateResearch(tradeDate);
+                    if (returnResultList.size()>0) {
+                        HStockReturnResult returnResult = returnResultList.get(0);
+                        String desc = returnResult.getResultDesc();
+                        composeUturnStock(uturn_stocks, enhance_uturn_stocks, desc);
+                    }
+                } else if (flag.equals("U")) {
+                    List<UStockReturnResult> returnResultList = uStockReturnResultService.getBeanlistByDateResearch(tradeDate);
+                    if (returnResultList.size()>0) {
+                        UStockReturnResult returnResult = returnResultList.get(0);
+                        String desc = returnResult.getResultDesc();
+                        composeUturnStock(uturn_stocks, enhance_uturn_stocks, desc);
+                    }
+                }
+
+                if (uturn_stocks.size()>0 || enhance_uturn_stocks.size()>0) {
+                    stockMessageLogService.insertUreturnSignalMessages(uturn_stocks, enhance_uturn_stocks, tradeDate, flag);
+                }
             }
         } else {
             LOGGER.debug("今天不是{}股股票交易日，不运行信号发现邮件检查", flag);
         }
     }
 
+    private void composeUturnStock(List<String> uturn_stocks, List<String> enhance_uturn_stocks, String desc) {
+        Matcher m = ureturn_sign_p1.matcher(desc);
+        while (m.find()) {
+            String ureturn = m.group(1);
+            if (!ureturn.equals("无")) {
+                uturn_stocks.addAll(Arrays.asList(ureturn.split(",")));
+            }
+        }
+        Matcher m2 = ureturn_sign_p2.matcher(desc);
+        while (m2.find()) {
+            String enhance_ureturn = m2.group(1);
+            if (!enhance_ureturn.equals("无")) {
+                enhance_uturn_stocks.addAll(Arrays.asList(enhance_ureturn.split(",")));
+            }
+        }
+    }
+
     private String getRunStatusDesc(String tradeDate, String flag) {
-        if (flag == "A") {
+        if (flag.equals("A")) {
             List<StockWeeklyLineEmaResult> list = stockWeeklyLineEmaResultService.getBeanlistByDateResearch(tradeDate);
             if (list.size()>0) {
                 return list.get(0).getRunStatusDesc();
             } else {
                 return "";
             }
-        } else if (flag == "H") {
+        } else if (flag.equals("H")) {
             List<HStockWeeklyLineEmaResult> list = hStockWeeklyLineEmaResultService.getBeanlistByDateResearch(tradeDate);
             if (list.size()>0) {
                 return list.get(0).getRunStatusDesc();
             } else {
                 return "";
             }
-        } else if (flag == "U") {
+        } else if (flag.equals("U")) {
             List<UStockWeeklyLineEmaResult> list = uStockWeeklyLineEmaResultService.getBeanlistByDateResearch(tradeDate);
             if (list.size()>0) {
                 return list.get(0).getRunStatusDesc();
@@ -182,11 +234,6 @@ public class BaseStockTask {
                 return "";
             }
         }
-        return "";
-    }
-
-    private String getReturnResult(String tradeDate, String flag) {
-
         return "";
     }
 

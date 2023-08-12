@@ -29,13 +29,20 @@
     <result column="buy_fee" jdbcType="FLOAT" property="buyFee" />
     <result column="time_buy" jdbcType="TIMESTAMP" property="timeBuy" />
     <result column="time_sell" jdbcType="TIMESTAMP" property="timeSell" />
+    <result column="time_white_sign" jdbcType="VARCHAR" property="timeWhiteSign" />
+    <result column="time_hold_begin" jdbcType="TIMESTAMP" property="timeHoldBegin" />
+    <result column="price_peak_top" jdbcType="FLOAT" property="pricePeakTop" />
+    <result column="price_up_rate_1" jdbcType="FLOAT" property="priceUpRate1" />
+    <result column="price_up_rate_2" jdbcType="FLOAT" property="priceUpRate2" />
+    <result column="price_up_rate_3" jdbcType="FLOAT" property="priceUpRate3" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, code, time_create, time_update, `status`, buy_amount, buy_price, hold_amount, 
     sell_stage, weekly_ema_result_id, note, price_close, price_high, price_low, enhance_white_sign, 
-    lose_enhance_white_sign, price_sell_high, price_sell_low, close_ema_18, price_stop, generate_type,
-    buy_total, buy_fee, time_buy, time_sell
+    lose_enhance_white_sign, price_sell_high, price_sell_low, close_ema_18, price_stop, 
+    generate_type, buy_total, buy_fee, time_buy, time_sell, time_white_sign, time_hold_begin, 
+    price_peak_top, price_up_rate_1, price_up_rate_2, price_up_rate_3
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -57,15 +64,22 @@
       note, price_close, price_high, 
       price_low, enhance_white_sign, lose_enhance_white_sign, 
       price_sell_high, price_sell_low, close_ema_18, 
-      price_stop, generate_type, buy_total, buy_fee, time_buy, time_sell)
+      price_stop, generate_type, buy_total, 
+      buy_fee, time_buy, time_sell, 
+      time_white_sign, time_hold_begin, price_peak_top, 
+      price_up_rate_1, price_up_rate_2, price_up_rate_3
+      )
     values (#{code,jdbcType=VARCHAR}, #{timeCreate,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP}, 
       #{status,jdbcType=INTEGER}, #{buyAmount,jdbcType=INTEGER}, #{buyPrice,jdbcType=FLOAT}, 
       #{holdAmount,jdbcType=INTEGER}, #{sellStage,jdbcType=INTEGER}, #{weeklyEmaResultId,jdbcType=INTEGER}, 
       #{note,jdbcType=VARCHAR}, #{priceClose,jdbcType=FLOAT}, #{priceHigh,jdbcType=FLOAT}, 
       #{priceLow,jdbcType=FLOAT}, #{enhanceWhiteSign,jdbcType=BOOLEAN}, #{loseEnhanceWhiteSign,jdbcType=BOOLEAN}, 
       #{priceSellHigh,jdbcType=FLOAT}, #{priceSellLow,jdbcType=FLOAT}, #{closeEma18,jdbcType=FLOAT}, 
-      #{priceStop,jdbcType=FLOAT}, #{generateType, jdbcType=INTEGER}, #{buyTotal,jdbcType=FLOAT},
-      #{buyFee,jdbcType=FLOAT}, #{timeBuy,jdbcType=TIMESTAMP}, #{timeSell,jdbcType=TIMESTAMP})
+      #{priceStop,jdbcType=FLOAT}, #{generateType,jdbcType=INTEGER}, #{buyTotal,jdbcType=FLOAT}, 
+      #{buyFee,jdbcType=FLOAT}, #{timeBuy,jdbcType=TIMESTAMP}, #{timeSell,jdbcType=TIMESTAMP}, 
+      #{timeWhiteSign,jdbcType=VARCHAR}, #{timeHoldBegin,jdbcType=TIMESTAMP}, #{pricePeakTop,jdbcType=FLOAT}, 
+      #{priceUpRate1,jdbcType=FLOAT}, #{priceUpRate2,jdbcType=FLOAT}, #{priceUpRate3,jdbcType=FLOAT}
+      )
   </insert>
   <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockHold">
     <!--@mbg.generated-->
@@ -93,7 +107,13 @@
       buy_total = #{buyTotal,jdbcType=FLOAT},
       buy_fee = #{buyFee,jdbcType=FLOAT},
       time_buy = #{timeBuy,jdbcType=TIMESTAMP},
-      time_sell = #{timeSell,jdbcType=TIMESTAMP}
+      time_sell = #{timeSell,jdbcType=TIMESTAMP},
+      time_white_sign = #{timeWhiteSign,jdbcType=VARCHAR},
+      time_hold_begin = #{timeHoldBegin,jdbcType=TIMESTAMP},
+      price_peak_top = #{pricePeakTop,jdbcType=FLOAT},
+      price_up_rate_1 = #{priceUpRate1,jdbcType=FLOAT},
+      price_up_rate_2 = #{priceUpRate2,jdbcType=FLOAT},
+      price_up_rate_3 = #{priceUpRate3,jdbcType=FLOAT}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="getBeanlistByPage" resultMap="BaseResultMap">

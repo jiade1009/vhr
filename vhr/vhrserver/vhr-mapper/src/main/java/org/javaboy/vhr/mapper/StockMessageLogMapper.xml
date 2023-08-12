@@ -88,7 +88,7 @@
       and flag=#{flag, jdbcType=VARCHAR}
     </if>
     <if test="dateResearch!=null">
-      and title like like concat('%-',#{dateResearch})
+      and title like concat('%-',#{dateResearch})
     </if>
   </select>
 </mapper>
