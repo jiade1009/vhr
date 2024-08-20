@@ -5,24 +5,27 @@ import java.util.List;
 
 /**
  * @author : sam
- * @ClassName : MessageType
- * @description : 消息通知类型
- * @datetime : 2022年 11月 23日 16:55
+ * @ClassName : ProfitStage
+ * @description : 止盈阶段
+ * @datetime : 2024年 08月 07日 16:55
  * @version: : 1.0
  */
-public enum MessageType {
-    SIGN(0,"信号发现"),
-    BUY(1,"股票买入"),
-    SELL(2,"股票卖出"),
-    INSPECTION(3, "巡检结果"),
-    URETURNSIGN(4,"回头草发现"),
-    AI_ORDER(5,"智能订单触发");
+public enum ProfitStage {
+    P0(0,"P0"),
+    P3(1,"P3"),
+    P5(2,"P5"),
+    P8(3,"P8"),
+    P10(4,"P10"),
+    P1051(5,"P1051"),
+    P1052(6,"P1052"),
+    P1053(7,"P1053"),
+    END(8,"END");
 
     // 成员变量
     private String name;
     private int index;
 
-    MessageType(int index, String name) {
+    ProfitStage(int index, String name) {
         this.name = name;
         this.index = index;
     }
@@ -45,16 +48,24 @@ public enum MessageType {
 
     // 普通方法
     public static String getName(int index) {
-        for (MessageType c : MessageType.values()) {
+        for (ProfitStage c : ProfitStage.values()) {
             if (c.getIndex() == index) {
                 return c.name;
             }
         }
         return null;
     }
+    public static int getIndex(String name) {
+        for (ProfitStage c : ProfitStage.values()) {
+            if (c.getName().equals(name)) {
+                return c.index;
+            }
+        }
+        return -1;
+    }
 
-    public static MessageType getMessageType(int index) {
-        for (MessageType c : MessageType.values()) {
+    public static ProfitStage getProfitStage(int index) {
+        for (ProfitStage c : ProfitStage.values()) {
             if (c.getIndex() == index) {
                 return c;
             }
@@ -64,7 +75,7 @@ public enum MessageType {
 
     public static List getNames() {
         List names = new ArrayList();
-        for (MessageType c : MessageType.values()) {
+        for (ProfitStage c : ProfitStage.values()) {
             names.add(c.name);
         }
         return names;

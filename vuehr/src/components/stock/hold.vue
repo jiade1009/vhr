@@ -178,7 +178,7 @@
 <!--              //将表格数据格式化后，再用 template + v-html 展示出来-->
             </div>
             <div v-else-if="column.prop == 'generateType'">
-              {{scope.row[scope.column.property]==0?"直接加入":"回头草"}}
+              {{scope.row[scope.column.property]==0?"直接加入":scope.row[scope.column.property]==1?"回头草":"加强回头草"}}
             </div>
             <div v-else>
               {{ scope.row[scope.column.property] }}

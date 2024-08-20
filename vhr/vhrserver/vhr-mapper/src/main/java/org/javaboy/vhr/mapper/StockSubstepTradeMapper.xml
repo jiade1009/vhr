@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.StockSubstepTradeMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.StockSubstepTrade">
+    <!--@mbg.generated-->
+    <!--@Table stock_substep_trade-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
+    <result column="time_update" jdbcType="TIMESTAMP" property="timeUpdate" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="price" jdbcType="FLOAT" property="price" />
+    <result column="amount" jdbcType="INTEGER" property="amount" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="date_trade" jdbcType="VARCHAR" property="dateTrade" />
+    <result column="substep_profit_id" jdbcType="INTEGER" property="substepProfitId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, time_create, time_update, code, price, amount, `type`, date_trade, substep_profit_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from stock_substep_trade
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from stock_substep_trade
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockSubstepTrade" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into stock_substep_trade (time_create, time_update,
+      code, price, amount, 
+      `type`, date_trade, substep_profit_id
+      )
+    values (#{timeCreate,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP},
+      #{code,jdbcType=VARCHAR}, #{price,jdbcType=FLOAT}, #{amount,jdbcType=INTEGER}, 
+      #{type,jdbcType=INTEGER}, #{dateTrade,jdbcType=VARCHAR}, #{substepProfitId,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockSubstepTrade">
+    <!--@mbg.generated-->
+    update stock_substep_trade
+    set time_create = #{timeCreate,jdbcType=TIMESTAMP},
+      time_update = #{timeUpdate,jdbcType=TIMESTAMP},
+      code = #{code,jdbcType=VARCHAR},
+      price = #{price,jdbcType=FLOAT},
+      amount = #{amount,jdbcType=INTEGER},
+      `type` = #{type,jdbcType=INTEGER},
+      date_trade = #{dateTrade,jdbcType=VARCHAR},
+      substep_profit_id = #{substepProfitId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_substep_trade
+    <where>
+      <if test="keywords!=null">
+        and code like concat('%',#{keywords},'%')
+      </if>
+    </where>
+    order by time_create desc
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from stock_substep_trade
+    <where>
+      <if test="keywords!=null">
+        and code like concat('%',#{keywords},'%')
+      </if>
+    </where>
+  </select>
+
+  <select id="getBeanlistByStepId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_substep_trade where substep_profit_id = #{hid,jdbcType=INTEGER}
+    order by time_create desc
+  </select>
+  <delete id="deleteByProfitId" parameterType="java.lang.Integer">
+    delete from stock_substep_trade where substep_profit_id = #{pid,jdbcType=INTEGER}
+  </delete>
+</mapper>

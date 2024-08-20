@@ -33,7 +33,7 @@ server:
     enabled: true
 fastdfs:
   nginx:
-    host: http://121.37.203.125:8889/  # 提供文件上传访问的前缀链接地址
+    host: http://1.94.54.206:8889/  # 提供文件上传访问的前缀链接地址
 # 日志配置
 logging:
   level:
@@ -115,10 +115,12 @@ task:
       orderQuery_0: 0 30-59/10 9 ? * MON-FRI
       orderQuery_1: 0 0-30/10 11 ? * MON-FRI
       orderQuery_2: 0 */10 10,13,14 ? * MON-FRI
+      orderQuery_3: 0 0 15 ? * MON-FRI
       # 股票撤销交易结果查询（买入和卖出）
       revokeQuery_0: 0 30-59/1 9 ? * MON-FRI
       revokeQuery_1: 0 0-30/1 11 ? * MON-FRI
       revokeQuery_2: 0 */1 10,13,14 ? * MON-FRI
+      revokeQuery_3: 0 1 15 ? * MON-FRI
       #股票代码更新
       stockCodeUpdate: 0 0 1 ? * SAT
       # 每日收盘信息更新（所持股票）
@@ -131,6 +133,10 @@ task:
       inspection: 0 0 21 ? * MON-FRI
       # 每日巡检（U)
       u_inspection: 0 40 23 ? * TUE-SAT
+      # 智能订单跟踪
+      ai_order_0: 0 30-59/5 9 ? * MON-FRI
+      ai_order_1: 0 0-29/5 11 ? * MON-FRI
+      ai_order_2: 0 */5 10,13,14 ? * MON-FRI
 
 
 # 与python客户端通信签名配置

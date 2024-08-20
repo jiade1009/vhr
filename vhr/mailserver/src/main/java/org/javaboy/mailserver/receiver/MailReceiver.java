@@ -101,7 +101,7 @@ public class MailReceiver {
         MessageType messageType = bean.getMessageType();
         Integer sendType = bean.getSendType();  //（0短信、1邮件、2微信服务通知）
         String flag = bean.getFlag();
-        if (sendType == 1) {
+        if (sendType == 1) { //邮件发送
             String title = bean.getTitle();
 //            String title = messageType.getName();
 //            if (!(flag == null || flag.trim().equals(""))) {

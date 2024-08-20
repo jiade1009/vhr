@@ -141,6 +141,11 @@ public class AStockCoreTask extends BaseStockTask{
     public void orderQuery_2() {
         orderQueryTask();
     }
+    @Async("stockCoreAsync")
+    @Scheduled(cron = "${task.cron.StockCore.orderQuery_3}")
+    public void orderQuery_3() {
+        orderQueryTask();
+    }
 
     private void orderQueryTask() {
         String[] params = new String[]{BaseConstants.PY_API_RUN_A_ORDER_QUERY};
@@ -195,6 +200,11 @@ public class AStockCoreTask extends BaseStockTask{
     @Async("stockCoreAsync")
     @Scheduled(cron = "${task.cron.StockCore.revokeQuery_2}")
     public void revokeQuery_2() {
+        revokeQueryTask();
+    }
+    @Async("stockCoreAsync")
+    @Scheduled(cron = "${task.cron.StockCore.revokeQuery_3}")
+    public void revokeQuery_3() {
         revokeQueryTask();
     }
 
@@ -259,5 +269,29 @@ public class AStockCoreTask extends BaseStockTask{
         String now = DateUtils.formatDate(new Date(), DateUtils.yyyyMMdd);
         String[] params = new String[]{BaseConstants.PY_API_RUN_A_CHECK_SELL, now};
         runPython(flag, params, "收盘股票卖出交易结果检查");
+    }
+
+    /**
+     * 智能订单触发跟踪
+     */
+    @Async("stockCoreAsync")
+    @Scheduled(cron = "${task.cron.StockCore.ai_order_0}")
+    public void ai_order_0() {
+        aiOrderTask();
+    }
+    @Async("stockCoreAsync")
+    @Scheduled(cron = "${task.cron.StockCore.ai_order_1}")
+    public void ai_order_1() {
+        aiOrderTask();
+    }
+    @Async("stockCoreAsync")
+    @Scheduled(cron = "${task.cron.StockCore.ai_order_2}")
+    public void ai_order_2() {
+        aiOrderTask();
+    }
+
+    private void aiOrderTask() {
+        String[] params = new String[]{BaseConstants.PY_API_RUN_A_AI_ORDER};
+        runPython(flag, params, "卖出股票操作");
     }
 }

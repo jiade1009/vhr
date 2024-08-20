@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.StockSubstepProfitMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.StockSubstepProfit">
+    <!--@mbg.generated-->
+    <!--@Table stock_substep_profit-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
+    <result column="time_update" jdbcType="TIMESTAMP" property="timeUpdate" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="profit_stage" jdbcType="INTEGER" property="profitStage" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="price_cost" jdbcType="FLOAT" property="priceCost" />
+    <result column="amount_cost" jdbcType="INTEGER" property="amountCost" />
+    <result column="amount_able" jdbcType="INTEGER" property="amountAble" />
+    <result column="amount_substep" jdbcType="INTEGER" property="amountSubstep" />
+    <result column="price_p3" jdbcType="FLOAT" property="priceP3" />
+    <result column="amount_p3" jdbcType="INTEGER" property="amountP3" />
+    <result column="price_p5" jdbcType="FLOAT" property="priceP5" />
+    <result column="amount_p5" jdbcType="INTEGER" property="amountP5" />
+    <result column="price_p8" jdbcType="FLOAT" property="priceP8" />
+    <result column="amount_p8" jdbcType="INTEGER" property="amountP8" />
+    <result column="price_p10" jdbcType="FLOAT" property="priceP10" />
+    <result column="amount_p10" jdbcType="INTEGER" property="amountP10" />
+    <result column="price_p1051" jdbcType="FLOAT" property="priceP1051" />
+    <result column="amount_p1051" jdbcType="INTEGER" property="amountP1051" />
+    <result column="price_p1052" jdbcType="FLOAT" property="priceP1052" />
+    <result column="amount_p1052" jdbcType="INTEGER" property="amountP1052" />
+    <result column="price_p1053" jdbcType="FLOAT" property="priceP1053" />
+    <result column="amount_p1053" jdbcType="INTEGER" property="amountP1053" />
+    <result column="last_trade_type" jdbcType="INTEGER" property="lastTradeType" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, time_create, time_update, `name`, code, profit_stage, `status`, price_cost, amount_cost, 
+    amount_able, amount_substep, price_p3, amount_p3, price_p5, amount_p5, price_p8, amount_p8, price_p10, amount_p10,
+    price_p1051, amount_p1051, price_p1052, amount_p1052, price_p1053, amount_p1053, last_trade_type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from stock_substep_profit
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from stock_substep_profit where id = #{id,jdbcType=INTEGER};
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockSubstepProfit" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into stock_substep_profit (time_create, time_update, `name`, 
+      code, profit_stage, `status`, 
+      price_cost, amount_cost, amount_able, amount_substep,
+      price_p3, amount_p3, price_p5, amount_p5, price_p8, amount_p8, price_p10, amount_p10,
+      price_p1051, amount_p1051, price_p1052, amount_p1052, price_p1053, amount_p1053, last_trade_type
+      )
+    values (#{timeCreate,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR}, 
+      #{code,jdbcType=VARCHAR}, #{profitStage,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{priceCost,jdbcType=FLOAT}, #{amountCost,jdbcType=INTEGER}, #{amountAble,jdbcType=INTEGER},
+      #{amountSubstep,jdbcType=INTEGER},
+      #{priceP3,jdbcType=FLOAT}, #{amountP3,jdbcType=INTEGER},
+      #{priceP5,jdbcType=FLOAT}, #{amountP5,jdbcType=INTEGER},
+      #{priceP8,jdbcType=FLOAT}, #{amountP8,jdbcType=INTEGER},
+      #{priceP10,jdbcType=FLOAT}, #{amountP10,jdbcType=INTEGER},
+      #{priceP1051,jdbcType=FLOAT}, #{amountP1051,jdbcType=INTEGER},
+      #{priceP1052,jdbcType=FLOAT}, #{amountP1052,jdbcType=INTEGER},
+      #{priceP1053,jdbcType=FLOAT}, #{amountP1053,jdbcType=INTEGER},
+      #{lastTradeType,jdbcType=INTEGER}
+    )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockSubstepProfit">
+    <!--@mbg.generated-->
+    update stock_substep_profit
+    set time_create = #{timeCreate,jdbcType=TIMESTAMP},
+      time_update = #{timeUpdate,jdbcType=TIMESTAMP},
+      `name` = #{name,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      profit_stage = #{profitStage,jdbcType=INTEGER},
+      `status` = #{status,jdbcType=INTEGER},
+      price_cost = #{priceCost,jdbcType=FLOAT},
+      amount_cost = #{amountCost,jdbcType=INTEGER},
+      amount_able = #{amountAble,jdbcType=INTEGER},
+      amount_substep = #{amountSubstep,jdbcType=INTEGER},
+      price_p3 = #{priceP3,jdbcType=FLOAT}, amount_p3 = #{amountP3,jdbcType=INTEGER},
+      price_p5 = #{priceP5,jdbcType=FLOAT}, amount_p5 = #{amountP5,jdbcType=INTEGER},
+      price_p8 = #{priceP8,jdbcType=FLOAT}, amount_p8 = #{amountP8,jdbcType=INTEGER},
+      price_p10 = #{priceP10,jdbcType=FLOAT}, amount_p10 = #{amountP10,jdbcType=INTEGER},
+      price_p1051 = #{priceP1051,jdbcType=FLOAT}, amount_p1051 = #{amountP1051,jdbcType=INTEGER},
+      price_p1052 = #{priceP1052,jdbcType=FLOAT}, amount_p1052 = #{amountP1052,jdbcType=INTEGER},
+      price_p1053 = #{priceP1053,jdbcType=FLOAT}, amount_p1053 = #{amountP1053,jdbcType=INTEGER}, last_trade_type = #{lastTradeType,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_substep_profit
+    <where>
+      <if test="keywords!=null">
+        and (code like concat('%',#{keywords},'%') or name like concat('%',#{keywords},'%') )
+      </if>
+      <if test="status!=null">
+        and status=#{status}
+      </if>
+    </where>
+    order by status desc, time_update desc, profit_stage desc
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from stock_substep_profit
+    <where>
+      <if test="keywords!=null">
+        and (code like concat('%',#{keywords},'%') or name like concat('%',#{keywords},'%') )
+      </if>
+      <if test="status!=null">
+        and status=#{status}
+      </if>
+    </where>
+  </select>
+
+  <select id="getRunningByCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from stock_substep_profit
+    where code = #{code,jdbcType=VARCHAR} and status = 1
+  </select>
+</mapper>

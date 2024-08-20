@@ -3,9 +3,15 @@ package org.javaboy.vhr.utils;
 import org.apache.poi.hpsf.DocumentSummaryInformation;
 import org.apache.poi.hpsf.SummaryInformation;
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.javaboy.vhr.model.*;
+import org.javaboy.vhr.model.util.AiOrderProcess;
+import org.javaboy.vhr.model.util.AiStrategyType;
+import org.javaboy.vhr.model.util.ProfitStage;
+import org.javaboy.vhr.model.util.TradeType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class POIUtils {
+    private static final Logger LOGGER = LoggerFactory.getLogger(POIUtils.class);
 
     public static ResponseEntity<byte[]> employee2Excel(List<Employee> list) {
         //1. 创建一个 Excel 文档
@@ -347,6 +354,154 @@ public class POIUtils {
     }
 
 
+    public static List<StockAiOrder> excel2AiOrder(MultipartFile file, String orderSource) {
+        List<StockAiOrder> list = new ArrayList<>();
+        StockAiOrder vo = null;
+        try {
+            Workbook workbook = getSheets(file);
+            //1. 创建一个 workbook 对象
+//            int numberOfSheets = workbook.getNumberOfSheets();  //获取 workbook 中表单的数量
+            Sheet sheet = workbook.getSheetAt(0);
+            int rows = sheet.getLastRowNum();
+            String searchString = "证券名称";
+            int anchorRow = 0;
+            int anchorCol = 0;
+            boolean done = false;  // 是否找到searchString所对应的excel单元格坐标
+            for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
+                Row row = sheet.getRow(rowIndex);
+                if (row == null) {
+                    continue;//防止数据中间有空行
+                }
+                int columns = row.getLastCellNum();
+                for (int colIndex = 0; colIndex < columns; colIndex++) {
+                    Cell cell = row.getCell(colIndex);
+                    String cellValue = "";
+                    switch (cell.getCellType()) {
+                        case STRING:
+                            cellValue = cell.getStringCellValue().trim();
+                            break;
+                        case NUMERIC:
+                            // 如果需要处理数字类型的单元格，可以添加相应的逻辑
+                            break;
+                        case BOOLEAN:
+                            // 如果需要处理布尔类型的单元格，可以添加相应的逻辑
+                            break;
+                        // 其他类型...
+                        default:
+                            break;
+                    }
+                    // 检查单元格值是否匹配搜索字符串
+                    if (cellValue.equals(searchString)) {
+                        System.out.println("找到匹配的单元格: Sheet 1, Row " + (rowIndex + 1) + ", Column " + (colIndex + 1));
+                        done = true;
+                        anchorRow = rowIndex;
+                        anchorCol = colIndex;
+                        break;
+                    }
+                }
+                if (done) break;
+            }
+            if (!done) {
+                LOGGER.warn("未找到对应的'证券名称'单元格，无法分析处理该文件的智能订单");
+                return null;
+            } else {
+                // 开始分析智能订单
+                for (int rowIndex = anchorRow + 1; rowIndex < rows; rowIndex++) {
+
+                    Row row = sheet.getRow(rowIndex);
+                    if (row == null) {
+                        continue;//防止数据中间有空行
+                    }
+                    vo = new StockAiOrder();
+                    vo.setOrderSource(orderSource);
+                    Cell cell = row.getCell(anchorCol);
+                    if (cell == null || cell.getCellType() == CellType.BLANK) {
+                        continue;
+                    } else {
+                        vo.setName(cell.getStringCellValue().trim());
+                    }
+
+                    for (int colIndex = anchorCol+1; colIndex < anchorCol+14; colIndex++) {
+                        cell = row.getCell(colIndex);
+//                        System.out.println("colIndex:"+colIndex+" rowIndex："+ rowIndex);
+                        switch (cell.getCellType()) {
+                            case STRING:
+                                String val = cell.getStringCellValue().trim();
+                                switch (colIndex) {
+                                    case 3:
+                                        vo.setCode(val);
+                                        break;
+                                    case 4:
+                                        vo.setStrategyType(AiStrategyType.getIndex(val));
+                                        break;
+                                    case 5:
+                                        vo.setStatus(val.equals("监控中")?1:0);
+                                        break;
+                                    case 6:
+                                        vo.setProcess(AiOrderProcess.getIndex(val));
+                                        break;
+                                    case 8:
+                                        vo.setTriggerCondition(val);
+                                        break;
+                                    case 9:
+                                        vo.setPriceEntrust(val);
+                                        break;
+                                    case 10:
+                                        vo.setAmountEntrust(val);
+                                        break;
+                                    case 11:
+                                        vo.setAutoEntrust(val.equals("是")?1:0);
+                                        break;
+                                    case 12:
+                                        vo.setDateBegin(DateUtils.parseDate(val));
+                                        break;
+                                    case 13:
+                                        vo.setDateExpire(DateUtils.parseDate(val));
+                                        break;
+                                    case 14:
+                                        vo.setOrderNo(val);
+                                        break;
+                                    case 15:
+                                        vo.setSourceNote(val);
+                                        break;
+                                }
+                                break;
+                            default: {
+                                switch (colIndex) {
+                                    case 12:
+                                        vo.setDateBegin(cell.getDateCellValue());
+                                        break;
+                                    case 13:
+                                        vo.setDateExpire(cell.getDateCellValue());
+                                        break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    list.add(vo);
+                }
+            }
+            return list;
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("==================");
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("=========2222=========");
+            return null;
+        }
+    }
+
+
+    /**
+     * 将量化回测的股票收益结果导出到excel文件
+     * @param list
+     * @param buyRule
+     * @param sellRule
+     * @return
+     */
     public static ResponseEntity<byte[]> stockQtProfitHold2Excel(List<StockQtProfitHold> list, StockQtBuyRule buyRule,
                                                                  StockQtSellRule sellRule) {
         //1. 创建一个 Excel 文档
@@ -582,5 +737,75 @@ public class POIUtils {
             e.printStackTrace();
         }
         return new ResponseEntity<byte[]>(baos.toByteArray(), headers, HttpStatus.CREATED);
+    }
+
+    public static List<StockSubstepProfit> excel2SubstepProfit(MultipartFile file) {
+        List<StockSubstepProfit> list = new ArrayList<>();
+        try {
+            Workbook workbook = getSheets(file);
+            //1. 创建一个 workbook 对象
+            // int numberOfSheets = workbook.getNumberOfSheets();  //获取 workbook 中表单的数量
+            Sheet sheet = workbook.getSheetAt(0);
+            int rows = sheet.getLastRowNum();
+            // 初始化为标题栏：名称	代码	成本价 成本股票数 可用股票 分级股票数	止盈阶段	最新操作
+            for (int rowIndex = 1; rowIndex < rows; rowIndex++) {
+                Row row = sheet.getRow(rowIndex);
+                if (row == null) {
+                    continue;//防止数据中间有空行
+                }
+                StockSubstepProfit vo = new StockSubstepProfit();
+                Cell cell = row.getCell(0);
+                vo.setName(cell.getStringCellValue().trim());
+                cell = row.getCell(1);
+                vo.setCode(getText(cell));
+                cell = row.getCell(2);
+                vo.setPriceCost(NumberUtils.ceil(cell.getNumericCellValue(), 2));
+                cell = row.getCell(3);
+                vo.setAmountCost(Double.valueOf(cell.getNumericCellValue()).intValue());
+                cell = row.getCell(4);
+                vo.setAmountAble(Double.valueOf(cell.getNumericCellValue()).intValue());
+                cell = row.getCell(5);
+                vo.setAmountSubstep(Double.valueOf(cell.getNumericCellValue()).intValue());
+                cell = row.getCell(6);
+                vo.setProfitStage(ProfitStage.getIndex(cell.getStringCellValue().trim().toUpperCase()));
+                cell = row.getCell(7);
+                vo.setLastTradeType(TradeType.getIndex(cell.getStringCellValue().trim()));
+
+                SubstepUtils.updateSubstepPrice(vo);
+
+                list.add(vo);
+            }
+            return list;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static Workbook getSheets(MultipartFile file) throws IOException {
+        Workbook workbook;
+        String fileName = file.getOriginalFilename();
+        if (fileName.endsWith(".xls")) {
+            workbook = new HSSFWorkbook(file.getInputStream());
+        } else if (fileName.endsWith(".xlsx")) {
+            workbook = new XSSFWorkbook(file.getInputStream());
+        } else {
+            throw new IllegalArgumentException("Invalid file type. Only .xls and .xlsx are supported.");
+        }
+        return workbook;
+    }
+
+    private static String getText(Cell cell) {
+        switch (cell.getCellType()) {
+            case NUMERIC:
+                // 如果需要处理数字类型的单元格，可以添加相应的逻辑
+                return String.valueOf((int)cell.getNumericCellValue());
+            // 其他类型...
+            default:
+                return cell.getStringCellValue().trim();
+        }
     }
 }

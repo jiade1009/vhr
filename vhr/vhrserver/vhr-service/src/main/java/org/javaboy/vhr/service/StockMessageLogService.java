@@ -4,10 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.javaboy.vhr.base.BaseService;
 import org.javaboy.vhr.mapper.StockMessageLogMapper;
-import org.javaboy.vhr.model.MailConstants;
-import org.javaboy.vhr.model.StockHoldTrade;
-import org.javaboy.vhr.model.StockMessageConf;
-import org.javaboy.vhr.model.StockMessageLog;
+import org.javaboy.vhr.model.*;
 import org.javaboy.vhr.model.util.CommandType;
 import org.javaboy.vhr.model.util.MessageType;
 import org.javaboy.vhr.model.util.SendType;
@@ -39,6 +36,8 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
     private StockMessageConfService stockMessageConfService;
     @Resource
     private StockHoldTradeService stockHoldTradeService;
+    @Resource
+    private StockAiOrderService stockAiOrderService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StockMessageLogService.class);
 
@@ -196,6 +195,24 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
             insertMessage(json_str, title, MessageType.INSPECTION.getIndex(), flag);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void insertAiOrderMessages(List<String> ai_order_id_list, String date_research, String flag) {
+        if (ai_order_id_list.size()>0) {
+            StringBuilder sbd = new StringBuilder("");
+            for (String id: ai_order_id_list) {
+                StockAiOrder order = stockAiOrderService.selectByPrimaryKey(Integer.valueOf(id));
+                sbd.append("[").append(order.getName()).append("(").append(order.getCode()).
+                        append(")，触发条件：").append(order.getTriggerCondition());
+                sbd.append("，委托价格：").append(order.getPriceEntrust()).
+                        append("，委托数量：").append(order.getAmountEntrust()).
+                        append("。触发结果：").append(order.getNote()).
+                        append("。 ]<br/> ");
+            }
+            String title = flag + "股" + MessageType.AI_ORDER.getName() +
+                    (StringUtils.hasLength(date_research) ? ("-" + date_research):"");
+            insertMessage(sbd.toString(), title, MessageType.AI_ORDER.getIndex(), flag);
         }
     }
 

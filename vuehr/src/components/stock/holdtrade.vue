@@ -36,6 +36,11 @@
           element-loading-background="rgba(0, 0, 0, 0.8)"
           style="width: 100%">
         <el-table-column
+            prop="code"
+            label="代码"
+            align="left">
+        </el-table-column>
+        <el-table-column
             prop="timeCreate"
             label="创建时间"
             align="left">

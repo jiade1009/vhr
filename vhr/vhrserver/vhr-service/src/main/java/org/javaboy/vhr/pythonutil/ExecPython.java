@@ -71,18 +71,18 @@ public class ExecPython {
             String line = null;
 
             while ((line = in.readLine()) != null) {
-                LOGGER.info("the result of invoking python: {}", line);
+//                LOGGER.info("the result of invoking python: {}", line);
                 Matcher m = p.matcher(line);
                 while (m.find()) {
 //                    m.group(0) 是包含那两个字符，m.group(1) 不包含那两个字符
-                    System.out.println(m.group(1));
+//                    System.out.println(m.group(1));
                     responseList.add(m.group(1));
                 }
 
             }
             in.close();
             int result = proc.waitFor(); //返回值为0表示我们调用python脚本成功，1表示失败
-            LOGGER.info("the status of invoking python: {}", result);
+//            LOGGER.info("the status of invoking python: {}", result);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -135,13 +135,13 @@ class InputStreamRunnable implements Runnable {
     public void run() {
         String line;
         int num = 0;
-        try {
-            while ((line = bReader.readLine()) != null) {
-                System.out.println("---->"+String.format("%02d",num++)+" "+line);
-            }
-            bReader.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+//        try {
+//            while ((line = bReader.readLine()) != null) {
+//                System.out.println("---->"+String.format("%02d",num++)+" "+line);
+//            }
+//            bReader.close();
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
     }
 }

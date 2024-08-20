@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.StockAiOrderMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.StockAiOrder">
+    <!--@mbg.generated-->
+    <!--@Table stock_ai_order-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
+    <result column="time_update" jdbcType="TIMESTAMP" property="timeUpdate" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="strategy_type" jdbcType="INTEGER" property="strategyType" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="process" jdbcType="INTEGER" property="process" />
+    <result column="trigger_condition" jdbcType="VARCHAR" property="triggerCondition" />
+    <result column="price_entrust" jdbcType="VARCHAR" property="priceEntrust" />
+    <result column="amount_entrust" jdbcType="INTEGER" property="amountEntrust" />
+    <result column="auto_entrust" jdbcType="INTEGER" property="autoEntrust" />
+    <result column="date_begin" jdbcType="DATE" property="dateBegin" />
+    <result column="date_expire" jdbcType="DATE" property="dateExpire" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="source_note" jdbcType="VARCHAR" property="sourceNote" />
+    <result column="order_source" jdbcType="VARCHAR" property="orderSource" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, time_create, time_update, `name`, code, strategy_type, `status`, `process`, trigger_condition, 
+    price_entrust, amount_entrust, auto_entrust, date_begin, date_expire, order_no, source_note, 
+    order_source, note
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from stock_ai_order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from stock_ai_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockAiOrder" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into stock_ai_order (time_create, time_update, `name`, 
+      code, strategy_type, `status`, 
+      `process`, trigger_condition, price_entrust, 
+      amount_entrust, auto_entrust, date_begin, 
+      date_expire, order_no, source_note, 
+      order_source, note)
+    values (#{timeCreate,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR}, 
+      #{code,jdbcType=VARCHAR}, #{strategyType,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{process,jdbcType=INTEGER}, #{triggerCondition,jdbcType=VARCHAR}, #{priceEntrust,jdbcType=VARCHAR}, 
+      #{amountEntrust,jdbcType=INTEGER}, #{autoEntrust,jdbcType=INTEGER}, #{dateBegin,jdbcType=DATE}, 
+      #{dateExpire,jdbcType=DATE}, #{orderNo,jdbcType=VARCHAR}, #{sourceNote,jdbcType=VARCHAR}, 
+      #{orderSource,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR})
+  </insert>
+  <insert id="addOrders">
+    insert into stock_ai_order (time_create, time_update, `name`,
+    code, strategy_type, `status`,
+    `process`, trigger_condition, price_entrust,
+    amount_entrust, auto_entrust, date_begin,
+    date_expire, order_no, source_note,
+    order_source, note)
+    values
+    <foreach collection="list" separator="," item="order">
+      (#{order.timeCreate,jdbcType=TIMESTAMP}, #{order.timeUpdate,jdbcType=TIMESTAMP}, #{order.name,jdbcType=VARCHAR},
+      #{order.code,jdbcType=VARCHAR}, #{order.strategyType,jdbcType=INTEGER}, #{order.status,jdbcType=INTEGER},
+      #{order.process,jdbcType=INTEGER}, #{order.triggerCondition,jdbcType=VARCHAR}, #{order.priceEntrust,jdbcType=VARCHAR},
+      #{order.amountEntrust,jdbcType=INTEGER}, #{order.autoEntrust,jdbcType=INTEGER}, #{order.dateBegin,jdbcType=DATE},
+      #{order.dateExpire,jdbcType=DATE}, #{order.orderNo,jdbcType=VARCHAR}, #{order.sourceNote,jdbcType=VARCHAR},
+      #{order.orderSource,jdbcType=VARCHAR}, #{order.note,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockAiOrder">
+    <!--@mbg.generated-->
+    update stock_ai_order
+    set time_create = #{timeCreate,jdbcType=TIMESTAMP},
+      time_update = #{timeUpdate,jdbcType=TIMESTAMP},
+      `name` = #{name,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      strategy_type = #{strategyType,jdbcType=INTEGER},
+      `status` = #{status,jdbcType=INTEGER},
+      `process` = #{process,jdbcType=INTEGER},
+      trigger_condition = #{triggerCondition,jdbcType=VARCHAR},
+      price_entrust = #{priceEntrust,jdbcType=VARCHAR},
+      amount_entrust = #{amountEntrust,jdbcType=INTEGER},
+      auto_entrust = #{autoEntrust,jdbcType=INTEGER},
+      date_begin = #{dateBegin,jdbcType=DATE},
+      date_expire = #{dateExpire,jdbcType=DATE},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      source_note = #{sourceNote,jdbcType=VARCHAR},
+      order_source = #{orderSource,jdbcType=VARCHAR},
+      note = #{note,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getBeanlistByPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_ai_order
+    <where>
+      <if test="keywords!=null">
+        and (code like concat('%',#{keywords},'%') or name like concat('%',#{keywords},'%') )
+      </if>
+      <if test="status!=null">
+        and status=#{status}
+      </if>
+    </where>
+    order by status desc, process asc, time_create desc, date_begin desc
+    <if test="page !=null and size!=null">
+      limit #{page},#{size}
+    </if>
+  </select>
+  <select id="getTotal" resultType="java.lang.Long">
+    select count(*) from stock_ai_order
+    <where>
+      <if test="keywords!=null">
+        and (code like concat('%',#{keywords},'%') or name like concat('%',#{keywords},'%') )
+      </if>
+      <if test="status!=null">
+        and status=#{status}
+      </if>
+    </where>
+  </select>
+
+  <select id="getByOrderNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from stock_ai_order
+    where order_no = #{orderNo,jdbcType=VARCHAR} and order_source = #{orderSource,jdbcType=VARCHAR}
+  </select>
+
+  <update id="closeStatus">
+    update stock_ai_order set `status` = 0 , `time_update` = sysdate()
+    where `order_source` = #{orderSource,jdbcType=VARCHAR}
+  </update>
+</mapper>

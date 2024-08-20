@@ -84,6 +84,14 @@ public class StockRestController {
                         date_research = (String) data.get("date_research");
                         stockMessageLogService.insertSellHoldMessages(holdTradeId, date_research, flag);
                         break;
+                    case "ai_order":
+                        List<String> ai_order_id_list = (List<String>) data.get("ai_order_id_list");
+                        flag = (String) data.get("flag");
+                        date_research = (String) data.get("date_research");
+                        if (ai_order_id_list!=null && ai_order_id_list.size()>0) {
+                            stockMessageLogService.insertAiOrderMessages(ai_order_id_list, date_research, flag);
+                        }
+                        break;
                     case "sell_result":
                     case "revoke":
                         break;
