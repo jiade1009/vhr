@@ -9,6 +9,7 @@ import org.javaboy.vhr.utils.SubstepUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,11 +43,13 @@ public class StockSubstepTradeService extends BaseService<StockSubstepTrade, Int
                 profit.setName(trade.getName());
                 SubstepUtils.updatePrice(profit, trade);
                 stockSubstepProfitMapper.insert(profit);
-                System.out.println(".....profit id="+profit.getId());
             } else {
                 SubstepUtils.updatePrice(profit, trade);
+                profit.setTimeUpdate(new Date());
                 stockSubstepProfitMapper.updateByPrimaryKey(profit);
             }
+            trade.setTimeCreate(new Date());
+            trade.setTimeUpdate(trade.getTimeCreate());
             trade.setSubstepProfitId(profit.getId());
             stockSubstepTradeMapper.insert(trade);
         }

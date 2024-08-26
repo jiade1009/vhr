@@ -92,6 +92,14 @@ public class StockRestController {
                             stockMessageLogService.insertAiOrderMessages(ai_order_id_list, date_research, flag);
                         }
                         break;
+                    case "substep":
+                        List<List<String>> substep_list = (List<List<String>>) data.get("substep_list");
+                        flag = (String) data.get("flag");
+                        date_research = (String) data.get("date_research");
+                        if (substep_list!=null && substep_list.size()>0) {
+                            stockMessageLogService.insertSubstepMessages(substep_list, date_research, flag);
+                        }
+                        break;
                     case "sell_result":
                     case "revoke":
                         break;

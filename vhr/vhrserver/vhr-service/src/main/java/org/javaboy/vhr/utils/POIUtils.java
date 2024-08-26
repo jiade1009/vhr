@@ -367,7 +367,7 @@ public class POIUtils {
             int anchorRow = 0;
             int anchorCol = 0;
             boolean done = false;  // 是否找到searchString所对应的excel单元格坐标
-            for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
+            for (int rowIndex = 0; rowIndex <= rows; rowIndex++) {
                 Row row = sheet.getRow(rowIndex);
                 if (row == null) {
                     continue;//防止数据中间有空行
@@ -747,28 +747,34 @@ public class POIUtils {
             // int numberOfSheets = workbook.getNumberOfSheets();  //获取 workbook 中表单的数量
             Sheet sheet = workbook.getSheetAt(0);
             int rows = sheet.getLastRowNum();
-            // 初始化为标题栏：名称	代码	成本价 成本股票数 可用股票 分级股票数	止盈阶段	最新操作
-            for (int rowIndex = 1; rowIndex < rows; rowIndex++) {
+            // 初始化为标题栏：代码	名称	止损价 成本价 成本股票数 可用股票 分级股票数	止盈阶段	最新操作
+            for (int rowIndex = 1; rowIndex <= rows; rowIndex++) {
                 Row row = sheet.getRow(rowIndex);
                 if (row == null) {
                     continue;//防止数据中间有空行
                 }
                 StockSubstepProfit vo = new StockSubstepProfit();
                 Cell cell = row.getCell(0);
-                vo.setName(cell.getStringCellValue().trim());
-                cell = row.getCell(1);
+                if (cell.getStringCellValue() == null) {
+                    continue;
+                }
                 vo.setCode(getText(cell));
-                cell = row.getCell(2);
-                vo.setPriceCost(NumberUtils.ceil(cell.getNumericCellValue(), 2));
+                cell = row.getCell(1);
+                vo.setName(cell.getStringCellValue().trim());
+
+                double priceStopLoss = row.getCell(2).getNumericCellValue(); //止损价
+                vo.setPriceStopLoss(NumberUtils.ceil(priceStopLoss, 2));
                 cell = row.getCell(3);
-                vo.setAmountCost(Double.valueOf(cell.getNumericCellValue()).intValue());
+                vo.setPriceCost(NumberUtils.ceil(cell.getNumericCellValue(), 2));
                 cell = row.getCell(4);
-                vo.setAmountAble(Double.valueOf(cell.getNumericCellValue()).intValue());
+                vo.setAmountCost(Double.valueOf(cell.getNumericCellValue()).intValue());
                 cell = row.getCell(5);
-                vo.setAmountSubstep(Double.valueOf(cell.getNumericCellValue()).intValue());
+                vo.setAmountAble(Double.valueOf(cell.getNumericCellValue()).intValue());
                 cell = row.getCell(6);
-                vo.setProfitStage(ProfitStage.getIndex(cell.getStringCellValue().trim().toUpperCase()));
+                vo.setAmountSubstep(Double.valueOf(cell.getNumericCellValue()).intValue());
                 cell = row.getCell(7);
+                vo.setProfitStage(ProfitStage.getIndex(cell.getStringCellValue().trim().toUpperCase()));
+                cell = row.getCell(8);
                 vo.setLastTradeType(TradeType.getIndex(cell.getStringCellValue().trim()));
 
                 SubstepUtils.updateSubstepPrice(vo);

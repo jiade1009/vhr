@@ -292,6 +292,31 @@ public class AStockCoreTask extends BaseStockTask{
 
     private void aiOrderTask() {
         String[] params = new String[]{BaseConstants.PY_API_RUN_A_AI_ORDER};
-        runPython(flag, params, "卖出股票操作");
+//        runPython(flag, params, "卖出股票操作");
+    }
+
+    /**
+     * 分级止盈策略定时任务
+     * 触发止盈和止损操作
+     */
+    @Async("stockCoreAsync")
+    @Scheduled(cron = "${task.cron.StockCore.substep_0}")
+    public void substep_0() {
+        substepTask();
+    }
+    @Async("stockCoreAsync")
+    @Scheduled(cron = "${task.cron.StockCore.substep_1}")
+    public void substep_1() {
+        substepTask();
+    }
+    @Async("stockCoreAsync")
+    @Scheduled(cron = "${task.cron.StockCore.substep_2}")
+    public void substep_2() {
+        substepTask();
+    }
+
+    private void substepTask() {
+        String[] params = new String[]{BaseConstants.PY_API_RUN_A_SUBSTEP};
+        runPython(flag, params, "分级止盈操作");
     }
 }

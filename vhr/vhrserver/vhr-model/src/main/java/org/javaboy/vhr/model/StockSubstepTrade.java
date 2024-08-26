@@ -43,6 +43,7 @@ public class StockSubstepTrade {
     * 交易类型（加仓0、止盈1、止损2、减仓3、清仓4、调仓5）
     */
     private Integer type;
+    private String typeNote;
 
     /**
     * 交易日期

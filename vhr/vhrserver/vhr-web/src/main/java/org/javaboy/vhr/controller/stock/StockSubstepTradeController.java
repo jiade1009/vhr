@@ -50,16 +50,15 @@ public class StockSubstepTradeController {
         String[] lines = recordText.split("\\r?\\n");
         List<StockSubstepTrade> list = new ArrayList<>();
         for (int i = 0; i < lines.length; i++) {
-            System.out.println(lines[i]);
             String line = lines[i];
 //           交易日期 代码	名称	成交价	成交量	操作
-            String[] tradeInfo = line.split("\\S+");
+            String[] tradeInfo = line.split("\\s+");
             StockSubstepTrade trade = new StockSubstepTrade();
             trade.setDateTrade(tradeInfo[0]);
             trade.setCode(tradeInfo[1]);
             trade.setName(tradeInfo[2]);
             trade.setPrice(NumberUtils.ceil(tradeInfo[3], 2));
-            trade.setAmount(Integer.valueOf(tradeInfo[4]));
+            trade.setAmount(Double.valueOf(tradeInfo[4]).intValue());
             trade.setType(TradeType.getIndex(tradeInfo[5]));
             list.add(trade);
         }

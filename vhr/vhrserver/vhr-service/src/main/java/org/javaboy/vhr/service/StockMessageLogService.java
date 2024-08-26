@@ -7,10 +7,13 @@ import org.javaboy.vhr.mapper.StockMessageLogMapper;
 import org.javaboy.vhr.model.*;
 import org.javaboy.vhr.model.util.CommandType;
 import org.javaboy.vhr.model.util.MessageType;
+import org.javaboy.vhr.model.util.ProfitStage;
 import org.javaboy.vhr.model.util.SendType;
+import org.javaboy.vhr.utils.SubstepUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -38,6 +41,10 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
     private StockHoldTradeService stockHoldTradeService;
     @Resource
     private StockAiOrderService stockAiOrderService;
+    @Resource
+    private StockSubstepProfitService stockSubstepProfitService;
+    @Resource
+    private StockSubstepTriggerService stockSubstepTriggerService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StockMessageLogService.class);
 
@@ -213,6 +220,51 @@ public class StockMessageLogService extends BaseService<StockMessageLog, Integer
             String title = flag + "股" + MessageType.AI_ORDER.getName() +
                     (StringUtils.hasLength(date_research) ? ("-" + date_research):"");
             insertMessage(sbd.toString(), title, MessageType.AI_ORDER.getIndex(), flag);
+        }
+    }
+
+    /**
+     * 发送分级止盈触发服务通知
+     * @param substep_list 列表，元素数据结构为： [分级止盈id， 止盈或止损标识（1表示止盈，-1表示止损），触发第几个止盈阶段]
+     * @param date_research
+     * @param flag
+     */
+    @Transactional
+    public void insertSubstepMessages(List<List<String>> substep_list, String date_research, String flag) {
+        if (substep_list.size()>0) {
+            StringBuilder sbd = new StringBuilder("");
+            for (List<String> item: substep_list) {
+                StockSubstepProfit vo = stockSubstepProfitService.selectByPrimaryKey(Integer.valueOf(item.get(0)));
+
+                StockSubstepTrigger trigger = new StockSubstepTrigger();
+                trigger.setCode(vo.getCode());
+                trigger.setDateTrigger(date_research);
+                trigger.setSubstepProfitId(vo.getId());
+                if (item.get(1).equals("-1")) { // 止损清仓处理
+                    sbd.append("[").append(vo.getName()).append("(").append(vo.getCode()).
+                            append(")：触碰止损价格，请进行清仓处理");
+                    sbd.append("，止损价格：").append(vo.getPriceStopLoss()).
+                            append("，卖出数量：").append(vo.getAmountAble()).
+                            append("。 ]<br/> ");
+
+                    trigger.setStageTrigger(-1);
+                } else { // 分级止盈
+//                    Integer stage = vo.getProfitStage();
+//                    Integer nextStage = stage + 1;
+                    Integer triggerStage = Integer.valueOf(item.get(2));
+                    List<String> profitInfo = SubstepUtils.getProfitInfo(vo, triggerStage);
+                    sbd.append("[").append(vo.getName()).append("(").append(vo.getCode()).
+                            append(")：触碰" + ProfitStage.getName(triggerStage)+"阶段止盈价格，请进行止盈操作");
+                    sbd.append("，止盈价格：").append(profitInfo.get(0)).
+                            append("，卖出数量：").append(profitInfo.get(1)).
+                            append("。 ]<br/> ");
+                    trigger.setStageTrigger(triggerStage);
+                }
+                stockSubstepTriggerService.insert(trigger);
+            }
+            String title = flag + "股" + MessageType.SUBSTEP.getName() +
+                    (StringUtils.hasLength(date_research) ? ("-" + date_research):"");
+            insertMessage(sbd.toString(), title, MessageType.SUBSTEP.getIndex(), flag);
         }
     }
 

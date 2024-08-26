@@ -35,7 +35,19 @@ public class MyTest {
         }
     }
 
+    public static void testSplit() {
+        String src = "20240809\t600292\t远达环保\t4.82\t4200\t  止盈  加入";
+//        String replace = src.replaceAll("\\t+", " ");
+//        System.out.println(replace);
+        String[] tradeInfo = src.split("\\s+");
+        for (int j = 0; j < tradeInfo.length; j++) {
+            System.out.println(tradeInfo[j]);
+        }
+    }
+
     public static void main(String[] args) {
-        testStock();
+        System.out.println(Double.valueOf("2.00").intValue());
+
+        testSplit();
     }
 }

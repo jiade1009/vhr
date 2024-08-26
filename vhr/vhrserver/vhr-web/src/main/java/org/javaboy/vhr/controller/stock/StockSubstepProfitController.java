@@ -41,7 +41,7 @@ public class StockSubstepProfitController {
         Date now = new Date();
         bean.setTimeCreate(now);
         bean.setTimeUpdate(now);
-        int result = stockSubstepProfitService.insert(bean);
+        int result = stockSubstepProfitService.addProfit(bean);
         if (result == 1) {
             return RespBean.ok("添加成功", bean);
         }
@@ -60,7 +60,7 @@ public class StockSubstepProfitController {
     public RespBean importData(MultipartFile file) throws IOException {
         List<StockSubstepProfit> list = POIUtils.excel2SubstepProfit(file);
         if (list != null && list.size() > 0) {
-            stockSubstepProfitService.addProfits(list);
+            stockSubstepProfitService.addList(list);
             return RespBean.ok("上传成功");
         } else {
             return RespBean.error("上传失败，文件格式不正确");

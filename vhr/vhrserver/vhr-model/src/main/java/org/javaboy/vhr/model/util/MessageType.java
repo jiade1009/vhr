@@ -16,7 +16,8 @@ public enum MessageType {
     SELL(2,"股票卖出"),
     INSPECTION(3, "巡检结果"),
     URETURNSIGN(4,"回头草发现"),
-    AI_ORDER(5,"智能订单触发");
+    AI_ORDER(5,"智能订单触发"),
+    SUBSTEP(6,"分级止盈触发");
 
     // 成员变量
     private String name;

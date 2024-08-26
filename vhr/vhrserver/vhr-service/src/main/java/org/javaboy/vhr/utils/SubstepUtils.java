@@ -4,6 +4,9 @@ import org.javaboy.vhr.model.StockSubstepProfit;
 import org.javaboy.vhr.model.StockSubstepTrade;
 import org.javaboy.vhr.model.util.TradeType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author : sam
  * @ClassName : SubstepUtils
@@ -87,6 +90,7 @@ public class SubstepUtils {
             case 2:  //止损、清仓
             case 4:
                 amountAble = 0;
+                profit.setStatus(0);  // 结束
                 break;
             case 0:  //加仓操作
                 // 上次操作如果为空，默认是加仓操作
@@ -108,7 +112,7 @@ public class SubstepUtils {
                     priceCost = trade.getPrice();  //以这次的加仓成交价格作为成本价格
                     amountCost = trade.getAmount();  //以这次的加仓成交数量作为成本统计股票数
                     amountAble += trade.getAmount();
-                    amountSubstep += amountAble;  // 止盈股票数等于最新可用股票数
+                    amountSubstep = amountAble;  // 止盈股票数等于最新可用股票数
                 } else if (lastTradeType == TradeType.PROFIT.getIndex()) {
                     // 上次操作为止盈
                     stage = 0;
@@ -120,22 +124,23 @@ public class SubstepUtils {
 
                     amountCost = newAmountCost;
                     amountAble += trade.getAmount();
-                    amountSubstep += amountAble;  // 止盈股票数等于最新可用股票数
+                    amountSubstep = amountAble;  // 止盈股票数等于最新可用股票数
                 }
                 break;
             default:
                 break;
         }
+        if (profit.getStatus() == 0) return;
         profit.setAmountAble(amountAble);
         profit.setAmountSubstep(amountSubstep);
         profit.setAmountCost(amountCost);
         profit.setPriceCost(priceCost);
         profit.setProfitStage(stage);
+        profit.setLastTradeType(trade.getType());
 
         // 根据止盈阶段更新对应每个止盈阶段的止盈股票数
         // 止盈阶段0：未止盈、1：p3阶段、2：p5阶段、3：p8阶段、4：p10阶段、5：p1051阶段、6：p1052阶段、7：p1053阶段、8：终极
-        Integer remainder = amountSubstep - profit.getAmountP3() - profit.getAmountP5()
-                - profit.getAmountP8() - profit.getAmountP10();
+        Integer remainder = 0;
         switch (profit.getProfitStage()){
             case 0:
                 profit.setPriceP3(NumberUtils.ceil(priceCost*1.03, 2));
@@ -150,17 +155,26 @@ public class SubstepUtils {
                 profit.setPriceP10(NumberUtils.ceil(priceCost*1.1, 2));
                 profit.setAmountP10((int)(NumberUtils.floor(amountSubstep*0.2/100, 0))*100);
             case 4:
+                remainder = amountSubstep - profit.getAmountP3() - profit.getAmountP5()
+                        - profit.getAmountP8() - profit.getAmountP10();
                 profit.setPriceP1051(NumberUtils.ceil(profit.getPriceP10()*1.05, 2));
                 profit.setAmountP1051((int)NumberUtils.floor(remainder/3/100, 0)*100);
             case 5:
                 profit.setPriceP1052(NumberUtils.ceil(profit.getPriceP1051()*1.05, 2));
-                remainder -= profit.getAmountP1051();
+                if (profit.getProfitStage() == 5) {
+                    remainder = amountSubstep - profit.getAmountP3() - profit.getAmountP5()
+                            - profit.getAmountP8() - profit.getAmountP10() - profit.getAmountP1051();
+                } else {
+                    remainder -= profit.getAmountP1051();
+                }
                 profit.setAmountP1052((int)NumberUtils.floor(remainder/4/100, 0)*100);
             case 6:
                 profit.setPriceP1053(NumberUtils.ceil(profit.getPriceP1052()*1.05, 2));
                 if (profit.getProfitStage() == 6) {
                     // 如果当前处于阶段6，直接计算阶段7的止盈价格和数量，直接计算剩余的股票为多少
-                    remainder = remainder - profit.getAmountP1051() - profit.getAmountP1052();
+                    remainder = amountSubstep - profit.getAmountP3() - profit.getAmountP5()
+                            - profit.getAmountP8() - profit.getAmountP10() - profit.getAmountP1051()
+                            - profit.getAmountP1052();
                 } else {
                     remainder -= profit.getAmountP1052();
                 }
@@ -168,6 +182,52 @@ public class SubstepUtils {
                 break;
             default:
                 System.out.println("止盈已经结束，或者已经完成阶段7的止盈，不再做处理");
+                break;
         }
+    }
+
+    /**
+     * 获取指定止盈阶段的止盈价格和止盈股票数
+     * @param profit
+     * @param stage
+     * @return list[] [止盈价格， 止盈股票数]
+     */
+    public static List<String> getProfitInfo(StockSubstepProfit profit, Integer stage) {
+        Double priceProfit = 0d;  // 止盈价格
+        Integer amountProfit = 0;  // 止盈卖出股票数
+        switch (stage) {
+            case 1:
+                priceProfit = profit.getPriceP3();
+                amountProfit = profit.getAmountP3();
+                break;
+            case 2:
+                priceProfit = profit.getPriceP5();
+                amountProfit = profit.getAmountP5();
+                break;
+            case 3:
+                priceProfit = profit.getPriceP8();
+                amountProfit = profit.getAmountP8();
+                break;
+            case 4:
+                priceProfit = profit.getPriceP10();
+                amountProfit = profit.getAmountP10();
+                break;
+            case 5:
+                priceProfit = profit.getPriceP1051();
+                amountProfit = profit.getAmountP1051();
+                break;
+            case 6:
+                priceProfit = profit.getPriceP1052();
+                amountProfit = profit.getAmountP1052();
+                break;
+            case 7:
+                priceProfit = profit.getPriceP1053();
+                amountProfit = profit.getAmountP1053();
+                break;
+        }
+        List<String> result = new ArrayList<>();
+        result.add(String.valueOf(priceProfit));
+        result.add(String.valueOf(amountProfit));
+        return result;
     }
 }

@@ -137,6 +137,10 @@ task:
       ai_order_0: 0 30-59/5 9 ? * MON-FRI
       ai_order_1: 0 0-29/5 11 ? * MON-FRI
       ai_order_2: 0 */5 10,13,14 ? * MON-FRI
+      # 分级止盈策略
+      substep_0: 0 30-59/5 9 ? * MON-FRI
+      substep_1: 0 0-29/5 11 ? * MON-FRI
+      substep_2: 0 */5 10,13,14 ? * MON-FRI
 
 # 与python客户端通信签名配置
 encrypt:

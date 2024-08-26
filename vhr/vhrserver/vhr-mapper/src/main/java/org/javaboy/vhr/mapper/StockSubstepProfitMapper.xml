@@ -30,12 +30,13 @@
     <result column="price_p1053" jdbcType="FLOAT" property="priceP1053" />
     <result column="amount_p1053" jdbcType="INTEGER" property="amountP1053" />
     <result column="last_trade_type" jdbcType="INTEGER" property="lastTradeType" />
+    <result column="price_stop_loss" jdbcType="FLOAT" property="priceStopLoss" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, time_create, time_update, `name`, code, profit_stage, `status`, price_cost, amount_cost, 
     amount_able, amount_substep, price_p3, amount_p3, price_p5, amount_p5, price_p8, amount_p8, price_p10, amount_p10,
-    price_p1051, amount_p1051, price_p1052, amount_p1052, price_p1053, amount_p1053, last_trade_type
+    price_p1051, amount_p1051, price_p1052, amount_p1052, price_p1053, amount_p1053, last_trade_type, price_stop_loss
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -54,7 +55,7 @@
       code, profit_stage, `status`, 
       price_cost, amount_cost, amount_able, amount_substep,
       price_p3, amount_p3, price_p5, amount_p5, price_p8, amount_p8, price_p10, amount_p10,
-      price_p1051, amount_p1051, price_p1052, amount_p1052, price_p1053, amount_p1053, last_trade_type
+      price_p1051, amount_p1051, price_p1052, amount_p1052, price_p1053, amount_p1053, last_trade_type, price_stop_loss
       )
     values (#{timeCreate,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR}, 
       #{code,jdbcType=VARCHAR}, #{profitStage,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
@@ -67,7 +68,7 @@
       #{priceP1051,jdbcType=FLOAT}, #{amountP1051,jdbcType=INTEGER},
       #{priceP1052,jdbcType=FLOAT}, #{amountP1052,jdbcType=INTEGER},
       #{priceP1053,jdbcType=FLOAT}, #{amountP1053,jdbcType=INTEGER},
-      #{lastTradeType,jdbcType=INTEGER}
+      #{lastTradeType,jdbcType=INTEGER}, #{priceStopLoss,jdbcType=FLOAT}
     )
   </insert>
   <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockSubstepProfit">
@@ -89,7 +90,8 @@
       price_p10 = #{priceP10,jdbcType=FLOAT}, amount_p10 = #{amountP10,jdbcType=INTEGER},
       price_p1051 = #{priceP1051,jdbcType=FLOAT}, amount_p1051 = #{amountP1051,jdbcType=INTEGER},
       price_p1052 = #{priceP1052,jdbcType=FLOAT}, amount_p1052 = #{amountP1052,jdbcType=INTEGER},
-      price_p1053 = #{priceP1053,jdbcType=FLOAT}, amount_p1053 = #{amountP1053,jdbcType=INTEGER}, last_trade_type = #{lastTradeType,jdbcType=INTEGER}
+      price_p1053 = #{priceP1053,jdbcType=FLOAT}, amount_p1053 = #{amountP1053,jdbcType=INTEGER},
+      last_trade_type = #{lastTradeType,jdbcType=INTEGER}, price_stop_loss = #{priceStopLoss,jdbcType=FLOAT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 

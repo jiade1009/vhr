@@ -82,7 +82,7 @@
     select
     <include refid="Base_Column_List" />
     from stock_substep_trade where substep_profit_id = #{hid,jdbcType=INTEGER}
-    order by time_create desc
+    order by date_trade desc, id desc
   </select>
   <delete id="deleteByProfitId" parameterType="java.lang.Integer">
     delete from stock_substep_trade where substep_profit_id = #{pid,jdbcType=INTEGER}

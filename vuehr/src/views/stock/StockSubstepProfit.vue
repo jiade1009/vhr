@@ -55,15 +55,19 @@
             element-loading-background="rgba(0, 0, 0, 0.8)"
             style="width: 100%">
           <el-table-column
-              width="160"
+              fixed
+              width="140"
               align="left"
-              label="名称">
+              label="名称"
+              sortable
+              prop="code"
+          >
             <template slot-scope="scope">
               {{scope.row.name}}&nbsp;&nbsp;<el-tag>{{scope.row.code}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
-              width="360"
+              width="350"
               align="left"
               label="止盈">
             <template slot-scope="scope">
@@ -101,7 +105,7 @@
           <el-table-column
               align="left"
               label="成本"
-              width="160"
+              width="140"
           >
             <template slot-scope="scope">
               <div>{{ scope.row['priceCost'] }} * {{ scope.row['amountCost'] }} =
@@ -110,25 +114,43 @@
             </template>
           </el-table-column>
           <el-table-column
+              prop="priceStopLoss"
+              align="left"
+              label="止损价格">
+          </el-table-column>
+          <el-table-column
               prop="amountAble"
               align="left"
+              width="80"
               label="可用股票">
           </el-table-column>
           <el-table-column
               prop="amountSubstep"
               align="left"
-              label="总持股票">
+              width="100"
+              label="止盈股票数">
           </el-table-column>
           <el-table-column
-              prop="timeUpdate"
+              prop="amountCost"
               align="left"
-              label="更新时间">
+              width="100"
+              label="成本股票数">
+          </el-table-column>
+          <el-table-column
+              prop="lastTradeTypeNote"
+              align="left"
+              label="最新交易">
           </el-table-column>
           <el-table-column
               prop="statusNote"
               width="80"
               align="left"
               label="状态">
+          </el-table-column>
+          <el-table-column
+              prop="timeUpdate"
+              align="left"
+              label="更新时间">
           </el-table-column>
           <el-table-column
               fixed="right"
@@ -159,7 +181,7 @@
           width="50%">
         <div>
           <el-row style="margin-top: 10px">
-            <el-col :span="10">
+            <el-col :span="20">
               <el-upload
                   :show-file-list="false"
                   :before-upload="beforeUpload"
@@ -174,9 +196,14 @@
               </el-upload>
             </el-col>
           </el-row>
+          <el-row style="margin-top: 10px;">
+            <el-col :span="24">
+              <a href="/static/substep_demo.xlsx" target="_blank">模板下载</a>
+            </el-col>
+          </el-row>
         </div>
       </el-dialog>
-      <!-- edit dialog end -->
+      <!-- edit import file dialog end -->
 
       <!-- edit profit dialog begin -->
       <el-dialog
@@ -200,16 +227,22 @@
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="12">
+              <el-col :span="8">
                 <el-form-item label="成本价:" prop="priceCost">
-                  <el-input size="mini" style="width: 200px" prefix-icon="el-icon-edit" v-model="bean.priceCost"
+                  <el-input size="mini" style="width: 120px" prefix-icon="el-icon-edit" v-model="bean.priceCost"
                             placeholder="请输入股票成本价格" clearable @input="handlePriceCost"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="8">
                 <el-form-item label="成本股票数:" prop="amountCost">
-                  <el-input size="mini" style="width: 200px" prefix-icon="el-icon-edit" v-model="bean.amountCost"
+                  <el-input size="mini" style="width: 120px" prefix-icon="el-icon-edit" v-model="bean.amountCost"
                             placeholder="请输入股票成本关联的股票数"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="止损价:" prop="priceStopLoss">
+                  <el-input size="mini" style="width: 120px" prefix-icon="el-icon-edit" v-model="bean.priceStopLoss"
+                            placeholder="请输入股票止损价格"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -409,12 +442,26 @@
           :visible.sync="recordDialogVisible"
           width="50%">
         <div>
-          <el-row style="margin-top: 10px">
-            <el-col :span="24">
-              <el-input size="mini" prefix-icon="el-icon-edit" v-model="recordText" type="textarea" rows="10" style="width:100%"
-                        placeholder="请录入股票交易记录"></el-input>
-            </el-col>
-          </el-row>
+          <el-form :model="bean_record" status-icon :rules="rules_record" ref="beanForm_record" >
+            <el-row>
+              <el-col :span="24">
+                <el-form-item label="记录:" prop="recordText">
+                  <el-input size="mini" prefix-icon="el-icon-edit" v-model="bean_record.recordText"
+                            type="textarea" rows="10" style="width:80%" placeholder="请录入股票交易记录"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row style="margin-top: 10px;">
+              <el-col :span="24">
+                <div>交易记录格式：交易日期	代码	名称	成交价	成交量	操作</div>
+                <div>一行表示一条交易记录，且交易信息用空格分隔，操作包括：加仓、止盈、止损、降仓、调仓、清仓	。</div>
+                <div>例如：</div>
+                <div>20240809	600292	远达环保	4.82	4200	止盈</div>
+                <div>20240809	600409	三友化工	5.64	1000	加仓</div>
+                <div>20240809	600167	联美控股	5.12	1000	加仓</div>
+              </el-col>
+            </el-row>
+          </el-form>
         </div>
 
         <span slot="footer" class="dialog-footer">
@@ -446,6 +493,7 @@ export default {
         "name": null,
         "code": null,
         "profitStage": 0,
+        "priceStopLoss": null,
         "priceCost": null,
         "amountCost": null,
         "amountAble": null,
@@ -470,6 +518,12 @@ export default {
         name: [{required: true, message: '请输入名称', trigger: 'blur'}],
         code: [{required: true, message: '请输入代码', trigger: 'blur'}],
       },
+      bean_record: {
+        recordText: ''
+      },
+      rules_record: {
+        recordText: [{required: true, message: '请输入交易记录', trigger: 'blur'}],
+      },
       stageList: ['P3', 'P5', 'P8', 'P10', 'P1051', 'P1052', 'P1053'],
       title: '新增分级',
       dialogVisible: false,
@@ -492,7 +546,6 @@ export default {
         {prop: "typeNote", label: "交易类型", show: true},
       ],
       tradeDialogVisible: false,
-      recordText: '',
     }
   },
   computed: {
@@ -599,6 +652,7 @@ export default {
         "name": null,
         "code": null,
         "profitStage": 0,
+        "priceStopLoss": null,
         "priceCost": null,
         "amountCost": null,
         "amountAble": null,
@@ -703,18 +757,31 @@ export default {
       });
     },
     recordTrades() {
-      console.log(this.recordText);
-      let data = {
-        recordText: this.recordText
-      }
-      this.postRequest("/stock/substeptrade/record", data).then(resp => {
-        if (resp) {
-          console.log(resp)
-          this.recordDialogVisible = false;
-          //初始化变量
-          this.initBeanlist();
+      this.$refs['beanForm_record'].validate(valid => {
+        if (valid) {
+          this.$confirm('确认交易记录正确, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            let data = {
+              recordText: this.bean_record.recordText
+            }
+            this.postRequest("/stock/substeptrade/record", data).then(resp => {
+              if (resp) {
+                this.recordDialogVisible = false;
+                //初始化变量
+                this.initBeanlist();
+              }
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消交易记录录入'
+            });
+          });
         }
-      })
+      });
     }
   }
 }

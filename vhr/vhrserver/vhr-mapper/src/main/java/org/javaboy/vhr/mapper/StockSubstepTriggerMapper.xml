@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.javaboy.vhr.mapper.StockSubstepTriggerMapper">
+  <resultMap id="BaseResultMap" type="org.javaboy.vhr.model.StockSubstepTrigger">
+    <!--@mbg.generated-->
+    <!--@Table stock_substep_trigger-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="time_create" jdbcType="TIMESTAMP" property="timeCreate" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="stage_trigger" jdbcType="INTEGER" property="stageTrigger" />
+    <result column="date_trigger" jdbcType="VARCHAR" property="dateTrigger" />
+    <result column="substep_profit_id" jdbcType="INTEGER" property="substepProfitId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, time_create, code, stage_trigger, date_trigger, substep_profit_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from stock_substep_trigger
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from stock_substep_trigger
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="org.javaboy.vhr.model.StockSubstepTrigger" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into stock_substep_trigger (time_create, code, stage_trigger, 
+      date_trigger, substep_profit_id)
+    values (#{timeCreate,jdbcType=TIMESTAMP}, #{code,jdbcType=VARCHAR}, #{stageTrigger,jdbcType=INTEGER}, 
+      #{dateTrigger,jdbcType=VARCHAR}, #{substepProfitId,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="org.javaboy.vhr.model.StockSubstepTrigger">
+    <!--@mbg.generated-->
+    update stock_substep_trigger
+    set time_create = #{timeCreate,jdbcType=TIMESTAMP},
+      code = #{code,jdbcType=VARCHAR},
+      stage_trigger = #{stageTrigger,jdbcType=INTEGER},
+      date_trigger = #{dateTrigger,jdbcType=VARCHAR},
+      substep_profit_id = #{substepProfitId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

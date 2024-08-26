@@ -1,6 +1,7 @@
 package org.javaboy.vhr.model;
 
 import org.javaboy.vhr.model.util.ProfitStage;
+import org.javaboy.vhr.model.util.TradeType;
 
 import java.util.Date;
 
@@ -45,46 +46,47 @@ public class StockSubstepProfit {
     /**
     * 成本价
     */
-    private Double priceCost;
+    private Double priceCost = 0d;
 
     /**
     * 成本股票数，即统计入成本中的股票数
     */
-    private Integer amountCost;
+    private Integer amountCost = 0;
 
     /**
     * 可用股票数
     */
-    private Integer amountAble;
+    private Integer amountAble = 0;
 
     /**
      * 分级统计股票数，用于计算每次分级止盈的股票数
      */
-    private Integer amountSubstep;
+    private Integer amountSubstep = 0;
 
-    private Double priceP3; //P3成交价格
-    private Integer amountP3; // P3成交股票数
+    private Double priceP3 = 0d; //P3成交价格
+    private Integer amountP3 = 0; // P3成交股票数
 
-    private Double priceP5; //P5成交价格
-    private Integer amountP5; // P5成交股票数
+    private Double priceP5 = 0d; //P5成交价格
+    private Integer amountP5 = 0; // P5成交股票数
 
-    private Double priceP8; //P8成交价格
-    private Integer amountP8; // P8成交股票数
+    private Double priceP8 = 0d; //P8成交价格
+    private Integer amountP8 = 0; // P8成交股票数
 
-    private Double priceP10; //P10成交价格
-    private Integer amountP10; // P10成交股票数
+    private Double priceP10 = 0d; //P10成交价格
+    private Integer amountP10 = 0; // P10成交股票数
 
-    private Double priceP1051; //P105-1阶段成交价格
-    private Integer amountP1051; // P105-1阶段成交股票数
+    private Double priceP1051 = 0d; //P105-1阶段成交价格
+    private Integer amountP1051 = 0; // P105-1阶段成交股票数
 
-    private Double priceP1052; //P105-2阶段成交价格
-    private Integer amountP1052; // P105-2阶段成交股票数
+    private Double priceP1052 = 0d; //P105-2阶段成交价格
+    private Integer amountP1052 = 0; // P105-2阶段成交股票数
 
-    private Double priceP1053; //P105-3阶段成交价格
-    private Integer amountP1053; // P105-3阶段成交股票数
+    private Double priceP1053 = 0d; //P105-3阶段成交价格
+    private Integer amountP1053 = 0; // P105-3阶段成交股票数
 
     private Integer lastTradeType = 0; //上次交易类型，默认是加仓
-
+    private String lastTradeTypeNote;
+    private Double priceStopLoss = 0d; //止损价格
 
     public Integer getId() {
         return id;
@@ -298,8 +300,20 @@ public class StockSubstepProfit {
     public Integer getLastTradeType() {
         return lastTradeType;
     }
+    public String getLastTradeTypeNote() {
+        return TradeType.getName(lastTradeType);
+    }
 
     public void setLastTradeType(Integer lastTradeType) {
         this.lastTradeType = lastTradeType;
     }
+
+    public Double getPriceStopLoss() {
+        return priceStopLoss;
+    }
+
+    public void setPriceStopLoss(Double priceStopLoss) {
+        this.priceStopLoss = priceStopLoss;
+    }
+
 }
